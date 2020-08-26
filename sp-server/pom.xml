@@ -17,7 +17,7 @@
 		<java.version>1.8</java.version>
 		<maven-jar-plugin.version>3.1.1</maven-jar-plugin.version>
 		<!-- 主类地址，一定要配置，否则打包时运行会出错 -->
-		<java.run.main.class>com.pj.MdsjServerApplication</java.run.main.class>
+		<java.run.main.class>com.pj.SpServerApplication</java.run.main.class>
 	</properties>
 	
 	<dependencies>
