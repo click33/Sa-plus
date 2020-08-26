@@ -288,7 +288,6 @@
 					<#list t.columnListByNotAdd as c>
 						this.m.${c.fieldName} = undefined;		// 不提交属性：${c.columnComment3}
 					</#list>
-						this.m.create_time = undefined;		// 不提交属性：创建日期
 						if(this.id <= 0) {	// 添加
 							sa.ajax('/${t.mkNameBig}/add', this.m, function(res){
 								sa.alert('增加成功', this.clean); 

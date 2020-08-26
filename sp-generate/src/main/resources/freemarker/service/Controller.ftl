@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import ${cfg.package_utils};
-import com.pj.project4sf.SP;
+import com.pj.project4sp.SP;
 
 
 <#if cfg.saTokenAuthWay == 1 >import cn.dev33.satoken.stp.StpUtil;

@@ -6,6 +6,11 @@ spring:
         # active: prod
         
 # ================ 公共配置(优先级低于application-xxx.yml)  ================ 
+    # mvc设置
+    mvc: 
+        format: 
+            # 日期映射格式
+            date: yyyy-MM-dd HH:mm:ss
     # servlet配置 
     servlet: 
         # 单文件大小限制1024M，避免文件上传时因为文件过大而被限制 
@@ -22,7 +27,7 @@ spring:
         # 默认的日期转换格式  
         date-format: yyyy-MM-dd HH:mm:ss
         # 解决因为时区问题，date少8小时的bug 
-        time-zone: GMT+8
+        # time-zone: GMT+8
         
     # 文件上传相关配置
     upload-config: 

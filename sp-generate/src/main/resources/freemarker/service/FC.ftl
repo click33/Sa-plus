@@ -9,8 +9,8 @@ import ${t.packagePath}.${t.mkNameBig}Mapper;
 <#list cfg.tableList as t>
 import ${t.packagePath}.${t.mkNameBig}Service;
 </#list>
-import com.pj.project4sf.public4mapper.PublicMapper;
-import com.pj.project4sf.public4mapper.PublicService;
+import com.pj.project4sp.public4mapper.PublicMapper;
+import com.pj.project4sp.public4mapper.PublicService;
 
 /**
  * SpringBean依赖清单，项目中所有Bean在此定义

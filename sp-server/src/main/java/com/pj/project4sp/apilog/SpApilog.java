@@ -32,9 +32,9 @@ public class SpApilog implements Serializable {
 	private long user_id;		// user_id 
 	private long admin_id;		// admin_id 
 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone="GMT+8")
 	private Date start_time;		// 请求开始时间 
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS", timezone="GMT+8")
 	private Date end_time;		// 请求结束时间 
 	private int cost_time;		// 花费时间，单位ms 
 	
