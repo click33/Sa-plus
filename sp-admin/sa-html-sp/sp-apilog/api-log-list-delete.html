@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>角色-添加/修改</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			.c-panel .el-form .c-label{width: 6em !important;}
+			.c-panel .el-form .el-input{width: calc(100% - 120px);}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box sbot" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<div class="c-title">数据添加</div>
+					<el-form size="mini" v-if="m">
+						<!-- no字段： m.id - id -->
+						<div class="c-item br">
+							<label class="c-label">开始日期：</label>
+							<el-date-picker size="mini" v-model="m.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始日期"></el-date-picker>
+						</div>
+						<div class="c-item br">
+							<label class="c-label">结束日期：</label>
+							<el-date-picker size="mini" v-model="m.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束日期"></el-date-picker>
+						</div>
+						<div class="c-item br">
+							<label class="c-label">已选范围：</label>
+							<span style="color: red;">{{sa.forDate(m.startTime, 2)}}</span> - 
+							<span style="color: red;">{{sa.forDate(m.endTime, 2)}} </span>
+						</div>
+						<div class="c-item br">
+							<label class="c-label">操作注意：</label>
+							<span style="color: red;">日志删除后不可恢复，请谨慎操作</span>
+						</div>
+						
+						<!-- <div class="c-item br s-ok">
+							<label class="c-label"></label>
+							<el-button size="mini" type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
+						</div> -->
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button size="mini" type="primary" @click="ok()">确定</el-button>
+				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+			</div>
+		</div>
+        <script>
+			
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					id: sa.p('id', 0),		// 获取超链接中的id参数（0=添加，非0=修改） 
+					m: {
+						startTime: '',
+						endTime: '',
+					},		// 实体对象 
+				},
+				methods: {
+					// 提交数据 
+					ok: function(){
+						if(sa.isNull(this.m.startTime) || sa.isNull(this.m.endTime) ) {
+							return sa.error('请选择一个时间范围')
+						}
+						// 开始删除
+						sa.ajax('/SgApilog/deleteByStartEnd', this.m, function(res){
+							sa.alert('操作成功, 共删除 ' + res.data + ' 条请求记录', function() {
+								if(parent.app) {
+									parent.app.f5();
+									sa.closeCurrIframe();	// 关闭本页 
+								} 
+							}.bind(this)); 
+						}.bind(this));
+					},
+				},
+				mounted: function(){
+					
+				}
+			})
+		</script>
+	</body>
+</html>

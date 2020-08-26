@@ -1,0 +1,52 @@
+spring: 
+    profiles: 
+        # 启动环境加载，同时加载两个的写法：common,prod  优先级左>右
+        active: dev
+        # active: test
+        # active: prod
+        
+# ================ 公共配置(优先级低于application-xxx.yml)  ================ 
+    # servlet配置 
+    servlet: 
+        # 单文件大小限制1024M，避免文件上传时因为文件过大而被限制 
+        multipart: 
+            max-file-size: 1024MB
+            max-request-size: 1024MB
+            
+    # 静态文件路径映射 
+    resources: 
+        static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.upload-config.root_folder}
+        
+    # jackson设置 
+    jackson:
+        # 默认的日期转换格式  
+        date-format: yyyy-MM-dd HH:mm:ss
+        # 解决因为时区问题，date少8小时的bug 
+        time-zone: GMT+8
+        
+    # 文件上传相关配置
+    upload-config: 
+        # 文件保存的根目录，所有文件都保存在这个目录下  
+        root_folder: /upload-file
+        # http路由前缀，用于向前台暴露文件url  
+        http_prefix: /upload
+        
+    # 项目自定义配置 
+    myconfig: 
+        # md5的盐
+        md5_salt: whatclickme
+        # 是否明文存储密码 
+        is_pw: true
+    
+        
+        
+# mybatis-plus配置  
+mybatis-plus: 
+    configuration: 
+        # 控制打印sql 
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+        # 是否开启下划线转驼峰 
+        map-underscore-to-camel-case: false
+         
+        
+        

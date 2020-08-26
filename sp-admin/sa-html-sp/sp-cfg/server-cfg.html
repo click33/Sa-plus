@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title>服务器私有配置</title>
+		<!-- 所有的 css js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<script src="../../static/kj/upload-util.js"></script>
+		<style type="text/css">
+			html,body,.vue-box{height: 100%; overflow: hidden;}
+			/* .vue-box{padding: 0px;} */
+			.c-panel{height: calc(100% - 4em); position: relative;}
+			.c-panel .c-label{width: 10em;}
+			.c-panel .el-input{width: 500px;}
+			.c-panel .el-textarea{width: 500px;}
+			.logo-img{
+				width: 35px; 
+				height: 35px; 
+				border-radius: 2px; 
+				vertical-align: middle; 
+				margin-right: 0.5em;
+				cursor: pointer;
+			}
+			.s-tab{height: 100%; }
+			.el-tabs__content{height: calc(100% - 130px); overflow: auto;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel" v-if="m != null">
+				<!-- tab卡片 -->
+				<el-tabs class="s-tab" v-model="activeTab">
+					<!-- ---------------------------------- 系统参数 ---------------------------------- -->
+					<el-tab-pane label="系统参数" name="tab1">
+						<!-- <div class="c-item br">
+							<label class="c-label">预留信息：</label>
+							<el-input size="mini" v-model="m.reserve_info"></el-input>
+						</div> -->
+						<div class="c-item">
+							<label class="c-label">抛出SQL：</label>
+							<el-switch v-model="m.throw_out_sql" :active-value="1" :inactive-value="2"></el-switch>
+							<span class="c-remark" v-if="m.throw_out_sql==1">开启</span>
+							<span class="c-remark" v-else>关闭</span>
+							<span class="c-remark" style="color: red;">( 抛出sql只为方便调试，建议只在开发环境下打开此选项，生产环境请务必关闭 )</span>
+						</div>
+					</el-tab-pane>
+				</el-tabs>
+				
+				<!-- ---------------------------------- 其它配置 ---------------------------------- -->
+				<el-tab-pane label="其它配置" name="tab2">
+					<br>
+					<span>其它配置</span>
+				</el-tab-pane>
+
+				<!-- 确定按钮 -->
+				<div style="position: absolute; bottom: 0px; width: calc(100% - 3em); line-height: 80px; background-color: #FFF;">
+					<hr style="height: 2px;">
+					<div class="c-item">
+						<label class="c-label"></label>
+						<el-button type="primary" size="mini" icon="el-icon-check" @click="ok">保存修改</el-button>
+						<el-button type="primary" size="mini" icon="el-icon-refresh-right" @click="f5">重置</el-button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript">
+			// 创建一个默认的配置对象
+			function create_m() {
+				return {
+					reserve_info: '预留信息', // 预留信息 
+					throw_out_sql: 2,	// 是否隐藏sql，
+				}
+			}
+		</script>
+		<script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, // 超级对象
+					m: null, // 
+					activeTab: 'tab1'
+				},
+				methods: {
+					// 初始化配置
+					init: function(str) {
+						// 获取 
+						var cfg = sa.JSONParse(str, {}); // 用户配置  
+						var default_cfg = create_m(); // 默认配置  
+						// 遍历 
+						for (var key in default_cfg) {
+							if (cfg[key] !== undefined && cfg[key] !== null) {
+								default_cfg[key] = cfg[key];
+							}
+						}
+						// 赋值
+						this.m = default_cfg;
+					},
+					// 刷新
+					f5: function() {
+						sa.ajax('/SpCfg/getCfg', {
+							cfg_name: 'server_cfg'
+						}, function(res) {
+							this.init(res.data);
+						}.bind(this));
+					},
+					// 提交 
+					ok: function() {
+						sa.ajax('/SpCfg/updateCfg', {
+							cfg_name: 'server_cfg',
+							cfg_value: JSON.stringify(this.m)
+						}, function(res) {
+							sa.ok2('保存成功');
+						}.bind(this));
+					}
+				},
+				created: function() {
+					this.f5();
+				}
+			})
+
+
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>管理员列表</title>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<script src="../../static/kj/upload-util.js"></script>
+		<style type="text/css">
+			.el-radio{margin-right: 10px;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- ------------- 检索参数 ------------- -->
+				<h4 class="c-title">检索参数</h4>
+				<el-form>
+					<div class="c-item">
+						<label class="c-label">账号id：</label>
+						<el-input size="mini" v-model="p.id" type="number"></el-input>
+					</div>
+					<div class="c-item">
+						<label class="c-label">名称：</label>
+						<el-input size="mini" v-model="p.name"></el-input>
+					</div>
+					<div class="c-item">
+						<label class="c-label">角色：</label>
+						<el-select size="mini" v-model="p.role_id">
+							<el-option label="全部" :value="0"></el-option>
+							<el-option v-for="role in roleList" :key="role.id" :label="role.role_name" :value="role.id"></el-option>
+						</el-select>
+					</div>
+					<div class="c-item" style="min-width: 0px;">
+						<el-button size="mini" type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+					</div>
+					<br>
+					<div class="c-item s-radio-text">
+						<label class="c-label">综合排序：</label>
+						<el-radio-group v-model="p.sort_type">
+							<el-radio :label="0">最近添加</el-radio>
+							<el-radio :label="2">最近登录</el-radio>
+							<el-radio :label="3">登录次数</el-radio>
+						</el-radio-group>
+					</div>
+				</el-form>
+				<!-- ------------- 快捷按钮 ------------- -->
+				<div class="fast-btn">
+					<el-button size="mini" type="primary" icon="el-icon-plus" @click="add()">新增</el-button>
+					<el-button size="mini" type="success" icon="el-icon-edit" @click="updateName($refs['data-table'].selection[0])"
+						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length != 1">修改</el-button>
+					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()"
+						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length < 1">删除</el-button>
+					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
+					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
+				</div>
+				<!-- ------------- 数据列表 ------------- -->
+				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
+					<el-table-column type="selection" width="45px"></el-table-column>
+					<el-table-column label="id" prop="id" min-width="70px" > </el-table-column>
+					<el-table-column label="昵称" min-width="120px">
+						<template slot-scope="s">
+							<img :src="s.row.avatar" 
+								@click="sa.showImage(s.row.avatar, '400px', '400px')" 
+								style="width: 35px; height: 35px; margin-right: 1em; border-radius: 3px; cursor: pointer; vertical-align: middle;" />
+							<b>{{s.row.name}}</b>
+						</template>
+					</el-table-column>
+					<!-- <el-table-column label="名称" prop="name" > </el-table-column> -->
+					<el-table-column label="手机" >
+						<template slot-scope="s">
+							<span v-if="sa.isNull(s.row.phone)">无</span>
+							<span v-else>{{s.row.phone}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="创建人" >
+						<template slot-scope="s">
+							<span v-if="s.row.create_by_aid == -1">无</span>
+							<el-link v-else @click="sa.$page.openAdminInfo(s.row.create_by_aid, s.row.name)">{{s.row.create_by_aid}}</el-link>
+						</template>
+					</el-table-column>
+					<el-table-column label="所属角色" prop="role_name" > </el-table-column>
+					<el-table-column label="创建日期" width="150px">
+						<template slot-scope="s"><span>{{sa.forDate(s.row.create_time, 2)}}</span></template>
+					</el-table-column>
+					<el-table-column label="最后登录" width="150px">
+						<template slot-scope="s">
+							<span v-if="sa.isNull(s.row.login_time)">无</span>
+							<span v-else>{{sa.forDate(s.row.login_time, 2)}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="登录次数" width="100px">
+						<template slot-scope="s"><span>{{s.row.login_count,}}</span></template>
+					</el-table-column>
+					<el-table-column label="账号状态" width="120px">
+						<template slot-scope="s">
+							<el-switch v-model="s.row.status" :active-value="1" :inactive-value="2" inactive-color="#ff4949" @change="updateStatus(s.row)"></el-switch>
+							<span style="color: #999;" v-if="s.row.status==1">正常</span>
+							<span style="color: #999;" v-else>禁用</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="450px">
+						<template slot-scope="s">
+							<span @click="getInfo(s.row)">
+								<el-button type="success" class="c-btn" icon="el-icon-view">查看</el-button>
+							</span>
+							<span @click="updateName(s.row)">
+								<el-button type="primary" class="c-btn" icon="el-icon-edit">改名称</el-button>
+							</span>
+							<span @click="updateAvatar(s.row)">
+								<el-button type="primary" class="c-btn" icon="el-icon-edit">改头像</el-button>
+							</span>
+							<span @click="updatePassword(s.row)">
+								<el-button type="primary" class="c-btn" icon="el-icon-edit">改密码</el-button>
+							</span>
+							<el-dropdown size="mini" trigger="click" style="font-size: 0.85em;">
+								<el-button type="primary" class="c-btn">
+									修改角色为 <i class="el-icon-arrow-down el-icon--right"></i>
+								</el-button>
+								<el-dropdown-menu slot="dropdown">
+									<span v-for="role in roleList" :key="role.id" @click="updateRoleId(s.row, role.id, role.role_name)">
+										<el-dropdown-item :style=" s.row.role_id == role.id ? {color: 'blue'} : null ">{{role.role_name}}</el-dropdown-item>
+									</span>
+								</el-dropdown-menu>
+							</el-dropdown>
+							<span @click="del(s.row)">
+								<el-button type="danger" class="c-btn" icon="el-icon-delete">删除</el-button>
+							</span>
+						</template>
+					</el-table-column>
+				</el-table>
+				<!-- 分页 -->
+				<div class="page-box">
+					<el-pagination background
+						layout="total, prev, pager, next, sizes, jumper" 
+						:current-page.sync="p.pageNo" 
+						:page-size.sync="p.pageSize" 
+						:total="dataCount" 
+						:page-sizes="[1, 10, 20, 30, 40, 50, 100]" 
+						@current-change="f5()" 
+						@size-change="f5()">
+					</el-pagination>
+				</div>
+			</div>
+			
+			
+		</div>
+        <script>
+
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, 	// 超级对象
+					p: {		// 查询参数
+						id: '',
+						name: '',
+						role_id: 0,
+						sort_type: 0,
+						pageNo: 1,
+						pageSize: 10,
+					},
+					dataCount: 0,
+					dataList: [],	// 数据集合
+					roleList: [],	// 角色集合 
+					curr_m: null // 当前操作的 m 
+				},
+				methods: {
+					// 刷新
+					f5: function(isPage){
+						sa.ajax('/admin/getList', this.p, function(res){
+							this.dataList = res.data;	// 数据
+							this.dataCount = res.dataCount;
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
+					},
+					// 新增
+					add: function() {
+						parent.sa_admin.showMenuById('admin-add');
+					},
+					// 查看详情
+					getInfo: function(data) {
+						//sa.showIframe('账号详情', 'admin-info.html?id=' + data.id, '700px', '80%');
+						sa.$page.openAdminInfo(data.id, data.name);
+					},
+					// 修改名称 
+					updateName: function(data) {
+						layer.prompt({title: '修改账号名称'}, function(pass, index){
+							layer.close(index);
+							sa.ajax('/admin/update', {id: data.id, name: pass}, function(res){
+								data.name = pass;
+								layer.msg('修改成功');
+							})
+						});
+					},
+					// 修改头像 
+					updateAvatar: function(data) {
+						sa.uploadImage(function(src) {
+							var p = {id: data.id, avatar: src};
+							sa.ajax('/admin/updateAvatar', p, function(res) {
+								sa.msg('上传成功');
+								data.avatar = src;  
+							}.bind(this));
+						})
+					},
+					// 修改密码
+					updatePassword: function(data) {
+						layer.prompt({title: '修改密码'}, function(pass, index){
+							layer.close(index);
+							if(pass.length < 4) {
+								return layer.msg('新密码长度请不要低于4位');
+							}
+							sa.ajax('/admin/updatePassword', {id: data.id, password: pass}, function(res){
+								layer.msg('修改成功');
+							})
+						});
+					},
+					// 修改角色 
+					updateRoleId: function(data, role_id, role_name) {
+						if(data.id == sa.$sys.getCurrUser().id) {
+							return sa.alert('不能自己修改自己的角色');  
+						}
+						if(data.role_id == role_id) {
+							return sa.alert('该用户已经是' + role_name + '了');	
+						}
+						var str = '将此账号修改为【' + role_name + '】，请确认？';
+						layer.confirm(str, {title: '请确认'}, function() {
+							sa.ajax('/admin/updateRole', {id: data.id, role_id: role_id}, function(res) {
+								sa.msg('修改成功');
+								data.role_id = role_id;
+								data.role_name = role_name;
+							}.bind(this));
+						}.bind(this));
+					},
+					// 修改用户的状态
+					updateStatus: function(data) {
+						if(data.id == sa.$sys.getCurrUser().id) {
+							data.status = 3 - data.status;  
+							return sa.alert('不能自己封禁自己');  
+						}
+						var is_ok = false;	// 记录是否成功 
+						var ajax = sa.ajax('/admin/updateStatus', {admin_id: data.id, status: data.status}, function(res) {
+							sa.msg('修改成功');
+							is_ok = true;
+						}.bind(this));
+						// 如果未能修改成功, 则回滚 
+						$.when(ajax).done(function() {
+							if(is_ok == false) {
+								data.status = 3 - data.status; 
+							}
+						})
+					},
+					// 删除 
+					del: function (data) {
+						sa.confirm('是否删除，此操作不可撤销', function(){
+							sa.ajax('/admin/delete', {id: data.id},function(res){
+								sa.arrayDelete(app.dataList, data);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							})
+						});
+					},
+					// 批量删除
+					deleteByIds: function() {
+						// 获取选中元素的id列表
+						let selection = this.$refs['data-table'].selection;
+						let ids = sa.getArrayField(selection, 'id');
+						// 提交删除 
+						sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
+							sa.ajax('/admin/deleteByIds', {ids: ids.join(',')}, function(res) {
+								sa.arrayDelete(this.dataList, selection);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							}.bind(this))
+						}.bind(this));
+					},
+				},
+				created: function(){
+					this.f5();
+					sa.onInputEnter();	// 监听回车执行查询 
+					// 加载角色 
+					sa.ajax('/role/getList', function(res){
+						this.roleList = res.data;	// 数据  
+					}.bind(this), {msg: null});
+				}
+			})
+			
+
+			
+		
+		</script>
+	
+	</body>
+</html>

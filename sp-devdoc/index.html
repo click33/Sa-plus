@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="utf-8">
+		<title>sa-plus快速开发平台</title>
+		<script src="https://unpkg.com/marked@0.8.0/marked.min.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<style type="text/css">
+			/* 代码样式 */
+			body{padding: 0; margin: 0;}
+			body{background-color: #FFF;}
+			.s-width{width: 1000px; margin: auto;}
+			li{line-height: 28px;}
+			pre{overflow: auto;}
+		</style>
+	</head>
+	<body>
+		<!-- ------------ 头部 ------------- -->
+		<style type="text/css">
+			.s-header *{transition: all 0.2s;}
+			.s-header-content{height: 100%; margin: auto;}
+			/* 头部 */
+			.s-header{height: 80px; box-shadow: 0 1px 3px rgba(26,26,26,.1); background-color: rgba(0,0,0,0); background-color: rgba(0,0,0,0.2);}
+			.s-header{position: fixed; width: 100%; z-index: 10001; border-bottom: 0px rgba(200,200,200,0.1) solid;}
+			/* .s-header-xia{background-color: rgba(0,0,0,0.8); } */
+			.s-header-xia{background-color: #FFF; color: #000;}
+			.s-header-xia .logo-box, .s-header-xia .nav-box a{color: #000;}
+			.s-header-seat{height: 50px;}
+			.logo-box{height: 100%; float: left; font-size: 22px; line-height: 80px; color: #FFF; font-weight: 700;}
+			.logo-box img{height: 100%;}
+			
+			.nav-box{float: right; padding-left: 1em; line-height: 80px; }
+			.nav-box a{margin: 0 1em; color: #FFF; height: 48px; display: inline-block; text-decoration: none;}
+			.nav-box a:hover,.nav-box a.native{/* color: #9C1CEB; */font-weight: 700; text-decoration: underline; /* border-color: #9C1CEB; */}
+		</style>
+		
+		<div class="s-header">
+			<div class="s-header-content s-width">
+				<a href="index.html">
+					<div class="logo-box">
+						sa-plus 快速开发 
+						<span style="font-size: 0.7em; font-weight: 400;"> 1.15.0 更新于2020-8-27</span>
+					</div>
+				</a>
+				<div class="nav-box">
+					<!-- <a href="#mao-header" class="mao-href">首页</a> -->
+					<!-- <a href="index.html">优势</a> -->
+					<a href="#mao-header" class="mao-href">首页</a>
+					<!-- <a href="#mao-doc" class="mao-href">介绍</a> -->
+					<a href="./doc/index.html" target="_blank">在线文档</a>
+					<a href="http://demo.dev33.cn/sp-admin-demo/index.html" target="_blank">在线演示</a>
+					<a href="http://sa-app.dev33.cn/wall.html?name=sa-plus" target="_blank">需求墙</a>
+					<a href="#foot" class="mao-href">关于</a>
+				</div>
+				<!-- <a href="#foot" style="float: right; line-height: 50px; color: #FFF;">QQ群</a> -->
+			</div>
+		</div>
+		<script type="text/javascript">
+			// 监听滚动
+			$(function() {
+				function f5_class() {
+					if($(document).scrollTop() > 200) {
+						$('.s-header').addClass('s-header-xia');
+					} else {
+						$('.s-header').removeClass('s-header-xia');
+					}
+				}
+				f5_class();
+				$(document).scroll(f5_class);
+			})
+		</script>
+		
+		<!-- ------------ 背景 ------------- -->
+		<style type="text/css">
+			/*  */
+			.top-box{width: 100wh; height: 100vh; border: 0px #000 solid; position: relative;}
+			.bg-box{width: 100%; height: 100%; border: 0px; background-color: #000;}
+			/* .top-box{height: 100vh;} */
+			
+			.s-poster{position: absolute; top: 0px; pointer-events: none;}
+			.s-poster{border: 0px #000 solid; width: 100%; height: 100%; display: flex; align-items: center; }
+			/* .s-poster{background-image: url(img/poster-bg.png); background-size: 100% 100%;} */
+			.s-poster{color: #FFF; /* font-family: "华文新魏"; */ text-align: center;}
+			.s-poster-content{flex: 1;}
+			.s-poster-content-2{margin: auto;}
+			.s-p-y{pointer-events: auto;}
+			/* 按钮 */
+			.ws-btn-box{margin-right: 8px; text-align: center; display: inline-block;}
+			.ws-btn-box a{margin: 0 10px; text-decoration: none;}
+			.ws-btn{font-size: 1.4em; padding: 0 1em; height: 58px; line-height: 58px; background-color: rgba(0,0,0,0); border: 1px #FFF solid; color: #FFF; cursor: pointer;}
+			.ws-btn{border-radius: 3px; box-shadow: 0 0 10px rgba(200,200,200,0.3); background-color: rgba(0,0,0,0.3);}
+			.ws-btn:hover{color: #FFF; border: 1px #FFF solid; background-color: rgba(0,0,0,0.6);}
+		</style>
+		<div class="top-box" id="mao-header">
+			<iframe class="bg-box" src="./bg.html"></iframe>
+			<div class="s-poster">
+				<div class="s-poster-content">
+					<div class="s-poster-content-2 s-width" style="text-align: center;">
+						<span class="s-p-y" style="font-size: 38px;">sa-plus 快速开发框架, 内置代码生成器</span>
+						<br><br>
+						<span class="s-p-y" style="font-size: 16px; color: #eee;">只需声明简单的表注释，即可生成完善的增删改查</span>
+						<br><br><br><br>
+						<div>
+							<!-- <div class="ws-btn-box">
+								<a href="https://github.com/click33/sa-plus" target="_blank">
+									<button class="ws-btn s-p-y">关注GitHub</button>
+								</a>
+							</div> -->
+							<div class="ws-btn-box">
+								<a href="https://github.com/click33/sa-plus" target="_blank">
+									<button class="ws-btn s-p-y">GitHub</button>
+								</a>
+								<a href="https://gitee.com/sz6/sa-plus" target="_blank">
+									<button class="ws-btn s-p-y">Gitee</button>
+								</a>
+								<a href="http://sa-app.dev33.cn/wall.html?name=sa-plus" target="_blank">
+									<button class="ws-btn s-p-y">需求墙</button>
+								</a>
+								<a href="./doc/index.html" target="_blank">
+									<button class="ws-btn s-p-y">在线文档</button>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!-- -------------- 示例 ------------- -->
+		<style type="text/css">
+			#md-content{padding: 1em; width: 800px; margin: auto;}
+			pre{background-color: #282C34; padding: 1em; color: #98C363;}
+			blockquote{margin-left: 0px; padding: 0.1em 0em; border-left: 4px #aaa solid; background-color: #CCC;}
+			button{cursor: pointer;}
+			/* 图片 */
+			#md-content img{max-width: 100%; margin: 0.5em; box-shadow: 0 0 0px #999; transition: all 0.3s;}
+			#md-content img:hover{box-shadow: 0 0 10px #333; cursor: pointer;}
+		</style>
+		<div id="mao-doc" style="position: relative; top: -80px;"></div>
+		<div style="height: 20px;"></div>
+		<div id="md-content">
+			加载中...
+		</div>
+		<script type="text/javascript">
+			
+			// 获取md文档  
+			$.ajax({
+				url : './doc/README.md',
+				success: function(res) {
+					document.getElementById('md-content').innerHTML = marked(res);	
+				}
+			})
+			
+		</script>
+		
+		
+		<!-- -------------- 底部 -------------- -->
+		<div>
+			<meta charset="UTF-8">
+			<style type="text/css">
+				.foot-box{background-color: #444444; color: #ddd; padding: 3em 0px; line-height: 28px; overflow: hidden; position: relative; z-index: 100;}
+				.foot-box{border-top: 1px #666 solid;}
+				.foot-box p{text-indent: 1em;}
+				.foot-box b{font-size: 1.1em;}
+				.foot-box a{color: #ddd; font-size: 0.9em;}
+				.foot-box a:hover{text-decoration: underline;}
+			</style>
+			<div class="foot-box" id="foot">
+				<div class="s-width" style="text-align: center;">
+					Copyright ©2020 sa-plus 快速开发 | sa-plus.dev33.cn | <a href="http://www.miitbeian.gov.cn/" target="_blank">鲁ICP备18046274号-2</a>
+				</div>
+			</div>
+		</div>
+		
+		
+		<!-- 点击锚链接事件 -->
+		<script type="text/javascript">
+			$('.mao-href').click(function() {
+				$('html, body').animate({
+					scrollTop: $($.attr(this, 'href')).offset().top
+				}, 500);
+				return false;
+			});
+		</script>
+		<!-- img点击放大 -->
+		<script type="text/javascript">
+			$('#md-content').on('click', 'img', function(){
+				open(this.src);
+				return false;
+			});
+		</script>
+		
+	</body>
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>角色列表</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			.card-box {
+				min-width: 230px;
+				margin-right: 10px;
+				margin-bottom: 10px;
+				display: inline-block;
+				background-color: #f5f5f5;
+				cursor: pointer;
+				transition: all 0.3s;
+			}
+			.card-box:hover{box-shadow: 0 0 20px #999;}
+
+			.card-box .prop-name {
+				padding-left: 14px;
+				padding-top: 14px;
+				color: #666;
+			}
+
+			.card-box .prop-value {
+				/* border: 1px #000 solid; */
+				padding-left: 14px;
+				height: 40px;
+				line-height: 40px;
+				padding-top: 10px;
+				padding-bottom: 10px;
+				font-size: 26px;
+				color: green;
+			}
+			
+			.f5-pre-btn:hover{cursor: pointer; text-decoration: underline;}
+			
+			.key-div{color: green; cursor: pointer;}
+			.not-show,.is-show{padding: 5px 10px; background-color: #eee; cursor: pointer; }
+			.is-show{background-color: rgba(0,0,0,0);}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<!-- ------------- 总览 ------------- -->
+			<div class="c-panel">
+				<div class="c-title">
+					Redis 控制台
+					<span class="f5-pre-btn" @click="f5_pre(false)">刷新</span>
+				</div>
+				<div style="height: 10px;"></div>
+				<div>
+					<div class="card-box" @click="sa.msg('表点我 >_<')">
+						<p class="prop-name">键值总数</p>
+						<p class="prop-value">{{preData.keys_count}}</p>
+					</div>
+					<div class="card-box" @click="sa.msg('表点我 >_<')">
+						<p class="prop-name">命中次数</p>
+						<p class="prop-value">{{preData.keyspace_hits}}</p>
+					</div>
+					<div class="card-box" @click="sa.msg('表点我 >_<')">
+						<p class="prop-name">已用内存</p>
+						<p class="prop-value">{{preData.used_memory_human}}</p>
+					</div>
+					<div class="card-box" @click="sa.msg('表点我 >_<')">
+						<p class="prop-name">内存峰值</p>
+						<p class="prop-value">{{preData.used_memory_peak_human}}</p>
+					</div>
+					<div class="card-box" @click="sa.msg('表点我 >_<')">
+						<p class="prop-name">启动时间</p>
+						<p class="prop-value">{{preData.uptime_in_seconds_str}}</p>
+					</div>
+				</div>
+			</div>
+			<!-- ------------- 检索参数 ------------- -->
+			<div class="c-panel c-table">
+				<div class="c-title">搜索键值</div>
+				<div class="c-item">
+					<!-- <label class="c-label">搜索键值：</label> -->
+					<el-input size="mini" v-model="p.k" :placeholder="isLike ? '当前为模糊搜索' : '当前为精确搜索'" @keyup.native.enter="f5()" style="width: 400px;"></el-input>
+				</div>
+				<div class="c-item" style="min-width: 0px;">
+					<el-button type="primary" icon="el-icon-search" size="mini" @click="f5()">查询</el-button>
+					<el-button type="success" icon="el-icon-plus" size="mini" @click="add()">添加</el-button>
+					<el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteByKeys()">删除</el-button>
+					<el-button type="info" icon="el-icon-sort" size="mini" @click="isLike = !isLike; sa.ok('切换成功')">
+						{{isLike ? '切换为精确搜索' : '切换为模糊搜索'}}
+					</el-button>
+				</div>
+				<div style="height: 10px;"></div>
+				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
+					<!-- <el-table-column label="键"></el-table-column> -->
+					<el-table-column type="selection" width="45px"></el-table-column>
+					<el-table-column label="键">
+						<template slot-scope="s">
+							<div class="key-div" @click="sa.copyText(s.row.key); sa.msg('复制成功')">{{s.row.key}}</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="值">
+						<template slot-scope="s">
+							<div class="not-show" @click="get(s.row)" v-if="s.row.is_show == false">点击加载</div>
+							<div class="is-show" v-if="s.row.is_show == true" @click="sa.copyText(s.row.value); sa.msg('复制成功')">{{s.row.value}}</div>
+						</template>
+					</el-table-column>
+					<el-table-column label="TTL (秒)" prop="ttl" width="150px"></el-table-column>
+					<el-table-column label="操作" width="250px">
+						<template slot-scope="s">
+							<el-button type="text" size="mini" @click="get(s.row)">查询</el-button>
+							<el-button type="text" size="mini" @click="updateValue(s.row)">修改值</el-button>
+							<el-button type="text" size="mini" @click="updateTTL(s.row)">修改TTL</el-button>
+							<el-button type="text" size="mini" @click="del(s.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<div class="page-box">
+					<el-pagination background
+						layout="total, prev, pager, next, sizes, jumper" 
+						:current-page.sync="p.pageNo" 
+						:page-size.sync="p.pageSize" 
+						:total="dataCount" 
+						:page-sizes="[100000]" 
+						@current-change="f5()" 
+						@size-change="f5()">
+					</el-pagination>
+				</div>
+			</div>
+
+		</div>
+
+		<script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, // 超级对象
+					p: { // 查询参数 
+						k: '',
+						pageNo: 1,		// 当前页 
+						pageSize: 100000,	// 页大小 
+						sortType: 0	// 排序方式 
+					},
+					isLike: true,	// 是否为模糊匹配
+					dataCount: 0,
+					preData: {
+						keys_count: 0, // key 总数 
+						keyspace_hits: 0,	// 被命中次数 
+						used_memory_human: 0, // 已经占用内存数量 
+						used_memory_peak_human: 0, // 内存消耗峰值 
+						uptime_in_seconds: 0, // redis 已经启动的秒数 
+						uptime_in_seconds_str: '0', // redis 已经启动的时间 
+					},
+					dataList: [],
+				},
+				methods: {
+					// 查询key列表 
+					f5: function() {
+						let k = this.p.k;
+						if(this.isLike) {
+							k = '*' + k + '*';
+						}
+						sa.ajax('/RedisConsole/getKeys', {k: k}, function(res) {
+							var dataList = [];
+							for (var i = 0; i < res.data.length; i++) {
+								dataList.push({
+									key: res.data[i],	// key
+									value: '',		// value 
+									is_show: false,	// 是否已经显示详情 
+									ttl: '未加载',			// 过期时间 
+								})
+							}
+							this.dataList = dataList;
+							this.dataCount = this.dataList.length;
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this)); 
+					},
+					// 刷新预览 
+					f5_pre: function(is_f5_keys) {
+						// 基本预览信息
+						sa.ajax('/RedisConsole/getPreInfo', this.p, function(res) {
+							res.data.uptime_in_seconds_str = getDuration(parseInt(res.data.uptime_in_seconds) * 1000);
+							this.preData = res.data;
+							// 如果指定不查询keys列表 
+							if(is_f5_keys === false) {
+								return;
+							}
+							// 小于等于10000直接查询，否则提示一下 
+							if(this.preData.keys_count <= 10000) {
+								this.f5();
+							} else {
+								sa.confirm('key值数量已达' + this.preData.keys_count + '，继续检索可能会严重影响系统性能，是否继续加载？', function(res) {
+									this.f5();
+								}.bind(this))
+							}
+						}.bind(this)); 
+					},
+					// 加载详情
+					get: function(data) {
+						sa.ajax('/RedisConsole/getByKey?key=' + data.key, function(res) {
+							data.value = res.data.value;
+							data.ttl = res.data.ttl;
+							data.is_show = true;
+							sa.f5TableHeight();	// 刷新表格高度
+						}.bind(this)); 
+					},
+					// 删除
+					del: function(data) {
+						sa.confirm('是否删除，此操作不可撤销', function() {
+							sa.ajax('/RedisConsole/del?key=' + data.key, function(res) {
+								sa.arrayDelete(app.dataList, data);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							})
+						});
+					},
+					// 修改键值 
+					updateValue: function(data) {
+						layer.prompt({
+							title: '修改键值',
+							// shadeClose: true,	// 点击遮罩关闭 
+							formType: 2,		// 多行输入 
+							maxlength: 9999999999,	// 最大输入字符长度
+							area: ['600px', '400px'],	// 弹窗尺寸
+						}, function(pass, index, elem){
+							layer.close(index); //如果设定了yes回调，需进行手工关闭
+							sa.ajax('/RedisConsole/updateValue', {key: data.key, value: pass}, function(res){
+								data.value = pass;
+								layer.msg('修改成功');
+								sa.f5TableHeight();	// 刷新表格高度
+							})
+						});
+					},
+					// 修改ttl 
+					updateTTL: function(data) {
+						sa.prompt('修改TTL', function(pass, index){
+							if(isNaN(pass)) {
+								return sa.error('请输入一个数值');
+							}
+							sa.ajax('/RedisConsole/updateTTL', {key: data.key, ttl: pass}, function(res){
+								data.ttl = pass;
+								sa.ok('修改成功');
+							})
+						});
+					},
+					// 添加
+					add: function() {
+						sa.showIframe('添加键值', 'redis-key-add.html', '850px', '600px');
+					},
+					// 根据id列表删除 
+					deleteByKeys: function() {
+						// 获取选中元素的id列表
+						let selection = this.$refs['data-table'].selection;
+						let keys = sa.getArrayField(selection, 'key');
+						
+						// 判断
+						if(keys.length < 1) {
+							return sa.error('请至少选择一行');
+						}
+						// 删除 
+						sa.confirm('是否删除选中记录，此操作不可撤销', function() {
+							sa.ajax('/RedisConsole/deleteByKeys', {key: keys}, function(res) {
+								sa.arrayDelete(this.dataList, selection);
+								sa.ok2('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							}.bind(this))
+						}.bind(this));
+					},
+					// 刷新秒数 
+					auto_f5_run_time: function() {
+						setInterval(function() {
+							if(this.preData.uptime_in_seconds <= 0 || this.preData.uptime_in_seconds > 60 * 60 * 24) {
+								return;
+							}
+							this.preData.uptime_in_seconds++;
+							this.preData.uptime_in_seconds_str = getDuration(parseInt(this.preData.uptime_in_seconds) * 1000);
+						}.bind(this), 1000);
+					}
+				},
+				created: function() {
+					this.f5_pre();
+					this.auto_f5_run_time();
+				}
+			})
+
+
+
+			function getDuration(my_time) {
+				var days = my_time / 1000 / 60 / 60 / 24;
+				var daysRound = Math.floor(days);
+				var hours = my_time / 1000 / 60 / 60 - (24 * daysRound);
+				var hoursRound = Math.floor(hours);
+				var minutes = my_time / 1000 / 60 - (24 * 60 * daysRound) - (60 * hoursRound);
+				var minutesRound = Math.floor(minutes);
+				var seconds = my_time / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
+				seconds = parseInt(seconds);
+				// console.log('转换时间:', daysRound + '天', hoursRound + '时', minutesRound + '分', seconds + '秒');
+				// var time = hoursRound + ':' + minutesRound + ':' + seconds
+				// return time;
+				if(daysRound > 1) {
+					return daysRound + '天' + hoursRound + '小时';
+				} else if(hoursRound > 1) {
+					return hoursRound + '小时' + hoursRound + '分';
+				} else if(minutesRound > 1) {
+					return minutesRound + '分' + seconds + '秒';
+				} else {
+					return seconds + '秒';
+				}
+			}
+			// console.log(getDuration(200000));;
+		</script>
+
+	</body>
+</html>

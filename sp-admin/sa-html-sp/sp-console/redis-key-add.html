@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>Redis-key值添加</title>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			.c-panel .c-label{width: 6em;}
+			/*  普通文本和富文本一起变长  */
+			.c-panel .el-form .el-input, .c-panel .el-form .el-textarea__inner{width: 600px;}
+			body{background-color: #FFF;}
+		</style>
+ 
+	</head>
+	<body>
+		<div style="margin-top: -1em;" title="防止margin向下击穿"><br></div>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<!-- 参数栏 -->
+			<div class="c-panel">
+				<h4 class="c-title">添加一个键值</h4>
+				<el-form>
+					<div class="c-item br">
+						<label class="c-label">key：</label>
+						<el-input size="mini" v-model="m.key"></el-input>
+					</div>
+					<div class="c-item br">
+						<label class="c-label" style="vertical-align: top;">value：</label>
+						<div style="display: inline-block;">
+							<el-input v-model="m.value" size="mini" type="textarea" :autosize="{ minRows: 14, maxRows: 20}"></el-input>
+						</div>
+					</div>
+					<div class="c-item br">
+						<label class="c-label">ttl：</label>
+						<el-input size="mini" v-model="m.ttl" placeholder="过期时间 单位/毫秒"></el-input>
+					</div>
+					<div class="c-item br">
+						<label class="c-label"></label>
+						<el-button type="primary" icon="el-icon-plus" size="mini" @click="ok()">保存</el-button>
+					</div>
+				</el-form>
+			</div>
+		</div>
+		<script type="text/javascript">
+			function crate_model() {
+				return {
+					key: '',
+					value: '',
+					ttl: '',
+					is_show: true
+				}
+			}
+		</script>
+        <script>
+			
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, 	// 超级对象
+					m: crate_model()
+				},
+				methods: {
+					// 修改
+					ok: function(){
+						// 开始验证
+						var m = this.m;
+						if(m.key == ''){
+							return sa.error('请输入键');
+						}
+						if(m.value == ''){
+							return sa.error('请输入值');
+						}
+						if(m.ttl == ''){
+							return sa.error('请输入ttl (过期时间)');
+						}
+						if(isNaN(m.ttl)) {
+							return sa.error('ttl 必须是一个数字 ');
+						}
+						// 添加
+						m.ttl = parseInt(m.ttl);
+						sa.ajax('/RedisConsole/set', m, function(res){
+							sa.closeCurrIframe();
+							parent.app.dataList.unshift(m);
+							parent.sa.msg('添加成功');
+							parent.sa.f5TableHeight();	// 刷新表格高度
+						}.bind(this));
+					}
+				},
+				mounted: function(){
+					
+				}
+			})
+			
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>sa-doc 全局默认参数设置</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="./sa.css">
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="./sa.js"></script>
+		<style type="text/css">
+			
+			.vue-box{max-width: 1000px; margin: auto;}
+			
+			/* api-url盒子  */
+			.ajax-api-box{width: 100%;}
+			.c-panel .ajax-api-box .el-input{width: calc(100% - 200px);}
+			/* type */
+			.ajax-type,
+			.ajax-type .el-input,
+			.ajax-type .el-input__inner{width: 100px !important; text-align: center; 
+				font-weight: bold; background-color: #409EFF; color: #FFF; border-color: #409EFF !important; border-radius: 4px;}
+			.ajax-type{margin-right: 5px; }
+			
+			/* 参数盒子 */
+			.header-box .el-table__header-wrapper{height: 0px;}
+			.body-box .el-table__header-wrapper{height: 0px;}
+			.el-table td{border: 0px !important;}
+			.el-table::before{background-color: rgba(0,0,0,0)}
+			
+			.add-btn{padding: 5px 15px; margin-left: 10px; display: inline-block;}
+			.add-btn .el-link--inner{position: relative; top: -1px;}
+			.el-table__empty-block{height: 0px !important; display: none;}
+			
+			.el-textarea__inner{padding: 10px 15px; color: inherit;}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div style="margin-top: -1em;" title="防止margin向下击穿"><br></div>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<div class="c-title">
+					<span>参数说明</span>
+				</div>
+				<div>
+					<span style="color: #666; margin-left: 10px;">全局默认参数，会在每个测试接口里自动加载出来</span>
+				</div>
+				<!--------------- 请求地址 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>全局设置</span>
+					<br>
+					<el-checkbox v-model="isCookie">发送Cookie</el-checkbox>
+				</div>
+				<!--------------- header 参数 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>全局 header 参数</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="headerListAdd()">添加</el-link>
+				</div>
+				<div class="header-box">
+					<el-table :data="headerList" size="mini" ref="headerTable">
+						<el-table-column label="Name">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.name"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="Value">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.value"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100px">
+							<template slot-scope="s">
+								<el-button class="c-btn" type="danger" icon="el-icon-close" @click="sa.arrayDelete(headerList, s.row)" tabindex="-1">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+				
+				<!--------------- body 参数 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>全局 body 参数</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="bodyListAdd()">添加</el-link>
+				</div>
+				<div class="body-box">
+					<el-table :data="bodyList" size="mini" ref="bodyTable">
+						<el-table-column label="Name">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.name"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="Value">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.value" :placeholder="s.row.tips"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100px">
+							<template slot-scope="s">
+								<el-button class="c-btn" type="danger" icon="el-icon-close" @click="sa.arrayDelete(bodyList, s.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+				
+				<div class="c-title" style="margin-top: 20px;">操作</div>
+				<div class="c-item ajax-api-box" style="min-width: 0px; padding-right: 5px;">
+					<el-button size="small" type="primary" icon="el-icon-plus" @click="save()">保存</el-button>
+					<el-button size="small" icon="el-icon-close" @click="sa.closeCurrIframe()">关闭</el-button>
+					<span class="c-remark"></span>
+				</div>
+				
+				
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					isCookie: false,
+					headerList: [], // headr数据集合 
+					bodyList: [], 	// body数据集合 
+				},
+				methods: {
+					// header添加参数  
+					headerListAdd: function(header) {
+						header = header || {name: '', value: '', tips: ''};
+						this.headerList.push(header);
+						this.f5_tabindex();
+					},
+					// body添加参数  
+					bodyListAdd: function(body) {
+						body = body || {name: '', value: '', tips: ''};
+						this.bodyList.push(body);
+						this.f5_tabindex();
+					},
+					// 保存
+					save: function() {
+						// 写入本地缓存 
+						localStorage.setItem('isCookieCC', this.isCookie + "");
+						localStorage.setItem('headerListCC', JSON.stringify(this.headerList));
+						localStorage.setItem('bodyListCC', JSON.stringify(this.bodyList));
+						sa.ajax2('asd', function() {
+							// sa.ok2('保存成功');
+							sa.alert('保存成功',function() {
+								sa.closeCurrIframe();
+							})
+						}, {msg: '正在保存...'})
+					},
+					// 设置一下 tabindex
+					f5_tabindex: function() {
+						this.$nextTick(function() {
+							$('.el-checkbox__original').attr('tabindex', -1);
+						})
+					},
+					// 从本地缓存中加载参数 
+					init: function() {
+						try{
+							// 是否发送cookie 
+							var isCookieCC = localStorage.getItem('isCookieCC');
+							this.isCookie = isCookieCC === "true";
+							// 加载默认header参数 
+							var headerListCC = localStorage.getItem('headerListCC');
+							if(headerListCC && headerListCC != '') {
+								headerListCC = JSON.parse(headerListCC);
+								headerListCC.forEach(function(item) {
+									if(item.name == null || item.name == '') {
+										return;
+									}
+									this.headerListAdd(item);
+								}.bind(this))
+							}
+							// 加载默认body参数 
+							var bodyListCC = localStorage.getItem('bodyListCC');
+							if(bodyListCC && bodyListCC != '') {
+								bodyListCC = JSON.parse(bodyListCC);
+								bodyListCC.forEach(function(item) {
+									if(item.name == null || item.name == '') {
+										return;
+									}
+									this.bodyListAdd(item);
+								}.bind(this))
+							}
+						}catch(e){
+							console.error(e);
+						}
+						
+					}
+				},
+				created: function() {
+					// this.f5();
+				},
+				mounted: function() {
+					this.init();
+				}
+			})
+			
+		</script>
+	</body>
+</html>

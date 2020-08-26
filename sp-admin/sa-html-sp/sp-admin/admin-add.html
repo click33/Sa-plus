@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+	    <title>添加管理员</title>
+	    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<script src="../../static/kj/upload-util.js"></script>
+		<style type="text/css">
+			.c-panel .c-label{width: 6em;}
+		</style>
+ 
+	</head>
+	<body>
+		<div style="margin-top: -1em;" title="防止margin向下击穿"><br></div>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<!-- 参数栏 -->
+			<div class="c-panel">
+				<h4 class="c-title">添加一个管理员</h4>
+				<el-form>
+					<!-- <div class="c-item">
+						<label class="c-label">id：</label> {{m.id}} 
+					</div>
+					<br /> -->
+					<div class="c-item">
+						<label class="c-label">头像：</label>
+						<img :src="m.avatar" style="width: 3em; height: 3em; cursor: pointer;" 
+							@click="sa.showImage(m.avatar, '400px', '400px')" v-if="m.avatar != '' ">
+						<a href="javascript:;" @click="upload_avatar()" > 选择</a>
+						<!-- <a href="javascript:;" @click="sa.uploadImage(src => m.avatar = src)" > 选择(js-lambda写法)</a> -->
+					</div>
+					<div style="height: 0px; overflow: hidden;">
+						<el-input size="mini"></el-input>
+						<el-input size="mini" type="password"></el-input>
+					</div>
+					<div class="c-item">
+						<label class="c-label">名称：</label>
+						<el-input size="mini" v-model="m.name"></el-input>
+					</div>
+					<br />
+					<div class="c-item">
+						<label class="c-label">密码：</label>
+						<el-input size="mini" v-model="m.password" type="password"></el-input>
+					</div>
+					<br />
+					<div class="c-item">
+						<label class="c-label">角色：</label>
+						<el-select size="mini" v-model="m.role_id">
+							<el-option label="请选择" :value="0" disabled></el-option>
+							<el-option v-for="role in roleList" :key="role.id" :label="role.role_name" :value="role.id"></el-option>
+						</el-select>
+					</div>
+					
+					<br />
+					<div class="c-item">
+						<label class="c-label"></label>
+						<el-button type="primary" icon="el-icon-plus" size="mini" @click="ok()">保存</el-button>
+					</div>
+				</el-form>
+			</div>
+		</div>
+		
+		<script type="text/javascript">
+			function crate_model() {
+				return {
+					id: 0,
+					name: '',
+					avatar: '',
+					password: '',
+					role_id: 0
+				}
+			}
+		</script>
+        <script>
+			
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, 	// 超级对象
+					m: crate_model(),
+					is_close: sa.p('is_close', 'false') == 'true',	// 是否在添加完成后关闭窗口 
+					roleList: []
+				},
+				methods: {
+					// 上传文件 
+					upload_avatar: function() {
+						sa.uploadImage(function(src) {
+							this.m.avatar = src;	
+							sa.ok2('上传成功');
+						}.bind(this));
+					},
+					// 修改
+					ok: function(){
+						// 开始验证
+						var m = this.m;
+						if(m.avatar == ''){
+							return sa.msg('请选择一个头像');
+						}
+						if(m.name == ''){
+							return sa.msg('请输入昵称称');
+						}
+						if(m.password == ''){
+							return sa.msg('请输入密码');
+						}
+						if(m.role_id == 0){
+							return sa.msg('请选择角色');
+						}
+						// 添加
+						sa.ajax('/admin/add', m, function(res){
+							sa.alert('添加成功, 账号id为：' + res.data, function(){
+								this.m = crate_model();
+								// location.reload();
+							}.bind(this));
+						}.bind(this));
+					}
+				},
+				mounted: function(){
+					// 加载角色 
+					sa.ajax('/role/getList', function(res){
+						this.roleList = res.data;	// 数据  
+					}.bind(this), {msg: null});
+				}
+			})
+			
+			
+		</script>
+	</body>
+</html>

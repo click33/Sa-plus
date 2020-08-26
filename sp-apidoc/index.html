@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<title>sa-doc接口文档</title>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<link rel="shortcut icon" type="image/x-icon" href="sa-lib/logo.png">
+		<link rel="stylesheet" href="https://unpkg.com/docsify@4.11.3/lib/themes/vue.css">
+		<link rel="stylesheet" href="./sa-lib/index.css">
+		<script src="./sa-lib/index.js"></script> 
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="./sa-lib/api-test/sa.js"></script>
+	</head>
+	<body>
+		<nav>
+			<a href="./">首页</a>
+			<a href="./#/sa-lib/doc-exp">接口说明</a>
+			<a href="https://jq.qq.com/?_wv=1027&k=5DHN5Ib" target="_blank">QQ群</a>
+		</nav>
+		<div class="main-box">
+			<div id="app">加载中...</div>
+		</div>
+		<script>
+			
+			// ========================= v1.3.0 版本，更新于2020-7-2 新增接口文档测试  =========================
+			
+			// 全局配置 
+			window.sa_doc_cfg = {
+				server_url: 'http://127.0.0.1:8099',	// 接口测试总地址 
+				// server_url: 'http://127.0.0.1:8099',	// 接口测试总地址 
+			}
+			
+			// 文档标题
+			var name = '<img style="width: 50px; height: 50px; vertical-align: middle;" src="sa-lib/logo.png" alt="logo" /> ';
+			name += '<b style="font-size: 24px; vertical-align: middle;">sa-doc 接口文档</b>'
+			// 一些配置 
+			window.$docsify = {
+				name: name, // 名字 
+				// basePath: '/sa-doc/', // 项目名，如果部署时带路径上下文，则必须写这个     
+				basePath: location.pathname.substr(0, location.pathname.lastIndexOf('/') + 1),	// 自动计算项目名字 
+				// themeColor: '#06A3D7', // 主题颜色  
+				repo: 'https://github.com/click33/sa-doc', // github地址 
+				auto2top: true, // 是否在切换页面后回到顶部 
+				// coverpage: true, // 开启封面 
+				subMaxLevel: 3, // 标题解析层级, 写几就在目录树中解析到几级标题 ,一般写2吧也就 
+				loadSidebar: true, // 加载自定义侧边栏 , 目录定制在: _sidebar.md 文件 (需要创建 .nojekyll 的空文件，阻止 GitHub Pages 忽略命名是下划线开头的文件)  
+				copyCode: { // 复制插件 
+					buttonText: '复制到剪贴板',
+					errorText: '错误',
+					successText: '复制成功'
+				},
+				alias: {
+					'/.*/_sidebar.md': '/_sidebar.md'
+				},
+				search: 'auto', // 打开搜索功能 
+				plugins: [sa_plugins]	// 自定义插件 
+			}
+		</script>
+		<script src="https://unpkg.com/docsify@4.9.4/lib/docsify.min.js"></script>
+		<script src="https://unpkg.com/docsify-copy-code@2.1.0/dist/docsify-copy-code.min.js"></script>
+		<script src="https://unpkg.com/prismjs@1.20.0/components/prism-java.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+	</body>
+</html>

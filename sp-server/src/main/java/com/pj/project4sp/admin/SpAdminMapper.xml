@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.admin.SpAdminMapper">
+
+
+	<!-- 增 -->
+	<insert id="add">
+		insert into
+		sp_admin(name, avatar, phone, role_id, create_by_aid, create_time)
+		values (#{name}, #{avatar}, #{phone}, #{role_id}, #{create_by_aid}, now())
+	</insert>
+
+
+	<!-- 删 -->
+	<delete id="delete">
+		delete from sp_admin where id = #{id} 
+	</delete>
+
+
+	<!-- 改 -->
+	<delete id="update">
+		update sp_admin set 
+		name = #{name} 
+		where id = #{id} 
+	</delete>
+	
+	<!-- 自己改自己 -->
+	<!-- <delete id="updateBy">
+		update sp_admin set 
+		name = #{name} 
+		where id = #{id} 
+	</delete> -->
+
+	<!-- =================== 查询相关 =================== -->
+
+	<!-- 通用映射 -->
+	<resultMap id="model" type="com.pj.project4sp.admin.SpAdmin">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="avatar" column="avatar" />
+		<result property="password" column="password" />
+		<result property="pw" column="pw" />
+		<result property="phone" column="phone" />
+		<result property="role_id" column="role_id" />
+		<result property="status" column="status" />
+		<result property="create_by_aid" column="create_by_aid" />
+		<result property="create_time" column="create_time" />
+		<result property="login_time" column="login_time" />
+		<result property="login_ip" column="login_ip" />
+		<result property="login_count" column="login_count" />
+		<result property="role_name" column="role_name" />
+	</resultMap>
+	
+	<!-- 查询sql -->
+	<sql id="select_sql">
+		select *,
+		(select role_name from sp_role where id = sp_admin.role_id) as role_name 
+		from sp_admin 
+	</sql>
+
+
+	<!-- 查询，根据id -->
+	<select id="getById" resultMap="model">
+		<include refid="select_sql"></include>
+		where id = #{id}
+	</select>
+
+	<!-- 查询，根据名称 -->
+	<select id="getByName" resultMap="model">
+		<include refid="select_sql"></include>
+		where name = #{name}
+	</select>
+
+	<!-- 查询，根据名称 -->
+	<select id="getByPhone" resultMap="model">
+		<include refid="select_sql"></include>
+		where phone = #{phone}
+	</select>
+
+
+	<!-- 查询，根据条件(参数为null或0时默认忽略此条件) -->
+	<select id="getList" resultMap="model">
+		<include refid="select_sql"></include>
+		where 1=1
+		<if test=' this.isNotNull("id")  '>
+			and id = #{id} 
+		</if>
+		<if test=' this.isNotNull("name")  '>
+			and name like concat('%', #{name}, '%')  
+		</if>
+		<if test=' this.isNotNull("role_id")  '>
+			and role_id = #{role_id} 
+		</if>
+		order by 
+		<choose>
+			<when test='sort_type == 0'>id desc</when> 
+			<when test='sort_type == 1'>id asc</when> 
+			<when test='sort_type == 2'>login_time desc</when> 
+			<when test='sort_type == 3'>login_count desc</when> 
+		 	<otherwise>id desc</otherwise>
+		 </choose>
+	</select>
+	
+
+
+</mapper>

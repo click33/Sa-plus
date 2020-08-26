@@ -1,0 +1,46 @@
+.logo-box {position: absolute;left: 30px;top: 10px;cursor: pointer;color: #000;}
+.logo-box img {width: 50px;height: 50px;vertical-align: middle;}
+.logo-box .logo-text {display: inline-block;vertical-align: middle;font-size: 24px;font-weight: 400;}
+#main {padding-bottom: 300px;}
+#main h2 {font-size: 1.6rem;}
+#main h3 {font-size: 1.25rem;}
+@media screen and (max-width: 800px) {
+	.logo-box {display: none;}
+}
+
+
+/* ============== 样式优化 ================ */
+
+/* 背景变黑 */
+.main-box [data-lang]{padding: 0px !important; border-radius: 10px; overflow: hidden;}
+.main-box [class^="lang-"]{/* color: red !important; */ border: 0px red solid; padding: 1.2em; background-color: #000; color: #FFF;}
+.main-box [class^="lang-api"]{color: #FFF;}
+
+
+.token.string{color: #65B042;}
+.token.number{color: #2487CC;}
+.token.punctuation{color: #FFF;}
+.token.comment{color: #FFF;}
+
+/* .main-box [class="lang-api"]{color: red;} */
+
+#main table{margin-left: 25px;}
+@media screen and (min-width: 800px) {
+	#main table tr th{min-width: 150px;}
+}
+
+
+/* 测试接口的按钮 */
+.test-api-btn{
+	margin-left: 30px;
+	cursor: pointer;
+	border-radius: 2px;
+	border-width: 0px;
+	padding: 7px 15px;
+	background-color: green;
+	color: #FFF;
+}
+
+.layui-layer-iframe{box-shadow: 0 0 100px #000 !important;}
+
+#main [data-lang=js]{margin-bottom: 80px;}

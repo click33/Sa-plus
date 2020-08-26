@@ -1,0 +1,19 @@
+spring: 
+    # freemarker配置
+    freemarker: 
+        charset: UTF-8
+        suffix: .ftl
+        content-type: text/html; charset=utf-8
+        template-loader-path: classpath:/templates
+        
+    # SqlFly的配置 （请从代码中配置）
+#    sqlfly: 
+#        driver-class-name: com.mysql.jdbc.Driver
+#        url: jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
+#        username: root
+#        password: root
+#        # 是否启用连接池 
+#        ispool: false
+#        # 是否控制台打印日志 
+#        printSql: true 
+        

@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>角色列表</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- 参数栏 -->
+				<div class="c-title">检索参数</div>
+				<el-form :inline="true" size="mini" @submit.native.prevent>
+					<div class="c-item">
+						<label class="c-label">角色名称：</label>
+						<el-input size="mini" v-model="p.role_name"></el-input>
+					</div>
+					<div class="c-item" style="min-width: 0px;">
+						<el-button size="mini" type="primary" icon="el-icon-search" @click="f5()">查询</el-button>
+						<el-button size="mini" type="primary" icon="el-icon-plus" @click="add()">新增</el-button>
+					</div>
+				</el-form>
+				<!-- 数据列表 -->
+				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
+					<el-table-column label="编号" prop="id" width="70px" > </el-table-column>
+					<el-table-column label="角色名称">
+						<template slot-scope="s">
+							<el-input v-if="s.row.is_update" size="mini" v-model="s.row.role_name"></el-input>
+							<span v-else>{{s.row.role_name}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="责任描述">
+						<template slot-scope="s">
+							<el-input v-if="s.row.is_update" size="mini" v-model="s.row.role_info"></el-input>
+							<span v-else>{{s.row.role_info}}</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="是否锁定" title="锁定的角色为系统维持正常运行的重要角色，不可删除">
+						<template slot-scope="s">
+							{{s.row.is_lock == 1 ? '是' : '否'}}
+						</template>
+					</el-table-column>
+					<el-table-column label="创建日期">
+						<template slot-scope="s">
+							{{sa.forDate(s.row.create_time, 2)}}
+						</template>
+					</el-table-column>
+					<el-table-column label="操作" width="220px">
+						<template slot-scope="s">
+							<el-button type="text" size="mini" @click="update(s.row)">
+								<span :style="s.row.is_update ? 'color: red;' : ''">修改</span>
+							</el-button>
+							<el-button type="text" size="mini" @click="del(s.row)">删除</el-button>
+							<el-button type="text" size="mini" @click="menu_setup(s.row)">分配权限</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<!-- ------------- 分页 ------------- -->
+				<div class="page-box">
+					<el-pagination background
+						layout="total, prev, pager, next, sizes, jumper" 
+						:current-page.sync="p.pageNo" 
+						:page-size.sync="p.pageSize" 
+						:total="dataList.length" 
+						:page-sizes="[10000]" 
+						@current-change="f5()" 
+						@size-change="f5()">
+					</el-pagination>
+				</div>
+			</div>
+		</div>
+        <script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, 	// 超级对象
+					p: {	// 查询参数 
+						role_name: '',
+						pageNo: 1,
+						pageSize: 10000,
+					},
+					dataList: [],	// 数据集合
+				},
+				methods: {
+					// 刷新
+					f5: function(){
+						sa.ajax('/role/getList', this.p, function(res) {
+							this.dataList = sa.listAU(res.data);
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
+					},
+					// 修改
+					update: function (data) {
+						if(data.is_update == false) {
+							data.is_update = true;
+						} else {
+							sa.confirm('是否修改数据？', function(){
+								var data2 = sa.copyJSON(data);
+								data2.create_time = undefined;
+								sa.ajax('/role/update', data2, function(res){
+									sa.ok('修改成功');
+									data.is_update = false;
+								})
+							})
+						}
+					},
+					// 删除
+					del: function (data) {
+						if(data.is_lock == 1){
+							return layer.alert('此角色是维持系统正常运行的重要角色，已被锁定，不可删除');
+						};
+						sa.confirm('是否删除，此操作不可撤销', function(){
+							sa.ajax('/role/delete', {id: data.id},function(res){
+								sa.arrayDelete(app.dataList, data);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							})
+						});
+					},
+					// 添加
+					add: function () {
+						sa.showIframe('新增角色', 'role-add.html?id=-1', '420px', '280px');
+					}, 
+					// 修改权限菜单
+					menu_setup: function(data){
+						var title = '为 ['+data.role_name+'] 分配权限';
+						sa.showIframe(title, 'menu-setup.html?role_id=' + data.id, '700px', '600px');
+					}
+				},
+				created: function(){
+					this.f5();
+					sa.onInputEnter();	// 监听表单回车执行查询 
+				}
+			})
+			
+			
+		
+		</script>
+	</body>
+</html>

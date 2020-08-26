@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns="http://ch.qos.logback/xml/ns/logback"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
+	
+	<!-- 定义日志打印的根目录，不同的项目之间一般只用改这个属性值就够了 -->
+	<property name="LOG_HOME" value="/log/sp-server" />
+	
+	<!-- 输出到控制台 -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- 输出的格式 -->
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level --> : %msg%n</pattern>
+			<!-- <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] --> <!-- %logger{50}: %msg%n</pattern> -->
+		</encoder>
+	</appender>
+
+	<!-- 文件输出 -->
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 配置滚动的策略 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<!-- 日志名称的格式：LOG_HOME/年_月/年_月_日/年_月_日_时(索引).log -->
+			<fileNamePattern>${LOG_HOME}/%d{yyyy_MM}/%d{yyyy_MM_dd}/%d{yyyy_MM_dd_HH}(%i).log</fileNamePattern>
+			<!-- 单log文件最大大小 -->
+			<maxFileSize>1MB</maxFileSize> 
+			<!-- 保存的最长时间：天数 -->
+			<maxHistory>3650</maxHistory>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] --> : %msg%n</pattern>
+		</encoder>
+	</appender>
+
+
+	<!-- 相当于logger元素，只是name值已经确定为root了 -->
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+	
+	<!-- 可以设置具体到某个包的日志打印规则 -->
+	<!-- 注意： level属性也可以直接写在logger上，如： <logger name="ws.log.logback.LogbackTest" 
+		additivity="false" level="INFO"> <appender-ref ref="STDOUT" /> </logger> -->
+	<!-- <logger name="com.cr.utils.FC" additivity="false">
+		<level value="DEBUG" />
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger> -->
+	
+</configuration>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>资料详情</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			/* 使长度更长点 */
+			/* .c-panel .c-label{width: 10em;} */
+			.vue-box,.c-panel{background-color: #EEE;}
+			.c-panel .c-title{margin-bottom: 20px;}
+			.c-item .c-label{width: 150px;}
+			.c-item .el-input{width: 300px;}
+			/* 链接样式  */
+			.my-link{position: relative; top: -1px; margin-left: 0.5em;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box sbot" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<el-form size="mini" v-if="m">
+						<div style="height: 20px;"></div>
+						<div class="c-item">
+							<label class="c-label">编号：</label>
+							<span>{{m.id}}</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">名称：</label>
+							<span>{{m.name}}</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">手机：</label>
+							<span>{{m.phone}}</span>
+							<span v-if="sa.isNull(m.phone)">无</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">角色：</label>
+							<b>{{m.role_name}}</b>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">创建账号：</label>
+							<span v-if="m.create_by_aid == -1">无</span>
+							<a v-else :href=" 'admin-info.html?id=' +  m.create_by_aid">{{m.create_by_aid}}</a>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">创建时间：</label>
+							<span>{{sa.forDate(m.create_time, 2)}}</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">最后登录：</label>
+							<span>{{sa.forDate(m.login_time, 2)}}</span>
+							<span v-if="sa.isNull(m.login_time)">无</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">登录次数：</label>
+							<span>{{m.login_count}}</span>
+						</div>
+						<br>
+						<div class="c-item">
+							<label class="c-label">最后登录IP：</label>
+							<span>{{m.login_ip}}</span>
+							<span v-if="sa.isNull(m.login_ip)">无</span>
+						</div>
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button size="mini" type="success" @click="sa.closeCurrIframe()">确定</el-button>
+				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+			</div>
+			
+		</div>
+		
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					id: parseInt(sa.p('id', 0)),
+					sa: sa,
+					m: null
+				},
+				methods: {
+					// ok
+					ok: function(pageNo) {
+						sa.closeCurrIframe();
+					},
+					// 打开资金详细记录 
+					openZJXX: function() {
+						var url = 'html/ser-change-log/ser-change-log-list.html?type=1&acc_id=' + this.m.id;
+						var tab = {id: 'admin-money-' + this.m.id, name: '资金记录', url: url};
+						top.sa_admin.showTab(tab);
+						// 如果是本人的，在sa_admin打开的窗口，就关闭这个窗口 
+						if(this.id == 0) {
+							sa.closeCurrIframe();
+						}
+					}
+				},
+				created: function() {
+					if(this.id == 0 || this.id == sa.$sys.getCurrUser().id) {
+						sa.ajax('/admin/getByCurr', function(res) {
+							this.m = res.data;
+						}.bind(this));
+					} else {
+						sa.ajax('/admin/getById?id=' + this.id, function(res) {
+							this.m = res.data;
+						}.bind(this));
+					}
+				}
+			})
+			
+		</script>
+	</body>
+</html>

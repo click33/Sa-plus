@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>sa-doc 接口测试</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="./sa.css">
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="./sa.js"></script>
+		<style type="text/css">
+			
+			
+			.vue-box{max-width: 1000px; margin: auto;}
+			
+			/* api-url盒子  */
+			.ajax-api-box{width: 100%;}
+			.c-panel .ajax-api-box .el-input{width: calc(100% - 200px); }
+			/* .c-panel .ajax-api-box .el-input__inner{font-weight: bold;} */
+			.c-panel .el-input__inner{color: #333;}
+			/* type */
+			.ajax-type,
+			.ajax-type .el-input,
+			.ajax-type .el-input__inner{width: 100px !important; text-align: center; 
+				font-weight: bold; background-color: #409EFF; color: #FFF; border-color: #409EFF !important; border-radius: 4px;}
+			.ajax-type{margin-right: 5px; }
+			
+			/* 参数盒子 */
+			.header-box .el-table__header-wrapper{height: 0px;}
+			.body-box .el-table__header-wrapper{height: 0px;}
+			.el-table td{border: 0px !important;}
+			.el-table::before{background-color: rgba(0,0,0,0)}
+			
+			.add-btn{padding: 2px 15px; margin-left: 0px; display: inline-block;}
+			.add-btn .el-link--inner{position: relative; top: -1px;}
+			.el-table__empty-block{height: 0px !important; display: none;}
+			
+			.el-textarea__inner{padding: 10px 15px; color: inherit;/* font-family: Roboto Mono,Monaco,courier,monospace; */}
+			
+			
+		</style>
+	</head>
+	<body>
+		<div style="margin-top: -1em;" title="防止margin向下击穿"><br></div>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!--------------- 请求地址 --------------->
+				<div class="c-title">
+					<span>请求地址</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="g_setting()">全局参数设置</el-link>
+					<el-checkbox v-model="isCookie">发送Cookie</el-checkbox>
+				</div>
+				<div class="c-item ajax-api-box" style="min-width: 0px; padding-right: 5px;">
+					<el-select size="small" v-model="ajaxType" class="ajax-type">
+						<el-option label="GET" value="GET"></el-option>
+						<el-option label="POST" value="POST"></el-option>
+						<el-option label="PUT" value="PUT"></el-option>
+						<el-option label="DELETE" value="DELETE"></el-option>
+					</el-select> 
+					<el-input size="small" v-model="ajaxUrl" class="ajax-url"></el-input>
+					<el-button size="small" type="primary" icon="el-icon-plus" @click="send()">发送</el-button>
+				</div>
+				<!--------------- header 参数 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>header 参数</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="headerListAdd()">添加</el-link>
+				</div>
+				<div class="header-box">
+					<el-table :data="headerList" size="mini" ref="headerTable">
+						<el-table-column type="selection" width="45px" selection="-1"></el-table-column>
+						<el-table-column label="Name">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.name"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="Value">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.value"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100px">
+							<template slot-scope="s">
+								<el-button class="c-btn" type="danger" icon="el-icon-close" @click="sa.arrayDelete(headerList, s.row)" tabindex="-1">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+				
+				<!--------------- body 参数 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>body 参数</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="bodyListAdd()">添加</el-link>
+					<el-link class="add-btn" type="primary" icon="el-icon-edit" @click="bodyListCopy()">复制参数</el-link>
+					<el-link class="add-btn" type="primary" icon="el-icon-edit" @click="bodyListImport()">导入参数</el-link>
+				</div>
+				<div class="body-box">
+					<el-table :data="bodyList" size="mini" ref="bodyTable">
+						<el-table-column type="selection" width="45px"></el-table-column>
+						<el-table-column label="Name">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.name"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="Value">
+							<template slot-scope="s">
+								<el-input size="small" v-model="s.row.value" :placeholder="s.row.tips"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column label="操作" width="100px">
+							<template slot-scope="s">
+								<el-button class="c-btn" type="danger" icon="el-icon-close" @click="sa.arrayDelete(bodyList, s.row)">删除</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+				
+				<!--------------- 返回结果 --------------->
+				<div class="c-title" style="margin-top: 20px;">
+					<span>接口返回</span>
+					<el-link class="add-btn" type="primary" icon="el-icon-plus" @click="sa.copyText(resText); sa.ok2('复制成功')">复制</el-link>
+				</div>
+				<div class="res-box">
+					<el-input class="res-text" type="textarea" placeholder="接口返回" v-model="resText" :autosize="{ minRows: 15, maxRows: 40}" :style="{color: resColor}"></el-input>
+				</div>
+				
+			</div>
+		</div>
+		<script src="./input-tab.js"></script>
+		<script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					ajaxUrl: '', //
+					ajaxType: 'GET',
+					headerList: [], // headr数据集合 
+					bodyList: [], // body数据集合 
+					resText: '',	// 接口返回
+					resColor: 'green',	// 接口返回颜色
+					isCookie: false,	// 是否携带cookie 
+				},
+				methods: {
+					// 从本地缓存中加载参数 
+					init: function() {
+						try{
+							// 是否发送cookie 
+							var isCookieCC = localStorage.getItem('isCookieCC');
+							this.isCookie = isCookieCC === "true";
+							// 加载默认header参数 
+							var headerListCC = localStorage.getItem('headerListCC');
+							if(headerListCC && headerListCC != '') {
+								headerListCC = JSON.parse(headerListCC);
+								headerListCC.forEach(function(item) {
+									if(item.name == null || item.name == '') {
+										return;
+									}
+									this.headerListAdd(item);
+								}.bind(this))
+							}
+							// 加载默认body参数 
+							var bodyListCC = localStorage.getItem('bodyListCC');
+							if(bodyListCC && bodyListCC != '') {
+								bodyListCC = JSON.parse(bodyListCC);
+								bodyListCC.forEach(function(item) {
+									if(item.name == null || item.name == '') {
+										return;
+									}
+									this.bodyListAdd(item);
+								}.bind(this))
+							}
+						}catch(e){
+							console.error(e);
+						}
+						
+						// 加载链接参数 
+						var id = sa.p('id', '');
+						if(id == null || id == '') {
+							return;
+						}
+						
+						// 从本地缓存读取出来
+						var key = 'sa-doc-cc-' + id;
+						var cc = sessionStorage.getItem(key);
+						// console.log(key);
+						// console.log(cc);
+						if(cc == undefined || cc == '') {
+							return;
+						}
+						// 赋值
+						cc = JSON.parse(cc);
+						this.ajaxUrl = cc.ajaxUrl || '';			// 地址 
+						this.ajaxType = cc.ajaxType || 'GET';		// 请求类型 
+						if(cc.headerList) {
+							cc.headerList.forEach(function(item) {
+								this.headerListAdd(item);
+							}.bind(this));
+						}
+						if(cc.bodyList) {
+							cc.bodyList.forEach(function(item) {
+								this.bodyListAdd(item);
+							}.bind(this));
+						}
+					},
+					// header添加参数  
+					headerListAdd: function(header) {
+						header = header || {name: '', value: '', tips: ''};
+						this.headerList.push(header);
+						this.$refs.headerTable.selection.push(header);
+						this.f5_tabindex();
+					},
+					// body添加参数  
+					bodyListAdd: function(body) {
+						body = body || {name: '', value: '', tips: ''};
+						this.bodyList.push(body);
+						this.$refs.bodyTable.selection.push(body);
+						this.f5_tabindex();
+					},
+					// 复制body参数 
+					bodyListCopy: function(body) {
+						// 获取body参数
+						var body = {};
+						this.$refs.bodyTable.selection.forEach(function(item) {
+							if(item.name != null && item.name != '') {
+								body[item.name] = item.value || '';
+							}
+						})
+						var str = JSON.stringify(body, null, "\t");
+						sa.copyText(str);
+						sa.ok2('复制成功');
+					},
+					// 导入body参数
+					bodyListImport: function() {
+						sa.prompt('请输入一个JSON字符串', function(pass, index){
+							try{
+								pass = pass.replace(/(\s*?{\s*?|\s*?,\s*?)(['"])?([a-zA-Z0-9]+)(['"])?:/g, '$1"$3":');
+								var obj = JSON.parse(pass);//JSON.parse();  
+								for (var key in obj) {
+									this.bodyListAdd({
+										name: key,
+										value: obj[key],
+										tips: ''
+									})
+								}
+							} catch (e) {
+								sa.alert('解析出错：' + JSON.stringify(e))
+							}
+						}.bind(this), 2);
+					},
+					// 发送
+					send: function() {
+						// 获取header参数 
+						var header = {};
+						this.$refs.headerTable.selection.forEach(function(item) {
+							if(item.name != null && item.name != '') {
+								header[item.name] = item.value || '';
+							}
+						})
+						// 获取body参数 
+						var body = {};
+						this.$refs.bodyTable.selection.forEach(function(item) {
+							if(item.name != null && item.name != '') {
+								body[item.name] = item.value || '';
+							}
+						})
+						
+						// 发送请求
+						this.resColor = '#000';
+						sa.ajax(this.ajaxUrl, this.ajaxType, header, body, this.isCookie, function(res) {
+							this.resColor = 'green';
+							var str = res;
+							if(typeof str === 'object') {
+								str = JSON.stringify(str, null, "\t");
+							}
+							this.resText = str;
+						}.bind(this), function(xhr) {
+							this.resColor = 'red';
+							var str = xhr;
+							if(typeof str === 'object') {
+								str = JSON.stringify(str, null, "\t");
+							}
+							this.resText = str;
+						}.bind(this))
+					},
+					// 设置一下 tabindex
+					f5_tabindex: function() {
+						this.$nextTick(function() {
+							$('.el-checkbox__original').attr('tabindex', -1);
+						})
+					},
+					// 全局默认参数设置 
+					g_setting: function() {
+						sa.showIframe('全局默认参数设置', './default-setting.html', '80%', '90%')
+					}
+				},
+				created: function() {
+					// this.f5();
+				},
+				mounted: function() {
+					// 使textarea可以插入tab
+					this.init();
+					inputTab('.res-text textarea');
+					
+				}
+			})
+			
+			
+			// 如果是从iframe打开的
+			if(parent != window) {
+				// document.body.backgroundColor = '#FFF'; 
+				$('body').css('background-color', '#FFF');
+			}
+			
+			
+		</script>
+	</body>
+</html>
