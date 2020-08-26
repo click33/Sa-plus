@@ -24,6 +24,7 @@ hs_err_pid*
 
 .idea/
 *.iml
+.factorypath
 
 sp-server/src/main/java/com/pj/project/*
 sp-admin/sa-resources/menu-list.js
