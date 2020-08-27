@@ -21,31 +21,33 @@
  
 	</head>
 	<body>
-		<div style="margin-top: -1em;" title="防止margin向下击穿"><br></div>
-		<div class="vue-box" style="display: none;" :style="'display: block;'">
-			<!-- 参数栏 -->
-			<div class="c-panel">
-				<h4 class="c-title">添加一个键值</h4>
-				<el-form>
-					<div class="c-item br">
-						<label class="c-label">key：</label>
-						<el-input size="mini" v-model="m.key"></el-input>
-					</div>
-					<div class="c-item br">
-						<label class="c-label" style="vertical-align: top;">value：</label>
-						<div style="display: inline-block;">
-							<el-input v-model="m.value" size="mini" type="textarea" :autosize="{ minRows: 14, maxRows: 20}"></el-input>
+		<div class="vue-box sbot" style="display: none;" :style="'display: block;'">
+			<!-- ------- 内容部分 ------- -->
+			<div class="s-body">
+				<div class="c-panel">
+					<div class="c-title">数据添加</div>
+					<el-form size="mini" v-if="m">
+						<div class="c-item br">
+							<label class="c-label">key：</label>
+							<el-input size="mini" v-model="m.key"></el-input>
 						</div>
-					</div>
-					<div class="c-item br">
-						<label class="c-label">ttl：</label>
-						<el-input size="mini" v-model="m.ttl" placeholder="过期时间 单位/毫秒"></el-input>
-					</div>
-					<div class="c-item br">
-						<label class="c-label"></label>
-						<el-button type="primary" icon="el-icon-plus" size="mini" @click="ok()">保存</el-button>
-					</div>
-				</el-form>
+						<div class="c-item br">
+							<label class="c-label" style="vertical-align: top;">value：</label>
+							<div style="display: inline-block;">
+								<el-input v-model="m.value" size="mini" type="textarea" :autosize="{ minRows: 14, maxRows: 20}"></el-input>
+							</div>
+						</div>
+						<div class="c-item br">
+							<label class="c-label">ttl：</label>
+							<el-input size="mini" v-model="m.ttl" placeholder="过期时间 单位/毫秒"></el-input>
+						</div>
+					</el-form>
+				</div>
+			</div>
+			<!-- ------- 底部按钮 ------- -->
+			<div class="s-foot">
+				<el-button size="mini" type="primary" @click="ok()">确定</el-button>
+				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 		</div>
 		<script type="text/javascript">
