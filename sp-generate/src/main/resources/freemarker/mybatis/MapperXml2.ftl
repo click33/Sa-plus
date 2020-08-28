@@ -57,7 +57,7 @@
 	<sql id="select_sql">
 		select ${t.getAllColumnStringOrStar()}<#if t.getAllDbFk()?size != 0>,</#if> 
 <#list t.getAllDbFk() as fk>
-		(select `${fk.fkPkConcatName}` from `${fk.dc.fkPkTableName}` where `${fk.dc.fkPkColumnName}` = ${t.tableName}.${fk.dc.columnName}) as ${fk.fieldName}<#if fk_index != t.getAllDbFk()?size-1>, </#if>
+		(select `${fk.fkPkConcatName}` from `${fk.dc.fkPkTableName}` where `${fk.dc.fkPkColumnName}` = ${t.tableName}.${fk.dc.columnName}) as ${fk.columnName}<#if fk_index != t.getAllDbFk()?size-1>, </#if>
 </#list>
 		from `${t.tableName}` 
 	</sql>

@@ -18,7 +18,7 @@ public class DbFk {
 	private String fkPkConcatComment;	// 对应的连表查需要展示的字段名 的字段注释 
 
 	private String  columnName;		// 对应的表列名  	
-	private String  fieldName;		// 实体类中字段名 	
+//	private String  fieldName;		// 实体类中字段名 	
 
 	
 	public DbFk(DbColumn dc, String fkPkConcatName, String fkPkConcatComment) {
@@ -62,29 +62,34 @@ public class DbFk {
 	 * @return fieldName
 	 */
 	public String getFieldName() {
-		// 如果无值，走默认配置
-		if(this.fieldName == null) {
-			if(GenCfgManager.cfg.getModelStyle() == 2) {
-				String columnName = this.columnName;
-				return SUtil.wordEachBig_fs(columnName);// 下划线转小驼峰 
-			}
-			return this.columnName;
-		} else {
-			if(GenCfgManager.cfg.getModelStyle() == 2) {
-				String fieldName = this.fieldName;
-				return SUtil.wordEachBig_fs(fieldName);// 下划线转小驼峰 
-			}
-			return this.fieldName;
+		if(GenCfgManager.cfg.getModelStyle() == 2) {
+			String columnName = this.columnName;
+			return SUtil.wordEachBig_fs(columnName);// 下划线转小驼峰 
 		}
+		return this.columnName;
+//		// 如果无值，走默认配置
+//		if(this.fieldName == null) {
+//			if(GenCfgManager.cfg.getModelStyle() == 2) {
+//				String columnName = this.columnName;
+//				return SUtil.wordEachBig_fs(columnName);// 下划线转小驼峰 
+//			}
+//			return this.columnName;
+//		} else {
+//			if(GenCfgManager.cfg.getModelStyle() == 2) {
+//				String fieldName = this.fieldName;
+//				return SUtil.wordEachBig_fs(fieldName);// 下划线转小驼峰 
+//			}
+//			return this.fieldName;
+//		}
 	}
 //
-	/**
-	 * @param fieldName 要设置的 fieldName
-	 */
-	public DbFk setFieldName(String fieldName) {
-		this.fieldName = fieldName;
-		return this;
-	}
+//	/**
+//	 * @param fieldName 要设置的 fieldName
+//	 */
+//	public DbFk setFieldName(String fieldName) {
+//		this.fieldName = fieldName;
+//		return this;
+//	}
 
 	
 	/**
@@ -112,8 +117,11 @@ public class DbFk {
 	/**
 	 * @param columnName 要设置的 columnName
 	 */
-	public void setColumnName(String columnName) {
-		this.columnName = columnName;
+	public DbFk setColumnName(String columnName) {
+		if(columnName != null && !columnName.equals("")) {
+			this.columnName = columnName;
+		}
+		return this;
 	}
 	
 
