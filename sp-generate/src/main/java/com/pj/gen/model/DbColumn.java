@@ -219,7 +219,7 @@ public class DbColumn {
 					this.fkPkTableName = pkArr[0];
 					this.fkPkColumnName = pkArr[1];
 					this.fkPkConcatList = new ArrayList<DbFk>();
-					fkPkConcatList.add(new DbFk(this, pkArr[2], pkArr[3]).setFieldName(this.txMap.getString("fname")));		// 连表字段、连表字段注释
+					fkPkConcatList.add(new DbFk(this, pkArr[2], pkArr[3]).setColumnName(this.txMap.getString("fname")));		// 连表字段、连表字段注释
 					// 肮脏的实现
 					this.fkPkConcatName = pkArr[2];
 					this.fkPkConcatComment = pkArr[3];
@@ -242,7 +242,7 @@ public class DbColumn {
 					this.fkPkColumnName = pkArr[1];
 					this.fkPkConcatList = new ArrayList<DbFk>();
 					for (int i = 2; i < pkArr.length; i+=2) {
-						fkPkConcatList.add(new DbFk(this, pkArr[i], pkArr[i+1]).setFieldName(this.txMap.getString("fname")));		// 连表字段、连表字段注释		
+						fkPkConcatList.add(new DbFk(this, pkArr[i], pkArr[i+1]).setColumnName(this.txMap.getString("fname")));		// 连表字段、连表字段注释		
 					}
 //					this.fkPkConcatName = pkArr[2];
 //					this.fkPkConcatComment = pkArr[3];
