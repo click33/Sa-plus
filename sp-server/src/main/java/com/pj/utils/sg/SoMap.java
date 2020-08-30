@@ -382,45 +382,50 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return so;
 	}
 
-	/** 将所有key转为大写，返回一个新的SoMap */
+	/** 将所有key转为大写 */
 	public SoMap toUpperCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(key.toUpperCase(), this.get(key));
 		}
-		return so;
+		this.clearNotIn().setMap(so);
+		return this;
 	}
-	/** 将所有key转为小写，返回一个新的SoMap */
+	/** 将所有key转为小写 */
 	public SoMap toLowerCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(key.toLowerCase(), this.get(key));
 		}
-		return so;
+		this.clearNotIn().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为中划线模式 (kebab-case风格)，返回一个新的SoMap */
+	/** 将所有key中下划线转为中划线模式 (kebab-case风格) */
 	public SoMap toKebabCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordEachKebabCase(key), this.get(key));
 		}
-		return so;
+		this.clearNotIn().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为小驼峰模式，返回一个新的SoMap */
+	/** 将所有key中下划线转为小驼峰模式 */
 	public SoMap toHumpCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordEachBigFs(key), this.get(key));
 		}
-		return so;
+		this.clearNotIn().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为小驼峰模式，返回一个新的SoMap */
+	/** 将所有key中小驼峰转为下划线模式 */
 	public SoMap humpToLineCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordHumpToLine(key), this.get(key));
 		}
-		return so;
+		this.clearNotIn().setMap(so);
+		return this;
 	}
 	
 	
@@ -627,7 +632,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return str.replaceAll("_", "-");
 	}
 
-	// 驼峰转中划线 
+	// 驼峰转下划线 
 	private static String wordHumpToLine(String str) {
 		return str.replaceAll("[A-Z]", "_$0").toLowerCase();
 	}

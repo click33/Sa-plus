@@ -35,7 +35,7 @@ public class ${t.mkNameBig}Controller {
 <#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
 </#if>
 	@Transactional(rollbackFor = Exception.class)
-	AjaxJson add(${t.modelName} ${t.varNameSimple}){
+	public AjaxJson add(${t.modelName} ${t.varNameSimple}){
 <#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
 </#if>
 		${t.varName}Service.add(${t.varNameSimple});
@@ -105,9 +105,12 @@ public class ${t.mkNameBig}Controller {
 	AjaxJson updateByNotNull(){
 <#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
 </#if>
-		// 请只保留需要修改的字段 
 		SoMap so = SoMap.getRequestSoMap();
-		so.clearNotIn(${t.getAllColumnString2()}).clearNull();	
+		// 鉴别身份，是否为数据创建者
+		/*long userId = SP.publicMapper.getColumnByIdToLong("${t.tableName}", "user_id", so.get("id"));*/
+		/*AjaxError.throwBy(userId != StpUserUtil.getLoginId_asLong(), "此数据您无权限修改");*/
+		// 开始修改(请只保留需要修改的字段)
+		so.clearNotIn(${t.getAllColumnString3()}).clearNull().humpToLineCase();	
 		int line = SP.publicMapper.updateBySoMapBy("${t.tableName}", so, "id", so.get("id"));
 		return AjaxJson.getByLine(line);
 	}

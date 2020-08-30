@@ -162,13 +162,13 @@
 	<#elseif c.foType == 'date-create' || c.foType == 'date-update'>
 						<!-- ${c.foType}字段： m.${c.fieldName} - ${c.columnComment3} -->
 	<#elseif c.foType == 'fk-1'>
-					<div class="c-item">
-						<label class="c-label">${c.fkPkConcatComment}：</label>
-						<el-select size="mini" v-model="m.${c.fieldName}">
-							<el-option label="不限" :value="0"></el-option>
-							<el-option v-for="${c.fkPkTableName} in ${c.fkPkTableName}List" :label="${c.fkPkTableName}.${c.fkPkConcatName}" :value="${c.fkPkTableName}.${c.fkPkColumnName}" :key="${c.fkPkTableName}.${c.fkPkColumnName}"></el-option>
-						</el-select>
-					</div>
+						<div class="c-item br">
+							<label class="c-label">${c.fkPkConcatComment}：</label>
+							<el-select size="mini" v-model="m.${c.fieldName}">
+								<el-option label="不限" :value="0"></el-option>
+								<el-option v-for="${c.fkPkTableName} in ${c.fkPkTableName}List" :label="${c.fkPkTableName}.${c.fkPkConcatName}" :value="${c.fkPkTableName}.${c.fkPkColumnName}" :key="${c.fkPkTableName}.${c.fkPkColumnName}"></el-option>
+							</el-select>
+						</div>
 	<#elseif c.foType == 'no'>
 						<!-- no字段： m.${c.fieldName} - ${c.columnComment3} -->
 	<#else>

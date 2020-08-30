@@ -264,7 +264,7 @@ public class DbTable {
 		return str;
 	}
 
-	// 返回这个表的所有列2 (待引号的)
+	// 返回这个表的所有列2 (带引号的)
 	public String getAllColumnString2() {
 		String str = "";
 		for (int i = 0; i < this.columnList.size(); i++) {
@@ -276,6 +276,22 @@ public class DbTable {
 		return str;
 	}
 
+	// 返回这个表的所有列3 (根据配置,下划线转驼峰,返回带引号的所有字段名)
+	public String getAllColumnString3() {
+		String str = "";
+		for (int i = 0; i < this.columnList.size(); i++) {
+			String column = this.columnList.get(i).getColumnName();
+			if(GenCfgManager.cfg.getModelStyle() == 2){
+				column = SUtil.wordEachBig_fs(column);
+			}
+			str += "\"" + column + "\"";
+			if(i != this.columnList.size() - 1) {
+				str += ", ";
+			}
+		}
+		return str;
+	}
+	
 	// 根据配置返回*或者所有列
 	public String getAllColumnStringOrStar() {
 		if(GenCfgManager.cfg.sqlSelectColumnWay == 1) {
