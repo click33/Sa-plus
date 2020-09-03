@@ -59,7 +59,7 @@
 								@click="sa.showImage(m.${c.fieldName}, '400px', '400px')" v-if="m.${c.fieldName}">
 							<span v-else>无</span>
 						</div>
-	<#elseif c.foType == 'audio' || c.foType == 'video'>
+	<#elseif c.isFoType('audio', 'video', 'file')>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
@@ -75,7 +75,7 @@
 							</div>
 							<span v-else>无</span>
 						</div>
-	<#elseif c.isFoType('audio_list', 'video_list', 'img_video_list')>
+	<#elseif c.isFoType('audio_list', 'video_list', 'file_list', 'img_video_list')>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<div class="c-item-mline" v-if="m.${c.fieldName}">

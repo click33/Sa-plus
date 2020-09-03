@@ -1,8 +1,8 @@
 // =========================== sa对象封装一系列工具方法 ===========================  
 var sa = {
-	version: '2.4.1',
-	update_time: '2020-8-21',
-	info: '刷新表格高度时判断了滚动条的情况'
+	version: '2.4.2',
+	update_time: '2020-9-3',
+	info: '添加了弹窗的回车事件'
 };
 
 // ===========================  当前环境配置  ======================================= 
@@ -412,6 +412,15 @@ var sa = {
 		var title_height = $(selected).find('.layui-layer-title').height();
 		$(selected).find('iframe').css('height', (height - title_height) + 'px');
 	}
+	
+	
+	// 监听回车事件，达到回车关闭弹窗的效果 
+	$(document).on('keydown', function() {
+		if(event.keyCode === 13 && $(".layui-layer-btn0").length == 1){
+			$(".layui-layer-btn0").click();
+			return false;
+		}
+	}); 
 	
 	
 })();

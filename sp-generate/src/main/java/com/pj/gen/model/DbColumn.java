@@ -156,6 +156,9 @@ public class DbColumn {
 			else if(foType.equals("video")) {	// 单视频
 				this.foType = "video";
 			}
+			else if(foType.equals("file")) {	// 单文件(任意类型)
+				this.foType = "file";
+			}
 			else if(foType.equals("img_list") || foType.equals("imgList")) {	// 多图片 
 				this.foType = "img_list";
 			}
@@ -164,6 +167,9 @@ public class DbColumn {
 			}
 			else if(foType.equals("video_list") || foType.equals("videoList")) {	// 多视频
 				this.foType = "video_list";
+			}
+			else if(foType.equals("file_list") || foType.equals("fileList")) {	// 多文件(任意类型)
+				this.foType = "file_list";
 			}
 			else if(foType.equals("img_video_list") || foType.equals("imgVideoList")) {	// 图片与视频混合_list
 				this.foType = "img_video_list";

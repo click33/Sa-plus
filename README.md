@@ -1,7 +1,7 @@
 <p align="center">
     <img alt="logo" src="http://sa-plus.dev33.cn/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
 </p>
-<h2 align="center" style="margin: 30px 0 30px;font-weight: bold;font-size:40px;">sa-plus 快速开发框架 v1.15.0</h2>
+<h2 align="center" style="margin: 30px 0 30px;font-weight: bold;font-size:40px;">sa-plus 快速开发框架 v1.16.0</h2>
 <h4 align="center">一个基于springboot架构的快速开发框架，内置代码生成器</h4>
  
 

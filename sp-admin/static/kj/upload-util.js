@@ -9,6 +9,7 @@ var upload_cfg = {
 	upload_video_url: sa.cfg.api_url + '/upload/video',	// 视频上传地址
 	upload_audio_url: sa.cfg.api_url + '/upload/audio',	// 音频上传地址
 	upload_apk_url: sa.cfg.api_url + '/upload/apk',	// apk安装包上传地址
+	upload_file_url: sa.cfg.api_url + '/upload/file',	// file上传地址
 }
 
 
@@ -17,26 +18,30 @@ window.sa = window.sa || {};
 
 // 上传图片   
 sa.uploadImage = function(successCB) {
-	sa.uploadFile(upload_cfg.upload_image_url, successCB);
+	sa.uploadFn(upload_cfg.upload_image_url, successCB);
 }
 // 上传视频   
 sa.uploadVideo = function(successCB) {
-	sa.uploadFile(upload_cfg.upload_video_url, successCB);
+	sa.uploadFn(upload_cfg.upload_video_url, successCB);
 }
 // 上传音频  
 sa.uploadAudio = function(successCB) {
-	sa.uploadFile(upload_cfg.upload_audio_url, successCB);
+	sa.uploadFn(upload_cfg.upload_audio_url, successCB);
 }
 // 上传apk 
 sa.uploadApk = function(successCB) {
-	sa.uploadFile(upload_cfg.upload_apk_url, successCB);
+	sa.uploadFn(upload_cfg.upload_apk_url, successCB);
 }
-// 上传文件  (要上传到的地址，成功的回调)
-sa.uploadFile = function(url, successCB) {
+// 上传任意文件 
+sa.uploadFile = function(successCB) {
+	sa.uploadFn(upload_cfg.upload_file_url, successCB);
+}
+// 上传的内部函数  (要上传到的地址，成功的回调)
+sa.uploadFn = function(url, successCB) {
 	// 创建input 
 	var fileInput = document.createElement("input"); //创建input
 	fileInput.type = "file"; //设置类型为file
-	fileInput.id = 'uploadfile-' + sa.randomString(12);
+	fileInput.id = 'uploadfile-' + randomString(12);
 	fileInput.style.display = 'none';
 	fileInput.onchange = function(evt) {
 		startUpload(evt.target.files[0], url, successCB);
@@ -48,23 +53,28 @@ sa.uploadFile = function(url, successCB) {
 
 // 上传多张图片   
 sa.uploadImageList = function(successCB) {
-	sa.uploadFileList(upload_cfg.upload_image_url, successCB);
+	sa.uploadListFn(upload_cfg.upload_image_url, successCB);
 }
 // 上传多个音频   
 sa.uploadAudioList = function(successCB) {
-	sa.uploadFileList(upload_cfg.upload_audio_url, successCB);
+	sa.uploadListFn(upload_cfg.upload_audio_url, successCB);
 }
 // 上传多个视频 
 sa.uploadVideoList = function(successCB) {
-	sa.uploadFileList(upload_cfg.upload_video_url, successCB);
+	sa.uploadListFn(upload_cfg.upload_video_url, successCB);
 }
-// 上传多个文件  
-sa.uploadFileList = function(url, successCB) {
+// 上传多个文件 
+sa.uploadFileList = function(successCB) {
+	sa.uploadListFn(upload_cfg.upload_file_url, successCB);
+}
+
+// 上传多个的内部函数  (要上传到的地址，成功的回调)
+sa.uploadListFn = function(url, successCB) {
 	// 创建input
 	var fileInput = document.createElement("input"); //创建input
 	fileInput.type = "file"; // 设置类型为file
 	fileInput.multiple = "multiple"; // 多选 
-	fileInput.id = 'uploadfile-' + sa.randomString(12);
+	fileInput.id = 'uploadfile-' + randomString(12);
 	fileInput.style.display = 'none';
 	fileInput.onchange = function(evt) {
 		// 开始上传 
@@ -148,7 +158,7 @@ function startUpload(file, url, successCB) {
 
 
 
-// ======================= 私有方法 =========================== 
+// ======================= 工具方法 =========================== 
 
 
 
@@ -179,6 +189,17 @@ function xhrOnProgress(fun) {
 	}
 }
 
+// 
+function randomString(len) {
+　　len = len || 32;
+　　var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+　　var maxPos = $chars.length;
+　　var str = '';
+　　for (i = 0; i < len; i++) {
+　　　　str += $chars.charAt(Math.floor(Math.random() * maxPos));
+　　}
+　　return str;
+}
 
 
 // ======================= 进度条相关 ===========================

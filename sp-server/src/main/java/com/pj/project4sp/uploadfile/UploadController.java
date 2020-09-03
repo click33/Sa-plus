@@ -1,7 +1,5 @@
 package com.pj.project4sp.uploadfile;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,42 +25,52 @@ public class UploadController {
 	}
 	
 	
-	// 上传图片
+	// 上传图片 
 	@RequestMapping("image")
-	public AjaxJson image(MultipartFile file, HttpServletRequest request){
+	public AjaxJson image(MultipartFile file){
 		UploadUtil.checkFileSize(file); 						// 验证文件大小 
-		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.image_suffix); 	// 验证后缀
-		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.image_folder);			// 保存到硬盘 
+		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.imageSuffix); 	// 验证后缀
+		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.imageFolder);			// 保存到硬盘 
 		return AjaxJson.getSuccessData(httpUrl);
 	}
 
 	
 	// 上传视频 
 	@RequestMapping("video")
-	public AjaxJson video(MultipartFile file, HttpServletRequest request){
+	public AjaxJson video(MultipartFile file){
 		UploadUtil.checkFileSize(file); 						// 验证文件大小 
-		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.video_suffix); 	// 验证后缀
-		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.video_folder);			// 保存到硬盘 
+		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.videoSuffix); 	// 验证后缀
+		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.videoFolder);			// 保存到硬盘 
 		return AjaxJson.getSuccessData(httpUrl);
 	}
 	
 
 	// 上传音频 
 	@RequestMapping("audio")
-	public AjaxJson audio(MultipartFile file, HttpServletRequest request){
+	public AjaxJson audio(MultipartFile file){
 		UploadUtil.checkFileSize(file); 						// 验证文件大小 
-		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.audio_suffix); 	// 验证后缀
-		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.audio_folder);			// 保存到硬盘 
+		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.audioSuffix); 	// 验证后缀
+		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.audioFolder);			// 保存到硬盘 
 		return AjaxJson.getSuccessData(httpUrl);
 	}
 	
 	
 	// 上传apk 
 	@RequestMapping("apk")
-	public AjaxJson apk(MultipartFile file, HttpServletRequest request){
+	public AjaxJson apk(MultipartFile file){
 		UploadUtil.checkFileSize(file); 						// 验证文件大小 
-		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.apk_suffix); 	// 验证后缀
-		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.apk_folder);			// 保存到硬盘 
+		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.apkSuffix); 	// 验证后缀
+		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.apkFolder);			// 保存到硬盘 
+		return AjaxJson.getSuccessData(httpUrl);
+	}
+	
+
+	// 上传任意文件 
+	@RequestMapping("file")
+	public AjaxJson file(MultipartFile file){
+		UploadUtil.checkFileSize(file); 						// 验证文件大小 
+		UploadUtil.checkSubffix(file.getOriginalFilename(), UploadUtil.uploadConfig.fileSuffix); 	// 验证后缀
+		String httpUrl = UploadUtil.saveFile(file, UploadUtil.uploadConfig.fileFolder);			// 保存到硬盘 
 		return AjaxJson.getSuccessData(httpUrl);
 	}
 	

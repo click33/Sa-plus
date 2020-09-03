@@ -35,9 +35,9 @@ public class UploadUtil {
 		// 1、计算路径  
 		String currDateFolder = getCurrDateFolder();		// 根据日期计算需要保存的文件夹 
 		String fileName = getMarking28() + '.' + getSuffixName(file.getOriginalFilename());					// 文件名 
-		String fileFolder = new File(uploadConfig.root_folder).getAbsolutePath() + "/" +
-				uploadConfig.http_prefix + flieTypeFolder + currDateFolder + "/";	// 需要保存到的文件夹地址 
-		String httpUrl = getDoMain() + uploadConfig.http_prefix + flieTypeFolder + currDateFolder + "/" + fileName;	// 对外暴露的http路径
+		String fileFolder = new File(uploadConfig.rootFolder).getAbsolutePath() + "/" +
+				uploadConfig.httpPrefix + flieTypeFolder + currDateFolder + "/";	// 需要保存到的文件夹地址 
+		String httpUrl = getDoMain() + uploadConfig.httpPrefix + flieTypeFolder + currDateFolder + "/" + fileName;	// 对外暴露的http路径
 		
 		// 2、如果文件夹不存在，则先创建 
 		File dirFile = new File(fileFolder);
@@ -61,7 +61,7 @@ public class UploadUtil {
 	// 验证文件大小 
 	static void checkFileSize(MultipartFile file) {
 		long size = file.getSize(); // 文件大小(B)
-        if (size > uploadConfig.max_size) {
+        if (size > uploadConfig.maxSize) {
         	throw new RuntimeException("文件大小超出限制");
         }
 	}

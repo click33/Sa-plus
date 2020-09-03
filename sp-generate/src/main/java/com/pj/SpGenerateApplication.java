@@ -26,12 +26,12 @@ public class SpGenerateApplication {
         config.setUrl("jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
         config.setUsername("root");
         config.setPassword("root123456");
-        config.setPrintSql(true);		// 是否打印sql 
-        FlyObjects.setConfig(config);    // 注入到框架中
+        config.setPrintSql(true);		// 是否打印sql  
+        FlyObjects.setConfig(config);    // 注入到框架中 
 		
         
 		// ===================================  你可以重写一些内部逻辑，填充一些功能  =================================== 
-		// 请参考本文件最底部示例
+		// 请参考本文件最底部示例 
         
 		
 		// ===================================  一些全局设置  =================================== 
@@ -76,7 +76,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.15.0，更新于2020-8-27 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.16.0，更新于2020-9-3 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

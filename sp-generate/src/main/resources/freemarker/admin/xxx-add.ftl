@@ -12,7 +12,7 @@
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
-<#if t.hasFo('img', 'img_list', 'video', 'video_list', 'audio', 'audio_list', 'img_video_list', 'richtext') >
+<#if t.hasFo('img', 'audio', 'video', 'file', 'img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list', 'richtext') >
 	<#if cfg.fileUploadWay == 1 >
 		<script src="../../static/kj/upload-util.js"></script>
 	</#if>
@@ -94,6 +94,12 @@
 							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
 							<el-link type="primary" @click="sa.uploadVideo(src => {m.${c.fieldName} = src; sa.ok2('上传成功');})">上传</el-link>
 						</div>
+	<#elseif c.foType == 'file'>
+						<div class="c-item br">
+							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
+							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
+							<el-link type="primary" @click="sa.uploadFile(src => {m.${c.fieldName} = src; sa.ok2('上传成功');})">上传</el-link>
+						</div>
 	<#elseif c.foType == 'img_list'>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
@@ -137,6 +143,20 @@
 									</el-link>
 								</div>
 								<el-link type="primary" @click="sa.uploadVideoList(src => m.${c.fieldName}_arr.push(src))">上传</el-link>
+							</div>
+						</div>
+	<#elseif c.foType == 'file_list'>
+						<div class="c-item br">
+							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
+							<div class="c-item-mline">
+								<div v-for="item in m.${c.fieldName}_arr">
+									<el-link type="info" :href="item" target="_blank">{{item}}</el-link>
+									<el-link type="danger" class="del-rr" @click="sa.arrayDelete(m.${c.fieldName}_arr, item)">
+										<i class="el-icon-close"></i>
+										<small style="vertical-align: top;">删除</small>
+									</el-link>
+								</div>
+								<el-link type="primary" @click="sa.uploadFileList(src => m.${c.fieldName}_arr.push(src))">上传</el-link>
 							</div>
 						</div>
 	<#elseif c.foType == 'img_video_list'>
@@ -241,7 +261,7 @@
 					<#list t.columnList as c>
 						<#if c.isFoType('no', 'date-create', 'date-update')>
 							// ${c.fieldName}: '',		// ${c.columnComment} 
-						<#elseif c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+						<#elseif c.isFoType('img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list')>
 							${c.fieldName}: '',		// ${c.columnComment} 
 							${c.fieldName}_arr: [],		// ${c.columnComment} - 转数组
 						<#else>
@@ -271,7 +291,7 @@
 					ok: function(){
 						// 验证 
 				<#list t.columnList as c>
-					<#if c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+					<#if c.isFoType('img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list')>
 						this.m.${c.fieldName} = this.m.${c.fieldName}_arr.join(',');	// 图片数组转字符串 
 					</#if>
 					<#if c.foType == 'richtext'>
@@ -323,7 +343,7 @@
 						<#if c.foType == 'date'>
 							res.data.${c.fieldName} = new Date(res.data.${c.fieldName});		// ${c.columnComment} 日期格式转换 
 						</#if>
-						<#if c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+						<#if c.isFoType('img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list')>
 							res.data.${c.fieldName}_arr = sa.isNull(res.data.${c.fieldName}) ? [] : res.data.${c.fieldName}.split(',');		// ${c.columnComment} 字符串转数组 
 						</#if>
 					</#list>

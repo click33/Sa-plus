@@ -72,6 +72,7 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 | [img]			| 声明一个图片字段，会生成图片上传								| 无		|
 | [audio]			| 声明一个音频字段，会生成音频上传								| 无		|
 | [video]			| 声明一个视频字段，会生成视频上传								| 无		|
+| [file]			| 声明一个文件字段，会生成文件上传(需在`UploadConfig.java`中配置文件后缀白名单)			| 无		|
 | [img_list]		| 声明一个图片集合字段，会生成多图片上传，还可以写成 `[imgList]`	| 无		|
 | [audio_list]		| 声明一个音频集合字段，会生成多音频上传，还可以写成 `[audioList]`	| 无		|
 | [video_list]		| 声明一个视频集合字段，会生成多视频上传，还可以写成 `[videoList]`	| 无		|

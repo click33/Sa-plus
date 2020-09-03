@@ -40,8 +40,8 @@
 		</#list>
 						</el-radio-group>
 					</div>
-	<#elseif c.foType == 'img'>
-	<#elseif c.isFoType('img_list', 'audio_list', 'video_list')>
+	<#elseif c.isFoType('img', 'audio', 'video', 'file')>
+	<#elseif c.isFoType('img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list')>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
 	<#elseif c.foType == 'fk-1'>
 					<div class="c-item">
@@ -108,7 +108,7 @@
 							<div v-else>无</div>
 						</template>
 					</el-table-column>
-	<#elseif c.foType == 'audio' || c.foType == 'video'>
+	<#elseif c.isFoType('audio', 'video', 'file')>
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
 							<el-link type="info" :href="s.row.${c.fieldName}" target="_blank" v-if="!sa.isNull(s.row.${c.fieldName})">预览</el-link>
@@ -125,7 +125,7 @@
 							<div v-else>无</div>
 						</template>
 					</el-table-column>
-	<#elseif c.isFoType('audio_list', 'video_list', 'img_video_list')>
+	<#elseif c.isFoType('audio_list', 'video_list', 'file_list', 'img_video_list')>
 					<el-table-column label="${c.columnComment3}" min-width="70px">
 						<template slot-scope="s">
 							<span v-if="s.row.${c.fieldName}" style="color: #666;">共{{s.row.${c.fieldName}.split(',').length}}个</span>

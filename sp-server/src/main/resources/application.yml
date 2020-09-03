@@ -20,7 +20,7 @@ spring:
             
     # 静态文件路径映射 
     resources: 
-        static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.upload-config.root_folder}
+        static-locations: classpath:/META-INF/resources/,classpath:/resources/, classpath:/static/, classpath:/public/, file:${spring.upload-config.root-folder}
         
     # jackson设置 
     jackson:
@@ -32,9 +32,9 @@ spring:
     # 文件上传相关配置
     upload-config: 
         # 文件保存的根目录，所有文件都保存在这个目录下  
-        root_folder: /upload-file
+        root-folder: /upload-file
         # http路由前缀，用于向前台暴露文件url  
-        http_prefix: /upload
+        http-prefix: /upload
         
     # 项目自定义配置 
     myconfig: 
