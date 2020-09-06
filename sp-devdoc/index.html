@@ -40,7 +40,7 @@
 				<a href="index.html">
 					<div class="logo-box">
 						sa-plus 快速开发 
-						<span style="font-size: 0.7em; font-weight: 400;"> v1.16.0 更新于2020-9-3</span>
+						<span style="font-size: 0.7em; font-weight: 400;"> v1.17.0 更新于2020-9-7</span>
 					</div>
 				</a>
 				<div class="nav-box">
@@ -136,6 +136,7 @@
 			button{cursor: pointer;}
 			/* 图片 */
 			#md-content img{max-width: 100%; margin: 0.5em; box-shadow: 0 0 0px #999; transition: all 0.3s;}
+			#md-content h4[align=center] img{margin: 0 0;}
 			#md-content img:hover{box-shadow: 0 0 10px #333; cursor: pointer;}
 		</style>
 		<div id="mao-doc" style="position: relative; top: -80px;"></div>
@@ -186,7 +187,7 @@
 		</script>
 		<!-- img点击放大 -->
 		<script type="text/javascript">
-			$('#md-content').on('click', 'img', function(){
+			$('#md-content').on('click', 'table img', function(){
 				open(this.src);
 				return false;
 			});

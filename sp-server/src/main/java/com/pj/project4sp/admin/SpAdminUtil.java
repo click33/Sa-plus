@@ -28,7 +28,7 @@ public class SpAdminUtil {
 	
 	// 当前admin
 	public static SpAdmin getCurrAdmin() {
-		long admin_id = StpUtil.getLoginId_asLong();
+		long admin_id = StpUtil.getLoginIdAsLong();
 		return spAdminMapper.getById(admin_id);
 	}
 	
@@ -76,7 +76,7 @@ public class SpAdminUtil {
 	
 	// 获取指定token对应的admin_id 
 	public static long getAdminIdByToken(String token) {
-		Object login_id = SaTokenManager.getDao().getValue(StpUtil.stpLogic.getKey_TokenValue(token));
+		Object login_id = SaTokenManager.getDao().getValue(StpUtil.stpLogic.getKeyTokenValue(token));
 		if(login_id == null) {
 			throw new NotLoginException();
 		}

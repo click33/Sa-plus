@@ -10,4 +10,5 @@
 
 .main-box img{max-width: 500px; margin: 0.5em; box-shadow: 0 0 0px #999; transition: all 0.3s;}
 .main-box img:hover{box-shadow: 0 0 10px #333; cursor: pointer;}
+.main-box h4[align=center] img{margin: 0 0;}
 

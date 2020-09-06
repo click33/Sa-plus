@@ -5,6 +5,6 @@
 /____/ \__,_/           / .___//_/ \__,_//____/  
                        /_/                       
 sa-plus running Spring Boot ${spring-boot.version} 
-version: 1.16.0   updateTime: 2020-9-3
+version: 1.17.0   updateTime: 2020-9-7
 devdoc: http://sa-plus.dev33.cn
 github: https://github.com/click33/sa-plus

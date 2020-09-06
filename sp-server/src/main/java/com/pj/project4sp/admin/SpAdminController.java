@@ -44,7 +44,7 @@ public class SpAdminController {
 	AjaxJson delete(long id){
 		StpUtil.checkPermission(AuthConst.p_admin_list);	// 鉴权
 		// 不能自己删除自己
-		if(StpUtil.getLoginId_asLong() == id) {
+		if(StpUtil.getLoginIdAsLong() == id) {
 			return AjaxJson.getError("不能自己删除自己");
 		}
 		int line = spAdminMapper.delete(id);
@@ -59,7 +59,7 @@ public class SpAdminController {
 		StpUtil.checkPermission(AuthConst.p_admin_list);	
 		// 不能自己删除自己
 		List<Long> ids = SoMap.getRequestSoMap().getListByComma("ids", long.class); 
-		if(ids.contains(StpUtil.getLoginId_asLong())) {
+		if(ids.contains(StpUtil.getLoginIdAsLong())) {
 			return AjaxJson.getError("不能自己删除自己");
 		}
 		// 开始删除 
@@ -151,7 +151,7 @@ public class SpAdminController {
 	// 当前admin修改信息
 	@RequestMapping("updateInfo")
 	AjaxJson updateInfo(SpAdmin obj){
-		obj.setId(StpUtil.getLoginId_asLong());
+		obj.setId(StpUtil.getLoginIdAsLong());
 		SpAdminUtil.checkName(obj.getId(), obj.getName());
 		int line = spAdminMapper.update(obj);
 		return AjaxJson.getByLine(line);

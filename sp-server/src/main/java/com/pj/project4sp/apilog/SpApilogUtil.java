@@ -16,7 +16,7 @@ import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.WebNbUtil;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SpringMVCUtil;
+import cn.dev33.satoken.util.SpringMvcUtil;
 import cn.hutool.core.util.IdUtil;
 
 /**
@@ -51,7 +51,7 @@ public class SpApilogUtil {
 		}
 		
 		// 1、开始时 
-    	HttpServletRequest request = SpringMVCUtil.getRequest();
+    	HttpServletRequest request = SpringMvcUtil.getRequest();
     	SpApilog a = new SpApilog();
     	a.setReq_id(getCurrReqId());		// 随机一个请求id
     	a.setReq_ip(WebNbUtil.getIP(request));		// 请求ip 
@@ -79,7 +79,7 @@ public class SpApilogUtil {
 		}
 		
 		// 读取本次请求的 ApiLog 对象 
-		HttpServletRequest request = SpringMVCUtil.getRequest();
+		HttpServletRequest request = SpringMvcUtil.getRequest();
 		SpApilog a = (SpApilog)request.getAttribute(apilog_obj_save_key);
 		if(a == null) {
 //	    	LogUtil.info("未找到相应ApiLog对象（可能原因：全局异常），aj=" + aj);
@@ -122,7 +122,7 @@ public class SpApilogUtil {
 
 	/** 获取当前请求的req_id */
 	public static String getCurrReqId() {
-		HttpServletRequest request = SpringMVCUtil.getRequest();
+		HttpServletRequest request = SpringMvcUtil.getRequest();
 		String req_id = (String)request.getAttribute(apilog_obj_save_id_key);
 		if(req_id == null) {
 			req_id = IdUtil.simpleUUID();

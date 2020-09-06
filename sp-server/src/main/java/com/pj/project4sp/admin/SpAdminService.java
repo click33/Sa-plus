@@ -33,7 +33,7 @@ public class SpAdminService {
 		SpAdminUtil.checkAdmin(admin);
 		
 		// 开始添加
-		admin.setCreate_by_aid(StpUtil.getLoginId_asLong());	// 创建人，为当前账号  
+		admin.setCreate_by_aid(StpUtil.getLoginIdAsLong());	// 创建人，为当前账号  
 		spAdminMapper.add(admin);	// 添加
 		long id = SP.publicMapper.getPrimarykey();	// 获取主键
 		spAdminPasswordService.updatePassword(id, admin.getPassword2());	// 更改密码（md5与明文）

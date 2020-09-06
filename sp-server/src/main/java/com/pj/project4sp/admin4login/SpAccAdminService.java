@@ -20,7 +20,7 @@ import com.pj.utils.sg.NbUtil;
 import com.pj.utils.sg.WebNbUtil;
 
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SpringMVCUtil;
+import cn.dev33.satoken.util.SpringMvcUtil;
 
 /**
  * service：admin账号相关
@@ -104,7 +104,7 @@ public class SpAccAdminService {
 	
 	// 指定id的账号成功登录一次 （修改最后登录时间等数据 ）
 	public int successLogin(SpAdmin s){
-		String login_ip = WebNbUtil.getIP(SpringMVCUtil.getRequest());
+		String login_ip = WebNbUtil.getIP(SpringMvcUtil.getRequest());
 		int line = spAccAdminMapper.successLogin(s.getId(), login_ip);
 		if(line > 0) {
 	        s.setLogin_ip(login_ip);

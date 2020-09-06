@@ -3,7 +3,7 @@ package com.pj.utils.cache;
 import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.WebNbUtil;
 
-import cn.dev33.satoken.util.SpringMVCUtil;
+import cn.dev33.satoken.util.SpringMvcUtil;
 
 /**
  * IP限流util
@@ -63,7 +63,7 @@ public class IpCheckUtil {
 	
 	// 返回我的ip
 	private static String getMyIp() {
-		String ip = WebNbUtil.getIP(SpringMVCUtil.getRequest());
+		String ip = WebNbUtil.getIP(SpringMvcUtil.getRequest());
 		return ip;
 	}
 	
