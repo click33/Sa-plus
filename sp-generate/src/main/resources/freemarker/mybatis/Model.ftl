@@ -8,12 +8,14 @@ import java.io.Serializable;
 
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * Model: ${t.tableName} -- ${t.tableComment}
  * @author ${cfg.author} 
  */
 @Data
+@Accessors(chain = true)
 public class ${t.modelName} implements Serializable {
 
 	private static final long serialVersionUID = 1L;
