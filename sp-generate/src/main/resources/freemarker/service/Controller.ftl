@@ -108,7 +108,7 @@ public class ${t.mkNameBig}Controller {
 		SoMap so = SoMap.getRequestSoMap();
 		// 鉴别身份，是否为数据创建者
 		/*long userId = SP.publicMapper.getColumnByIdToLong("${t.tableName}", "user_id", so.get("id"));*/
-		/*AjaxError.throwBy(userId != StpUserUtil.getLoginId_asLong(), "此数据您无权限修改");*/
+		/*AjaxError.throwBy(userId != StpUserUtil.getLoginIdAsLong(), "此数据您无权限修改");*/
 		// 开始修改(请只保留需要修改的字段)
 		so.clearNotIn(${t.getAllColumnString3()}).clearNull()<#if cfg.modelStyle == 2 >.humpToLineCase()</#if>;	
 		int line = SP.publicMapper.updateBySoMapBy("${t.tableName}", so, "id", so.get("id"));
