@@ -61,6 +61,9 @@ public class DbTable {
 	
 	// 表注释 
 	public String getTableComment() {
+		if(this.tableComment == null) {
+			return "";
+		}
 		return tableComment;
 	}
 	public void setTableComment(String tableComment) {
