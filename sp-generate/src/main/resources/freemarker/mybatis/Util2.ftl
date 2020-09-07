@@ -39,7 +39,7 @@ public class ${t.mkNameBig}Util {
 		<#list t.columnList as c>
 <#if  cfg.utilDocWay == 2 >		// 验证: ${c.columnComment}
 </#if>
-		AjaxError.byIsNull(${t.varNameSimple}.${c.fieldName}, "${c.columnComment}不能为空");	<#if cfg.utilDocWay == 1>	// 验证: ${c.columnComment}	 </#if>
+		AjaxError.throwByIsNull(${t.varNameSimple}.${c.fieldName}, "${c.columnComment}不能为空");	<#if cfg.utilDocWay == 1>	// 验证: ${c.columnComment}	 </#if>
 		</#list>
 </#if>
 		
