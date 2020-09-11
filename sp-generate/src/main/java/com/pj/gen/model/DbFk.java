@@ -236,7 +236,7 @@ public class DbFk {
 	}
 	// 默认的java-数据类型 
 	public String getJavaType() {
-		return tx.getString("java-type", "long");
+		return tx.getString("java-type", "Long");
 	}
 	
 	/**
