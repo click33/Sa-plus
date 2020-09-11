@@ -19,43 +19,52 @@
 				<!-- ------------- 检索参数 ------------- -->
 				<div class="c-title">检索参数</div>
 				<el-form ref="form" :model='p' @submit.native.prevent>
+<#-- --------------------------------------- 循环：list-查询条件 --------------------------------------- -->
 <#list t.columnList as c>
-	<#if c.foType == 'text' || c.foType == 'textarea' || c.foType == 'richtext'>
+	<#if c.isFoType('text', 'textarea', 'richtext', 'file', 'num', 'fk-2', 'no')>
 					<div class="c-item">
 						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}"></el-input>
+						<el-input size="mini" v-model="p.${c.fieldName}" <#if c.foType == 'num'>type="number" </#if>></el-input>
 					</div>
-	<#elseif c.foType == 'num'>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}" type="number" ></el-input>
-					</div>
+	<#elseif c.isFoType('img', 'audio', 'video', 'file')>
+	<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
+	<#elseif c.isFoType('date', 'date-create', 'date-update')>
 	<#elseif c.foType == 'enum'>
 					<div class="c-item">
 						<label class="c-label">${c.columnComment3}：</label>
-						<el-radio-group v-model="p.${c.fieldName}" class="s-radio-text">
+			<#if c.getTx('s-type') == '1' || c.getTx('s-type') == '2'>
+						<el-radio-group v-model="p.${c.fieldName}" size="mini" <#if c.getTx('s-type') == '2'>class="s-radio-text" </#if>>
 							<el-radio :label="0">不限</el-radio>
-		<#list c.jvList?keys as jv>
+							<#list c.jvList?keys as jv>
 							<el-radio :label="${jv}">${c.jvList[jv]}</el-radio>
-		</#list>
+							</#list>
 						</el-radio-group>
+			<#elseif c.getTx('s-type') == '3'>
+						<el-radio-group v-model="p.${c.fieldName}" size="mini">
+							<el-radio-button :label="0">不限</el-radio-button>
+							<#list c.jvList?keys as jv>
+							<el-radio-button :label="${jv}">${c.jvList[jv]}</el-radio-button>
+							</#list>
+						</el-radio-group>
+			<#elseif c.getTx('s-type') == '4'>
+						<el-select v-model="p.${c.fieldName}" size="mini">
+							<el-option label="不限" :value="0"></el-option>
+							<#list c.jvList?keys as jv>
+							<el-option label="${c.jvList[jv]}" :value="${jv}"></el-option>
+							</#list>
+						</el-select>
+			</#if>
 					</div>
-	<#elseif c.isFoType('img', 'audio', 'video', 'file')>
-	<#elseif c.isFoType('img_list', 'audio_list', 'video_list', 'file_list', 'img_video_list')>
-	<#elseif c.isFoType('date', 'date-create', 'date-update')>
 	<#elseif c.foType == 'fk-1'>
 					<div class="c-item">
 						<label class="c-label">${c.fkPkConcatComment}：</label>
 						<el-select size="mini" v-model="p.${c.fieldName}">
 							<el-option label="不限" :value="0"></el-option>
-							<el-option v-for="${c.fkPkTableName} in ${c.fkPkTableName}List" :label="${c.fkPkTableName}.${c.fkPkConcatName}" :value="${c.fkPkTableName}.${c.fkPkColumnName}" :key="${c.fkPkTableName}.${c.fkPkColumnName}"></el-option>
+							<el-option v-for="item in ${c.fkPkTableName2}List" :label="item.${c.fkPkConcatName}" :value="item.${c.fkPkFieldName}" :key="item.${c.fkPkColumnName}"></el-option>
 						</el-select>
 					</div>
 	<#else>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}"></el-input>
-					</div>
+					<!-- 未识别类型：${c.columnComment3}: p.${c.fieldName} -->
 	</#if>
 </#list>
 					<div class="c-item" style="min-width: 0px;">
@@ -66,13 +75,13 @@
 						<label class="c-label">综合排序：</label>
 						<el-radio-group v-model="p.sortType">
 							<el-radio :label="0">最近添加</el-radio>
-					<#list t.columnList as c>
+<#list t.columnList as c>
 						<#if c_index <= 3>
 							<el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio>
 						<#else>
 							<!-- <el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio> -->
 						</#if>
-					</#list>
+</#list>
 						</el-radio-group>
 					</div>
 				</el-form>
@@ -90,7 +99,7 @@
 				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
 					<el-table-column type="selection" width="45px"></el-table-column>
 <#list t.columnList as c>
-	<#if c.foType == 'text' || c.foType == 'textarea' || c.foType == 'num' >
+	<#if c.isFoType('text', 'textarea', 'num')>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
 	<#elseif c.foType == 'richtext'>
 					<el-table-column label="${c.columnComment3}" min-width="150px">
@@ -115,7 +124,7 @@
 							<div v-else>无</div>
 						</template>
 					</el-table-column>
-	<#elseif c.foType == 'img_list'>
+	<#elseif c.foType == 'img-list'>
 					<el-table-column label="${c.columnComment3}" min-width="120px">
 						<template slot-scope="s">
 							<div @click="sa.showImageList(s.row.${c.fieldName}.split(','))" style="cursor: pointer;" v-if="s.row.${c.fieldName}">
@@ -125,7 +134,7 @@
 							<div v-else>无</div>
 						</template>
 					</el-table-column>
-	<#elseif c.isFoType('audio_list', 'video_list', 'file_list', 'img_video_list')>
+	<#elseif c.isFoType('audio-list', 'video-list', 'file-list', 'img-video-list')>
 					<el-table-column label="${c.columnComment3}" min-width="70px">
 						<template slot-scope="s">
 							<span v-if="s.row.${c.fieldName}" style="color: #666;">共{{s.row.${c.fieldName}.split(',').length}}个</span>
@@ -140,8 +149,7 @@
 		</#list>
 						</template>
 					</el-table-column>
-	
-	<#elseif c.foType == 'fk-1' || c.foType == 'fk-2'>
+	<#elseif c.isFoType('fk-1', 'fk-2')>
 			<#if c.isTx('showfk')>
 				<#if c.isTx('link')>
 					<el-table-column label="${c.columnComment3}">
@@ -171,6 +179,9 @@
 	<#else>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
 	</#if>
+</#list>
+<#list t.getAllDbFk_jh() as fk>
+					<el-table-column label="${fk.tx.comment}" prop="${fk.getAsColumnName_fs()}" ></el-table-column>
 </#list>
 					<el-table-column label="操作" width="240px">
 						<template slot-scope="s">
@@ -213,7 +224,7 @@
 					dataCount: 0,
 					dataList: [], // 数据集合 
 				<#list t.getColumnListBy('fk-1') as c>
-					${c.fkPkTableName}List: [],		// ${c.fkPkConcatComment}集合
+					${c.fkPkTableName2}List: [],		// ${c.fkPkConcatComment}集合
 				</#list>
 				},
 				methods: {
@@ -271,7 +282,7 @@
 				<#list t.getColumnListBy('fk-1') as c>
 					// 加载 ${c.fkPkConcatComment}
 					sa.ajax('/${c.fkPkTableMkName}/getList?pageSize=1000', function(res) {
-						this.${c.fkPkTableName}List = res.data; // 数据集合 
+						this.${c.fkPkTableName2}List = res.data; // 数据集合 
 					}.bind(this), {msg: null});
 				</#list>
 			</#if>

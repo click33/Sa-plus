@@ -98,7 +98,7 @@ public class ${t.mkNameBig}Controller {
 	
 	
 	// 如需使用此接口，你可能需要删除鉴权代码, 并添加鉴别身份代码  
-	/** 改 - 空值不改 */  
+	/** 改 - 空值不改【G】 */  
 	@RequestMapping("updateByNotNull")
 <#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
 </#if>

@@ -20,7 +20,7 @@
 			.content-box img{max-width: 200px !important;}
 			.c-item-mline{width: 700px;}
 		</#if>
-		<#if t.hasFo('img_list') >
+		<#if t.hasFo('img-list') >
 			.c-item .image-box-2{height: 90px;}
 		</#if>
 		</style>
@@ -65,7 +65,7 @@
 							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
 							<span v-else>无</span>
 						</div>
-	<#elseif c.foType == 'img_list'>
+	<#elseif c.foType == 'img-list'>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<div class="c-item-mline image-box" v-if="m.${c.fieldName}">
@@ -75,7 +75,7 @@
 							</div>
 							<span v-else>无</span>
 						</div>
-	<#elseif c.isFoType('audio_list', 'video_list', 'file_list', 'img_video_list')>
+	<#elseif c.isFoType('audio-list', 'video-list', 'file-list', 'img-video-list')>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<div class="c-item-mline" v-if="m.${c.fieldName}">
@@ -109,6 +109,12 @@
 							<span>{{m.${c.fieldName}}}</span>
 						</div>
 	</#if>
+</#list>
+<#list t.getAllDbFk_jh() as fk>
+						<div class="c-item br">
+							<label class="c-label">${fk.tx.comment}：</label>
+							<span>{{m.${fk.getAsColumnName_fs()}}}</span>
+						</div>
 </#list>
 					</el-form>
 				</div>

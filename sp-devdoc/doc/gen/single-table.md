@@ -1,28 +1,11 @@
-# 代码生成器 
+# 单表生成 
 
 
-### 导入测试sql
-- 文件：`doc/test-data.sql`, 是为了测试代码生成准备的库，请先在数据库中导入 
-
-
-### 导入代码生成器
-1. 在后端ide中导入项目 `sp-generate`，此为代码生成器
-2. 导入项目后，直接运行main方法就可以生成代码
-3. 运行前，请先确认相关配置信息，主要的注意点为：
-	- 服务端代码-存放路径
-	- 后台管理端项目地址（这些可直接设置为`sp-server`和`sp-admin`项目所在路径）
-	- 代码作者等基础信息
-5. 详细可查看代码注释
-6. 生成的后台管理页面如果在页面菜单处看不到，那可能是无权限，在 `权限管理->角色列表->分配权限` 选中即可
-7. 生成代码的关键点，在于表注释的特殊声明，具体可查看下方的：[表注释特殊声明](#表注释特殊声明)
-
-
-
-### 表注释特殊声明
-1. **代码生成器的特殊声明，可以让代码生成器更加智能**
-2. 如果在建表时不写特殊声明，则只能生成普通输入框
-3. 如果要生成特殊的表单，如：数值输入、多行文本域、图片上传、多图上传、富文本等等，则需要写上特殊声明
-4. 语法为，写一个中括号，跟上关键字：`字段注释 [特殊声明]`
+### 表注释类型声明
+1. **代码生成器的类型声明，可以让代码生成器更加智能**
+2. 如果在建表时不写类型声明，则只能生成普通输入框
+3. 如果要生成特殊的表单，如：数值输入、多行文本域、图片上传、多图上传、富文本等等，则需要写上类型声明
+4. 语法为，写一个中括号，跟上关键字：`字段注释 [类型声明]`
 5. 参考以下示例 
 
 ### 一个简单的例子
@@ -56,7 +39,7 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 ```
 
 
-##### 最终生成效果
+##### 最终生成效果如图所示
 
 ![列表](https://color-test.oss-cn-qingdao.aliyuncs.com/sa-plus/g-list.png)
 ![增加/修改](https://color-test.oss-cn-qingdao.aliyuncs.com/sa-plus/g-update.png)		
@@ -78,24 +61,32 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 | [video-list]		| 声明一个视频集合字段，会生成多视频上传，还可以写成 `[videoList]`、`[video_list]`	| 无		|
 | [file-list]		| 声明一个文件集合字段，会生成多文件上传，还可以写成 `[fileList]`、`[file_list]`	| 无		|
 | [img-video-list]		| 声明一个图片与视频混合的集合字段，还可以写成 `[imgVideoList]`、`[img_video_list]`	| 无		|
-| [richtext]		| 声明一个富文本字段，会生成富文本插件，还可以写成 `[f]`			| 无		|
+| [richtext]		| 声明一个富文本字段，会生成富文本插件，还可以写成 `[f]`, 详情见下			| 无		|
 | [textarea]		| 声明一个多行文本域											| 无		|
 | [num]			| 声明数值输入字段												| 无		|
-| [enum]			| 声明一个枚举字段，具体语法请查看下方示例，还可以写成 `[j]`		| 无		|
+| [enum]			| 声明一个枚举字段，具体语法请查看下方示例，还可以写成 `[j]`		| [enum](#-enmu-枚举字段)		|
 | [date]			| 声明一个日期字段												| 无		|
 | [date-create]	| 声明一个日期字段（数据创建日期）								| 无		|
 | [date-update]	| 声明一个日期字段（数据更新日期）								| 无		|
-| [fk-1] 			| 声明一个外键(主表数据<1000时使用，比如商品分类表)，格式为 [fk-1 pk=主表.主键.连表字段.连表字段注释]，例如：`[fk-1 pk=sys_type.id.name.所属分类]` | [fk-1](#-fk-1-简单外键) |
-| [fk-2] 			| 声明一个外键(主表数据>1000时使用，比如用户表)，格式为 [fk-2 pk=主表.主键]，例如：`[fk-2 pk=sys_user.id]` | [fk-2](#-fk-2-复杂外键) |
+| [fk-1] 			| 声明一个外键(主表数据<1000时使用，比如商品分类表)，格式为 [fk-1 js=主表.主键.连表字段.连表字段注释]，例如：`[fk-1 js=sys_type.id.name.所属分类]` | [fk-1](#-fk-1-简单外键) |
+| [fk-2] 			| 声明一个外键(主表数据>1000时使用，比如用户表)，格式为 [fk-2 js=主表.主键]，例如：`[fk-2 js=sys_user.id]` | [fk-2](#-fk-2-复杂外键) |
 | --notp			| 此字段取消解析								| 无		|
 
 
-### 详解
+### 类型详解
+
+
+##### - enmu 枚举字段
+- enum指定一个字段为枚举类型，且其取值必须以 `(1=xxx, 2=xxx, 3=xxx)` 的形式声明
+- 其还有两个附加属性，决定表单样式
+	- `s-type`：标注列表查询页生成的样式, 取值：1=普通单选, 2=单选文字, 3=单选按钮, 4=下拉选择，`默认值=2`
+	- `a-type`：标注添加修改页生成的样式, 取值同上，`默认值=3`
+	- 例如：`用户性别 (1=男, 2=女, 3=未知)[enum s-type=4, a-type=1]`，表示：在列表页以下拉框显示,添加页以普通单选显示
 
 ##### - fk-1 简单外键
 - `fk-1` 为简单外键(主表数据<1000时使用，比如商品分类表)
 - 应用场景举例：商品表只存储了商品分类id，在展示时却需要**展示出商品类别名称**，这时候需要声明`fk-1`外键
-- 格式为：`[fk-1 pk=主表.主键.连表字段.连表字段注释]`，例如：`[fk-1 pk=sys_type.id.name.所属分类]`
+- 格式为：`[fk-1 js=主表.主键.连表字段.连表字段注释]`，例如：`[fk-1 js=sys_type.id.name.所属分类]`
 
 ##### - fk-2 复杂外键
 - `fk-2` 为复杂外键(主表数据>1000时使用，比如用户表)
@@ -104,13 +95,13 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 
 ``` mysql 
 	-- 写法1，最简单写法，不进行多表查询，此时在后台管理展示的只有user_id （带有超链接，鼠标点击后打开用户详情）
-	`user_id` bigint(20) COMMENT '用户id [fk-2 pk=sys_user.id]',
+	`user_id` bigint(20) COMMENT '用户id [fk-2 js=sys_user.id]',
 	
 	-- 写法2，带出username值，此时在后台管理展示的有user_id、username		(语法与fk-1类似)
-	`user_id` bigint(20) COMMENT '用户id [fk-2 pk=sys_user.id.username.用户昵称]',
+	`user_id` bigint(20) COMMENT '用户id [fk-2 js=sys_user.id.username.用户昵称]',
 	
 	-- 写法3，带出username、avatar值，此时在后台管理展示的有user_id、username、avatar		(可以按照这个语法一直扩展，带出n个值)
-	`user_id` bigint(20) COMMENT '用户id [fk-2 pk=sys_user.id.username.用户昵称.avatar.用户头像]',
+	`user_id` bigint(20) COMMENT '用户id [fk-2 js=sys_user.id.username.用户昵称.avatar.用户头像]',
 	
 ```
 
@@ -119,20 +110,20 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 - `fk-1` 和 `fk-2` 还都能声明一些额外参数，来控制一些功能
 - `link`：是否增加超链接，点击之后打开主表数据详情，`fk-1`默认为`false`，`fk-2`默认为`true`
 - `sh1owfk`：是否显示原始的外键字段，`fk-1`默认为`false`，`fk-2`默认为`true`
-- `fname`：指定此外键对应的实体类字段名称，这在解决多个外键指向同一个表重名的场景时非常有用，一般情况下你不用指定此字段，因为`sa-plus`会自动为你的字段计算合适的名称
+- `as`：为这个外键手动指定一个别名，这在解决多个外键指向同一个表重名的场景时非常有用，一般情况下你不用指定此字段，因为`sa-plus`会自动为你的字段计算合适的名称
 - 参考以下示例
 
 ```
 	-- 此写法代表生成的后台管理页面，在展示用户id的时候，不再有"点击打开用户详情功能" 
-	`user_id` bigint(20) COMMENT '用户id [fk-2 pk=sys_user.id, link=false]',
+	`user_id` bigint(20) COMMENT '用户id [fk-2 js=sys_user.id, link=false]',
 
 	-- 此写法代表生成的后台管理页面，在展示用户id的时候，不再展示外键字段，即：只展示username，不展示user_id 
-	`user_id` bigint(20) COMMENT '用户id [fk-2 pk=sys_user.id.username.用户昵称, showfk=false]',
+	`user_id` bigint(20) COMMENT '用户id [fk-2 js=sys_user.id.username.用户昵称, showfk=false]',
 ```
 		
 		
 
-### 注意点 
+### 注意事项
 
 1. 在项目代码生成之后，可以直接重启运行
 2. 生成的代码都是**比较粗糙**的，仅能维持基本功能点的运行，不要指望一次性直接生成一个完整的项目，那是任何代码生成器都做不到的事情

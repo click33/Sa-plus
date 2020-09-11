@@ -21,6 +21,8 @@ public class ${t.mkNameBig}Util {
 		${t.mkNameBig}Util.${t.varName}Mapper = ${t.varName}Mapper;
 	}
 	
+	
+	
 	/** 
 	 * 验证一个${t.modelName} 是否符合标准 (方便表单校验用)【G】 
 	 */
@@ -45,9 +47,6 @@ public class ${t.mkNameBig}Util {
 		
 		// 重重检验，最终合格
 	}
-
-
-
 
 <#-- private时 -->
 <#if cfg.modelVisitWay == 1>

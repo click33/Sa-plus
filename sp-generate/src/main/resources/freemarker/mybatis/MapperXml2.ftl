@@ -46,8 +46,11 @@
 	<#list t.columnList as c>
 		<result property="${c.fieldName}" column="${c.columnName}" />
 	</#list>
-	<#list t.getAllDbFk() as fk>
+	<#list t.getAllDbFk_12() as fk>
 		<result property="${fk.fieldName}" column="${fk.columnName}" />
+	</#list>
+	<#list t.getAllDbFk_jh() as fk>
+		<result property="${fk.getAsColumnName_fs()}" column="${fk.getAsColumnName()}" />
 	</#list>
 	</resultMap>
 	<#if cfg.resultMapWay == 1>--></#if>
@@ -55,9 +58,12 @@
 	
 	<!-- 公共查询sql片段 -->
 	<sql id="select_sql">
-		select ${t.getAllColumnStringOrStar()}<#if t.getAllDbFk()?size != 0>,</#if> 
-<#list t.getAllDbFk() as fk>
-		(select `${fk.fkPkConcatName}` from `${fk.dc.fkPkTableName}` where `${fk.dc.fkPkColumnName}` = ${t.tableName}.${fk.dc.columnName}) as ${fk.columnName}<#if fk_index != t.getAllDbFk()?size-1>, </#if>
+		select ${t.getAllColumnStringOrStar()}<#if t.getAllDbFk_12()?size != 0 || t.getAllDbFk_jh()?size != 0>,</#if> 
+<#list t.getAllDbFk_12() as fk>
+		(select `${fk.fkPkConcatName}` from `${fk.dc.fkPkTableName}` where `${fk.dc.fkPkColumnName}` = ${t.tableName}.${fk.dc.columnName}) as ${fk.columnName}<#if fk_index != t.getAllDbFk_12()?size-1 || t.getAllDbFk_jh()?size != 0>, </#if>
+</#list>
+<#list t.getAllDbFk_jh() as fk>
+		${fk.getJhSql()}<#if fk_index != t.getAllDbFk_jh()?size-1>, </#if>
 </#list>
 		from `${t.tableName}` 
 	</sql>
@@ -74,7 +80,7 @@
 		<include refid="select_sql"></include>
 		<where>
 <#list t.columnList as c>
-	<#if c.isFoType('date', 'date-create', 'date-update', 'img', 'img_list', 'audio', 'audio_list', 'video', 'video_list')>
+	<#if c.isFoType('date', 'date-create', 'date-update', 'img', 'img-list', 'audio', 'audio-list', 'video', 'video-list', 'file', 'file-list')>
 	<#else>
 			<if test=' this.isNotNull("${c.fieldName}") '><#rt>
 				<#if c.getTx('j') == 'like'> <#t>

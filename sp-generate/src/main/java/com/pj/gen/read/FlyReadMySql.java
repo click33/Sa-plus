@@ -29,6 +29,7 @@ public class FlyReadMySql implements FlyRead{
 			table.setTableName(tableName);	// 表名字 
 			table.setTableComment(tcMap.get(tableName));	// 表注释
 			getColumnList(table);	// 获取字段信息
+			ReadUtil.f5TableFkName(table);  // 刷新重复的外键名称 
 			codeCfg.tableList.add(table);	// 添加进集合 
 		}
 	}
@@ -43,6 +44,7 @@ public class FlyReadMySql implements FlyRead{
 			ResultSet rs = codeCfg.sqlFly.getResultSet("show full columns from " + table.getTableName());
 			while (rs.next()) {
 				DbColumn column = DbModelManager.manager.getDbColumn();	 //new DbColumn();
+				column.setDt(table);
 				column.setColumnName(rs.getString("Field")); 				// 字段名 
 				column.setColumnType(rs.getString("Type"));					// DB类型 
 				column.setFieldType(jtMap.get(column.getColumnName()));		// java类型  

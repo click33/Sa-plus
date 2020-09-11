@@ -12,11 +12,12 @@ var sa_admin = new Vue({
 	el: '.app',
 	data: {
 		version: 'v2.4.2',		// 当前版本
+		plusVersion: 'v1.18.0',	//sa-plus版本
 		update_time: '2020-09-03',		// 更新日期 
 		title: '',//'SA-后台模板',				// 页面标题  
 		logo_url: '',	// logo地址 
 		icon_url: '',	// icon地址 
-		github_url: 'https://github.com/click33/sa-admin',	// github地址 
+		github_url: 'https://github.com/click33/sa-plus',	// github地址 
 		default_active: '0',	// 默认的高亮菜单id
 		default_openeds: [],	// 默认的打开数组 
 		unique_opened: true,		// 是否保持只打开一个
@@ -915,8 +916,11 @@ var sa_admin = new Vue({
 		},
 		// 打印版本
 		printVesion: function() {
-			console.log('欢迎使用sa-admin(iframe版)，当前版本：' + this.version + "，更新于：" + this.update_time + "，GitHub地址：" + this.github_url);
-			console.log('如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
+			// console.log('欢迎使用sa-admin(iframe版)，当前版本：' + this.version + "，更新于：" + this.update_time + "，GitHub地址：" + this.github_url);
+			var str = ('\n欢迎使用sa-plus，当前版本：' + this.plusVersion + "，更新于：" + this.update_time + "，GitHub地址：" + this.github_url);
+			str += ('\n如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
+			str += "\n";
+			console.log('%c%s', 'color: green; font-size: 16px; font-weight: 700;', str)
 		},
 		// 获取指定tab栏的window对象, 用于多窗口通信 
 		getTabWindow: function(tab_id) {

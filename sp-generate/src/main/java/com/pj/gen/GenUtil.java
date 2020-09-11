@@ -76,11 +76,11 @@ public class GenUtil {
 		}
 		
 		// FC.java 依赖清单 
-		String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";						// 路径  
-		String FContent = FreeMarkerUtil.getResult("mybatis/FC2.ftl", "abc", 123);		// 内容 
-		SUtil.outFile(FCPath, FContent);
-		System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
-		System.out.println("\n");
+//		String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";						// 路径  
+//		String FContent = FreeMarkerUtil.getResult("mybatis/FC2.ftl", "abc", 123);		// 内容 
+//		SUtil.outFile(FCPath, FContent);
+//		System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
+//		System.out.println("\n");
 	}
 	
 
@@ -132,11 +132,11 @@ public class GenUtil {
 		}
 		
 		// FC.java 依赖清单 
-		String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";						// 路径  
-		String FContent = FreeMarkerUtil.getResult("service/FC.ftl", "abc", 123);		// 内容 
-		SUtil.outFile(FCPath, FContent);
-		System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
-		System.out.println("\n");
+//		String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";						// 路径  
+//		String FContent = FreeMarkerUtil.getResult("service/FC.ftl", "abc", 123);		// 内容 
+//		SUtil.outFile(FCPath, FContent);
+//		System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
+//		System.out.println("\n");
 	}
 	
 	
