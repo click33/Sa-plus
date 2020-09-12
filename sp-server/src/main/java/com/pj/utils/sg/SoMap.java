@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-8-18 增加了 toJSONString( )方法 
+ * <p>最新：2020-9-12 去除setThis() 
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -29,7 +29,6 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
 	public SoMap() {
-		setThis();	// 自己set自己：方便mybatis的操作
 	}
 	
 
@@ -44,6 +43,24 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	// ============================= 读值 =============================
 
+	/** 获取一个值 */
+	@Override
+	public Object get(Object key) {
+		if(key.equals("this")) {
+			return this;
+		}
+		return super.get(key);
+	}
+
+	/** 如果为空，则返回默认值 */
+	public Object get(Object key, Object defaultValue) {
+		Object value = get(key);
+		if(value == null || value.equals("")) {
+			return defaultValue;
+		}
+		return value;
+	}
+	
 	/** 转为String并返回 */
 	public String getString(String key) {
 		Object value = get(key);
@@ -56,7 +73,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	/** 如果为空，则返回默认值 */
 	public String getString(String key, String defaultValue) {
 		String value = getString(key);
-		if(value == null) {
+		if(value == null || value.equals("")) {
 			return defaultValue;
 		}
 		return value;
@@ -252,7 +269,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	/** set一个值，连缀风格 */
 	public SoMap set(String key, Object value) {
-		if(key.equals("this") || key.equals("THIS")) {	// 防止敏感key
+		if(key.toLowerCase().equals("this")) {		// 防止敏感key 
 			return this;
 		}
 		put(key, value);
@@ -286,24 +303,12 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
-	/** 添加自身的引用 */
-	public SoMap setThis() {
-		this.put("this", this);
-		return this;
-	}
-
 	
 	// ============================= 删值 =============================
 
-	/** del一个值，连缀风格 */
+	/** delete一个值，连缀风格 */
 	public SoMap delete(String key) {
 		remove(key);
-		return this;
-	}
-
-	/** 删除自身的引用 */
-	public SoMap deleteThis() {
-		this.delete("this");
 		return this;
 	}
 
@@ -339,7 +344,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		Iterator<String> iterator = this.keySet().iterator();
 		while(iterator.hasNext()) {
 			String key = iterator.next();
-			if(keys2.contains(key) == false && key.equals("this") == false) {
+			if(keys2.contains(key) == false) {
 				iterator.remove();
 				this.remove(key);
 			}
@@ -347,7 +352,11 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		}
 		return this;
 	}
-	
+	/** 清理掉所有key */
+	public SoMap clearAll() {
+		clear();
+		return this;
+	}
 	
 
 	// ============================= 快速构建 ============================= 
@@ -388,7 +397,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		for (String key : this.keySet()) {
 			so.set(key.toUpperCase(), this.get(key));
 		}
-		this.clearNotIn().setMap(so);
+		this.clearAll().setMap(so);
 		return this;
 	}
 	/** 将所有key转为小写 */
@@ -397,7 +406,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		for (String key : this.keySet()) {
 			so.set(key.toLowerCase(), this.get(key));
 		}
-		this.clearNotIn().setMap(so);
+		this.clearAll().setMap(so);
 		return this;
 	}
 	/** 将所有key中下划线转为中划线模式 (kebab-case风格) */
@@ -406,7 +415,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		for (String key : this.keySet()) {
 			so.set(wordEachKebabCase(key), this.get(key));
 		}
-		this.clearNotIn().setMap(so);
+		this.clearAll().setMap(so);
 		return this;
 	}
 	/** 将所有key中下划线转为小驼峰模式 */
@@ -415,7 +424,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		for (String key : this.keySet()) {
 			so.set(wordEachBigFs(key), this.get(key));
 		}
-		this.clearNotIn().setMap(so);
+		this.clearAll().setMap(so);
 		return this;
 	}
 	/** 将所有key中小驼峰转为下划线模式 */
@@ -424,7 +433,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		for (String key : this.keySet()) {
 			so.set(wordHumpToLine(key), this.get(key));
 		}
-		this.clearNotIn().setMap(so);
+		this.clearAll().setMap(so);
 		return this;
 	}
 	
@@ -482,8 +491,8 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	 */
 	public String toJsonString() {
 		try {
-			SoMap so = SoMap.getSoMap(this).deleteThis();
-			return new ObjectMapper().writeValueAsString(so);
+//			SoMap so = SoMap.getSoMap(this);
+			return new ObjectMapper().writeValueAsString(this);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

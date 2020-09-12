@@ -69,7 +69,7 @@ public class RedisConsoleUtil {
 		so.set("used_memory_peak_human", map.get("used_memory_peak_human"));	// 内存消耗峰值 
 		so.set("uptime_in_seconds", map.get("uptime_in_seconds"));	// redis 已经启动的秒数 
 		
-		return so.deleteThis();
+		return so;
 	}
 	
 	
@@ -123,9 +123,8 @@ public class RedisConsoleUtil {
 		String value = stringRedisTemplate.opsForValue().get(key);	// 键值 
 		long expire = stringRedisTemplate.getExpire(key);		// 过期时间 
 		
-		SoMap soMap = new SoMap().
-				deleteThis().
-				set("key", key)
+		SoMap soMap = new SoMap()
+				.set("key", key)
 				.set("value", value)
 				.set("ttl", expire);
 		return soMap;
