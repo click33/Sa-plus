@@ -161,6 +161,7 @@ input::-webkit-inner-spin-button {
 .c-item .image-box-2 p{text-align: center; color: #999; margin-top: -10px;}
 .c-item .up_img{text-align: center; background-color: #f8f8f8; height: 90px;}
 .c-item .up_img img{width: 40px; height: 40px; margin-top: 25px;}
+.c-item .up_img{border: 1px #eee solid;}
 
 /* ==== wang富文本编辑器 ==== */
 .editor-item{width: 100%; height: auto;}
