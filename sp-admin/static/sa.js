@@ -992,7 +992,7 @@ var sa = {
 		// 刷新表格高度, 请务必在所有表格高度发生变化的地方调用此方法
 		me.f5TableHeight = function() {
 			Vue.nextTick(function() {
-				if($('.el-table .el-table__body-wrapper table').length == 0) {
+				if($('.el-table.data-table .el-table__body-wrapper table').length == 0) {
 					return;
 				}
 				setTimeout(function() {
