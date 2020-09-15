@@ -87,8 +87,8 @@ public class ${t.mkNameBig}Controller {
 	/** 查 - 集合（参数为null或0时默认忽略此条件） */  
 	@${cfg.apiMappingWayString}("getList")
 	AjaxJson getList() { 
-		SoMap so = SoMap.getRequestSoMap().startPage();
-		List<${t.modelName}> list = ${t.varName}Service.getList(so);
+		SoMap so = SoMap.getRequestSoMap();
+		List<${t.modelName}> list = ${t.varName}Service.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
 	}
 	
