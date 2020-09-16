@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.public4mapper.PublicMapper">
+
+
+
+	<!-- 返回上一句SQL插入的自增主键值 -->
+	<select id="getPrimarykey" resultType="long">
+		SELECT @@identity 
+	</select>
+	
+	<!-- 删除一条记录，指定表名，id -->
+	<delete id="deleteById">
+		delete from ${tableName} where id = #{id}
+	</delete>
+	
+	<!-- 根据指定列指定值删除一条记录，// 参数: 表名、条件列表、条件列值  -->
+	<delete id="deleteBy">
+		delete from ${tableName} where ${whereName} = #{whereValue} 
+	</delete>
+	
+	<!-- 删除一条记录，指定表名，id列表 -->
+	<delete id="deleteByIds">
+		delete from ${tableName} 
+		where id in 
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+	
+	<!-- 根据指定列指定值删除多条记录  -->
+	<delete id="deleteByWhereList">
+		delete from ${tableName} 
+		where ${whereName} in 
+		<foreach collection="whereList" item="item" open="(" separator="," close=")">
+			#{"item"}
+		</foreach>
+	</delete>
+	
+	
+	<!-- 指定表的指定字段加num（可以小于0 ）,根据指定id -->
+	<update id="columnAdd">
+		update ${tableName} set 
+		${columnName} = ${columnName} + #{num} 
+		where id = #{id};
+	</update>
+	
+
+	<!-- 指定表的指定字段更新为指定值,根据指定id -->
+	<update id="updateColumnById">
+		update ${tableName} set 
+		${columnName} = #{value} 
+		where id = #{id} 
+	</update>
+
+	<!-- 指定表的指定字段更新为指定值, 根据指定列的指定值 -->
+	<update id="updateColumnBy">
+		update ${tableName} set 
+		${columnName} = #{columnValue} 
+		where ${whereName} = #{whereValue} 
+	</update>
+	
+	<!-- 指定表的指定字段SoMap集合更新为指定值,根据指定id   -->
+	<update id="updateBySoMapById">
+		update ${tableName} set 
+		<foreach collection="soMap.entrySet()" item="value"  index="key" separator=",">
+			<if test=' key != "this" '>
+	       		${key} = #{value} 
+			</if>
+		</foreach>
+		where id = #{id} 
+	</update>
+	
+	<!-- 指定表的指定字段SoMap集合更新为指定值,根据指定id   -->
+	<update id="updateBySoMapBy">
+		update ${tableName} set 
+		<foreach collection="soMap.entrySet()" item="value"  index="key" separator=",">
+			<if test=' key != "this" '>
+	       		${key} = #{value}
+			</if>
+		</foreach>
+		where ${whereName} = #{whereValue} 
+	</update>
+	
+	
+	
+	<!-- 获取指定表的指定字段值,根据id值 -->
+	<select id="getColumnById" resultType="String">
+		select ${columnName} from ${tableName} 
+		where id = #{id}
+	</select>
+
+	<!-- 获取指定表的指定字段值,并转化为long,根据id值  -->
+	<select id="getColumnByIdToLong" resultType="long">
+		select ${columnName} from ${tableName} 
+		where id = #{id}
+	</select>
+
+	<!-- 获取指定表的指定字段值,根据指定条件(whereName=whereValue) -->
+	<select id="getColumnByWhere" resultType="String">
+		select ${columnName} from ${tableName} 
+		where ${whereName} = #{whereValue} 
+	</select>
+
+
+
+	
+
+</mapper>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.role.SpRoleMapper">
+
+
+	<!-- 增 -->
+	<insert id="add" >
+		insert into 
+		sp_role(id, role_name, role_info, is_lock, create_time) 
+		values (#{id}, #{role_name}, #{role_info}, 2, now())
+	</insert>
+
+
+	<!-- 删 -->
+	<delete id="delete" >
+		delete from sp_role 
+		where id = #{id}
+	</delete>
+
+
+	<!-- 改 -->
+	<update id="update" >
+		update sp_role set 
+		role_name = #{role_name}, 
+		role_info = #{role_info}
+		where id=#{id}
+	</update>
+
+
+	<!-- 通用映射 -->
+	<resultMap id="model" type="com.pj.project4sp.role.SpRole">
+		<result property="id" column="id" />
+		<result property="role_name" column="role_name" />
+		<result property="role_info" column="role_info" />
+		<result property="is_lock" column="is_lock" />
+		<result property="create_time" column="create_time" />
+	</resultMap>
+
+	<!-- 查 -->
+	<select id="getById" resultMap="model" >
+		select * from sp_role 
+		where id = #{id}
+	</select>
+
+
+	<!-- 查询，根据条件(参数为null或0时默认忽略此条件) -->
+	<select id="getList" resultMap="model" >
+		select * from sp_role where 1=1 
+		<if test=' this.isNotNull("role_name")  '>
+			and role_name like concat('%', #{role_name}, '%')
+		</if>
+	</select>
+
+	<!-- 查 - 根据角色名字 -->
+	<select id="getByRoleName" resultMap="model">
+		select * from sp_role 
+		where role_name = #{role_name}
+	</select>
+
+
+	
+</mapper>

@@ -20,6 +20,11 @@
 	- [聚合外键](/gen/fk-poly)
 
 
+- **其它版本**
+	- [版本说明](/more-version/intro)
+	- [maven多模块版](/more-version/com)
+
+
 - **其它**
 	- [缘起](/more/origin)
 	- [常见问题](/more/common-questions)

@@ -13,8 +13,8 @@ var sa_admin = new Vue({
 	data: {
 		version: 'v2.4.2',		// 当前版本
 		update_time: '2020-09-03',		// 更新日期 
-		plusVersion: 'v1.18.0',	//sa-plus版本
-		plus_update_time: '2020-09-11',	//sa-plus版本
+		plusVersion: 'v1.19.0',	//sa-plus版本
+		plus_update_time: '2020-09-16',	//sa-plus版本
 		title: '',//'SA-后台模板',				// 页面标题  
 		logo_url: '',	// logo地址 
 		icon_url: '',	// icon地址 

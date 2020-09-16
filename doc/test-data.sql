@@ -25,11 +25,11 @@ CREATE TABLE `sys_notice` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=gbk ROW_FORMAT=COMPACT COMMENT='公告表 [table icon=el-icon-bell]';
 
 -- select * from sys_notice;
-INSERT INTO `sp-dev`.`sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
+INSERT INTO `sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
 VALUES (1001, '测试公告1', '测试公告1', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599805642483567503625.jpg', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/1599805439648277652144.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805450160616641835.mp4', '', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/15998054742041893440109.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805482152468147415.mp4', '', 1, 1, 0, 1, '2020-09-11 14:24:59', '2020-09-11 14:24:59');
-INSERT INTO `sp-dev`.`sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
+INSERT INTO `sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
 VALUES (1002, '测试公告2', '测试公告2', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599805614320552993661.jpg', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/1599805439648277652144.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805450160616641835.mp4', '', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/15998054742041893440109.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805482152468147415.mp4', '', 1, 1, 0, 1, '2020-09-11 14:24:59', '2020-09-11 14:24:59');
-INSERT INTO `sp-dev`.`sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
+INSERT INTO `sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
 VALUES (1003, '测试公告3', '测试公告3', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15998054293331190096174.jpg', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/1599805439648277652144.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805450160616641835.mp4', '', 'http://demo.dev33.cn/sp-server/upload/audio/2020/09-11/15998054742041893440109.mp3', 'http://demo.dev33.cn/sp-server/upload/video/2020/09-11/1599805482152468147415.mp4', '', 1, 1, 0, 1, '2020-09-11 14:24:59', '2020-09-11 14:24:59');
 
 
@@ -76,10 +76,10 @@ CREATE TABLE `ser_goods` (
 COMMENT='商品表[table icon=el-icon-apple]';
 
 -- select * from ser_goods
-INSERT INTO `sp-dev`.`ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1001, '红富士苹果', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997970168761290331860.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797023755588872264.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/159979702375259508173.jpg', '<p>红富士苹果、又大又甜</p>', 99, 101, 123, 1, now(), now());
-INSERT INTO `sp-dev`.`ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1002, '大鸭梨', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975812031637411542.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975705891356990788.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975733991694005505.jpg', '<p>大鸭梨呀 大鸭梨呀&nbsp;</p>', 199, 103, 1000, 1, now(), now());
-INSERT INTO `sp-dev`.`ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1003, '小橘子', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976253641694707239.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797629820639846984.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797629820432131808.jpeg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976298192074277937.jpg', '<p>小橘子呀小橘子呀</p>', 299, 103, 1232, 1, now(), now());
-INSERT INTO `sp-dev`.`ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1004, '贴水面膜', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797690037918361522.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976972201194628355.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797697219564502792.jpg', '<p>贴水面膜贴水面膜</p>', 66, 102, 12, 1, now(), now());
+INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1001, '红富士苹果', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997970168761290331860.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797023755588872264.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/159979702375259508173.jpg', '<p>红富士苹果、又大又甜</p>', 99, 101, 123, 1, now(), now());
+INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1002, '大鸭梨', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975812031637411542.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975705891356990788.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997975733991694005505.jpg', '<p>大鸭梨呀 大鸭梨呀&nbsp;</p>', 199, 103, 1000, 1, now(), now());
+INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1003, '小橘子', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976253641694707239.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797629820639846984.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797629820432131808.jpeg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976298192074277937.jpg', '<p>小橘子呀小橘子呀</p>', 299, 103, 1232, 1, now(), now());
+INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1004, '贴水面膜', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797690037918361522.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997976972201194628355.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797697219564502792.jpg', '<p>贴水面膜贴水面膜</p>', 66, 102, 12, 1, now(), now());
 
 
 
@@ -101,11 +101,11 @@ CREATE TABLE `ser_article` (
 COMMENT='文章表 [table icon=el-icon-document-remove]';
 
 -- select * from ser_article;
-INSERT INTO `sp-dev`.`ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
+INSERT INTO `ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
 VALUES (2, '开业大酬宾', '<p>开业大酬宾，开业了</p>', 104, 1001, now(), now(), 1);
-INSERT INTO `sp-dev`.`ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
+INSERT INTO `ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
 VALUES (3, '回馈老客户啦，速来', '<p>回馈老客户啦，速来</p>', 103, 1002, now(), now(), 1);
-INSERT INTO `sp-dev`.`ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
+INSERT INTO `ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 
 VALUES (4, '两块钱，你买不了吃亏', '<p>两块钱，你买不了吃亏，两块钱，你买不了上当</p>', 104, 1003, now(), now(), 1);
 
 
