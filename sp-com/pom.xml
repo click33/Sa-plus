@@ -8,7 +8,7 @@
     <modules>
         <!-- 核心模块 -->
         <module>sp-core</module>
-        <!-- sa-fast内置的代码模块 -->
+        <!-- sa-plus内置的代码模块 -->
         <module>sp-admin</module>
         <!-- 启动类模块 -->
         <module>sp-start</module>
