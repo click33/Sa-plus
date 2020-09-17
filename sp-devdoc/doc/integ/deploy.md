@@ -24,7 +24,28 @@
 
 ##### 为什么打成分散包？
 - 这样有一个好处，就是在你多次部署项目时，如没有变更`pom.xml`, `lib\`目录也是不变的， 这样每次只上传你的`xxx.jar`代码包就好了，节省部署时间  
+- 如一定需要打成完整包，将`pom.xml`中的`build`节点改为如下样式即可
 
+``` xml 
+
+<!-- 构建配置 -->
+    <build>
+        <!-- 配置资源目录  -->
+		<!-- resources配置... -->
+		
+		<!-- 打包插件(完整包) -->
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+		
+    </build>
+	
+```
+
+- 注意不要删除文件中的`<resources>`节点，将`plugins`节点改为如上所示即可，其它步骤不变
 
 
 ## 2. admin后台管理部署
