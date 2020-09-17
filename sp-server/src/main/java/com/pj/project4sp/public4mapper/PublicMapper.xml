@@ -33,7 +33,7 @@
 		delete from ${tableName} 
 		where ${whereName} in 
 		<foreach collection="whereList" item="item" open="(" separator="," close=")">
-			#{"item"}
+			#{item}
 		</foreach>
 	</delete>
 	
