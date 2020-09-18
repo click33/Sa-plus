@@ -50,6 +50,7 @@ public class GenCfg {
 	public int sqlSelectColumnWay = 1; 	// mapper.xml中的通用查询，是select * 还是所有列 (1=select *, 2=select所有列)
 	public int sqlEnclose = 2;			// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否)
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
+	public boolean mybatisPlus = false; // 是否使用mybatisPlus
 	
 	
 	public String packageUnderlineTo = "_"; 	// 将包名中的下划线转换成指定内容，比如：$、2、4 或者空字符串"" 
@@ -474,7 +475,14 @@ public class GenCfg {
 		this.saTokenAuthWay = saTokenAuthWay;
 		return this;
 	}
-	
+
+	public GenCfg setMybatisPlus(boolean mybatisPlus){
+		this.mybatisPlus = mybatisPlus;
+		return this;
+	}
+	public boolean getMybatisPlus(){
+		return mybatisPlus;
+	}
 	
 //	/* （非 Javadoc）
 //	 * @see java.lang.Object#toString()

@@ -5,13 +5,15 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import ${cfg.package_utils};
-
+<#if cfg.mybatisPlus>
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+</#if>
 /**
  * Mapper: ${t.tableName} -- ${t.tableComment}
  * @author ${cfg.author} 
  */
 @Mapper
-public interface ${t.mkNameBig}Mapper {
+public interface ${t.mkNameBig}Mapper <#if cfg.mybatisPlus> extends BaseMapper<${t.modelName}></#if>{
 
 	/**
 	 * 增  
