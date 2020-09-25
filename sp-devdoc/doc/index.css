@@ -12,3 +12,23 @@
 .main-box img:hover{box-shadow: 0 0 10px #333; cursor: pointer;}
 .main-box h4[align=center] img{margin: 0 0;}
 
+
+/* ============== 样式优化 ================ */
+
+/* 背景变黑 */
+.main-box [data-lang]{padding: 0px !important; border-radius: 10px; overflow: hidden;}
+.main-box [class^="lang-"]{/* color: red !important; */ border: 0px red solid; padding: 1.2em; background-color: #000; color: #FFF;}
+.main-box [class^="lang-api"]{color: #FFF;}
+
+
+.token.string{color: #65B042;}
+.token.number{color: #2487CC;}
+.token.punctuation{color: #FFF;}
+.token.comment{color: #FFF;}
+
+/* .main-box [class="lang-api"]{color: red;} */
+
+#main table{margin-left: 25px;}
+@media screen and (min-width: 800px) {
+	#main table tr th{min-width: 150px;}
+}

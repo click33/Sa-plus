@@ -23,6 +23,7 @@
 - **其它版本**
 	- [版本说明](/more-version/intro)
 	- [maven多模块版](/more-version/com)
+	- [springcloud微服务版](/more-version/springcloud)	
 
 
 - **其它**
