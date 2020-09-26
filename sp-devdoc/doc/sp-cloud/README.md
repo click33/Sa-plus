@@ -32,6 +32,7 @@
 - 搭建项目基架：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/create-projec](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/create-projec)
 - 注册服务到nacos：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/reg-service](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/reg-service)
 - 启动网关-gateway：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/gateway](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/gateway)
+- 使用feign实现rpc调用：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/feign](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/feign)
 - 熔断降级限流-sentinel：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/sentinel](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/sentinel)
 - 服务信息监控-springboot-admin：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/springboot-admin](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/springboot-admin)
 - 启动后台管理UI页面-sp-admin：[http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/sp-admin](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/sp-admin)
