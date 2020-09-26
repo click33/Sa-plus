@@ -13,7 +13,7 @@
 
 
 ## 如何使用？
-- `sentinel`有两种使用方式，一是通过代码配置防卫策略，而是通过`sentinel-dashboard`控制台配置防卫策略
+- `sentinel`有两种使用方式，一是通过代码配置防卫策略，二是通过`sentinel-dashboard`控制台配置防卫策略
 - 由于`sentinel-dashboard`控制台方式更加灵活更加自动化，在此仅演示`sentinel-dashboard`控制台方式，对代码配置感兴趣的同学可自行搜索相关资料
 - 以针对秒杀活动的限流策略距离:
 
