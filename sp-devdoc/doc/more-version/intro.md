@@ -8,6 +8,7 @@
 
 - **`sp-server`**: springboot单体版
 - **`sp-com`**: maven多模块版
+- **`sp-cloud`**: springcloud微服务版, [点我](/more-version/springcloud)
 
 
 ##### 后台管理所有版本
@@ -23,7 +24,7 @@
 
 <br><br><br><br><br>
 ##### 结语
-后序将会逐渐支持以下版本：`springcloud微服务版`、`后台管理vue单页版`、`接口文档swagger版`，敬请期待
+后序将会逐渐支持更多版本，目前已上提案的有：`后台管理vue单页版`、`接口文档swagger版`，敬请期待
 
 
 
