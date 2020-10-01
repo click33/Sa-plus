@@ -46,19 +46,3 @@ spring:
     myconfig:
         # 本项目部署到的服务器域名（文件上传等等模块  要用到）
         domain: http://127.0.0.1:8099
-
-#mybatisPlus配置
-mybatis-plus:
-    mapperLocations: com.pj.project.*
-    #实体扫描，多个package用逗号或者分号分隔
-    typeAliasesPackage: com.pj.project.*
-    global-config:
-        # 数据库相关配置
-        db-config:
-            #驼峰下划线转换
-            column-underline: true
-            #数据库大写下划线转换
-            capital-mode: false
-    configuration:
-        map-underscore-to-camel-case: true
-        cache-enabled: false

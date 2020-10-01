@@ -8,10 +8,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
+import lombok.EqualsAndHashCode;
 </#if>
-
-
-
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -24,6 +22,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 <#if cfg.mybatisPlus>
 @TableName("${t.tableName}")
+@EqualsAndHashCode(callSuper = false)
 </#if>
 public class ${t.modelName} <#if cfg.mybatisPlus> extends Model<${t.modelName}></#if> implements Serializable {
 
