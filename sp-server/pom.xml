@@ -70,7 +70,7 @@
 		<dependency>
 		    <groupId>cn.dev33</groupId>
 		    <artifactId>sa-token</artifactId>
-		    <version>1.0.3</version>
+		    <version>1.4.0</version>
 		</dependency>
         
         <!-- 工具类大全 - 在线文档：https://hutool.cn/docs/#/ -->

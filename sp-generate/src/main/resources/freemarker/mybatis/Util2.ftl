@@ -21,6 +21,8 @@ public class ${t.mkNameBig}Util {
 		${t.mkNameBig}Util.${t.varName}Mapper = ${t.varName}Mapper;
 	}
 	
+	
+	
 	/** 
 	 * 验证一个${t.modelName} 是否符合标准 (方便表单校验用)【G】 
 	 */
@@ -39,15 +41,12 @@ public class ${t.mkNameBig}Util {
 		<#list t.columnList as c>
 <#if  cfg.utilDocWay == 2 >		// 验证: ${c.columnComment}
 </#if>
-		AjaxError.byIsNull(${t.varNameSimple}.${c.fieldName}, "${c.columnComment}不能为空");	<#if cfg.utilDocWay == 1>	// 验证: ${c.columnComment}	 </#if>
+		AjaxError.throwByIsNull(${t.varNameSimple}.${c.fieldName}, "${c.columnComment}不能为空");	<#if cfg.utilDocWay == 1>	// 验证: ${c.columnComment}	 </#if>
 		</#list>
 </#if>
 		
 		// 重重检验，最终合格
 	}
-
-
-
 
 <#-- private时 -->
 <#if cfg.modelVisitWay == 1>

@@ -14,7 +14,16 @@
 
 
 - **代码生成器**
-	- [代码生成器](/gen/code-gener)
+	- [导入代码生成器](/gen/import-sql)
+	- [单表生成](/gen/single-table)
+	- [表注释](/gen/table-comment)
+	- [聚合外键](/gen/fk-poly)
+
+
+- **其它版本**
+	- [版本说明](/more-version/intro)
+	- [maven多模块版](/more-version/com)
+	- [springcloud微服务版](/more-version/springcloud)	
 
 
 - **其它**

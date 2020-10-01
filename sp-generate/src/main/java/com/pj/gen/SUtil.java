@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
 
-import com.pj.gen.utils.SoMap;
-
 /**
  * String处理工具类
  * @author kongyongshun
@@ -52,6 +50,14 @@ public class SUtil {
 	
 	// =====================  工具型方法  =========================   
 	
+	/**
+	 * 该字符串是否为null或者空串
+	 */
+	public static boolean isNull(String str) {
+		return (str == null || str.equals(""));
+	}
+	
+	
 	// 将指定单词首字母大写;
 	static String wordFirstBig(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
@@ -62,8 +68,18 @@ public class SUtil {
 		return str.substring(0, 1).toLowerCase() + str.substring(1, str.length());
 	}
 	
+	// 去掉字符串第一个字符
+	public static String strFirstDrop(String str) {
+		try {
+			return str.substring(1, str.length());
+		} catch (StringIndexOutOfBoundsException e) {
+			return str;
+		}
+	}
+	
+	
 	// 去掉字符串最后一个字符
-	static String strLastDrop(String str) {
+	public static String strLastDrop(String str) {
 		try {
 			return str.substring(0, str.length() - 1);
 		} catch (StringIndexOutOfBoundsException e) {
@@ -134,36 +150,6 @@ public class SUtil {
 //	}
 	
 	
-	// 将类似 name=张三, age=18 样式的字符串, 转换为map
-	public static SoMap txStringToMap(String tx_str) {
-		SoMap map = new SoMap();
-		if(tx_str == null) {
-			return map;
-		}
-		String[] arr = tx_str.split(",");
-		for (String str : arr) {
-			try {
-				str = str.trim();
-				if(str.equals("")) {	// 如果是空
-					
-				}
-				else if(str.indexOf("=") == -1) {	// 如果没有=
-					map.put(str, "");;
-				}
-				else {	
-					String[] darr = str.split("=");
-					if(darr.length == 1) {
-						map.put(darr[0], "");
-					} else {
-						map.put(darr[0], darr[1]);
-					}
-				}
-			} catch (Exception e) {
-				System.err.println("特性：" + str + "解析出错：" + e.getMessage());
-			}
-		}
-		return map;
-	}
 	
 //	public static void main(String[] args) {
 ////		System.out.println(txStringToMap("name=1, bas= 21, kjsa, ss=,"));

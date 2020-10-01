@@ -9,12 +9,13 @@
 
 ### 目录介绍
 
-- sp-server：java服务端代码
-- sp-admin：后台管理页面
-- sp-apidoc：api接口文档页面
-- sp-generate：代码生成器
-- sp-devdoc：sa-plus使用文档
-- doc：其它文件，例如：sql脚本
+- **`sp-server`**：java服务端代码
+- **`sp-admin`**：后台管理页面
+- **`sp-apidoc`**：api接口文档页面
+- **`sp-generate`**：代码生成器
+- **`sp-devdoc`**：sa-plus使用文档
+- **`sp-com`**：java服务端代码 - maven多模块版
+- **`doc`**：其它文件，例如：sql脚本
 
 
 

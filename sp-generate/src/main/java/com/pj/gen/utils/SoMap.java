@@ -38,6 +38,15 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	// ============================= 读值 =============================
 
+	/** 如果为空，则返回默认值 */
+	public Object get(String key, Object defaultValue) {
+		Object value = super.get(key);
+		if(value == null) {
+			return defaultValue;
+		}
+		return value;
+	}
+	
 	/** 转为String并返回 */
 	public String getString(String key) {
 		Object value = get(key);

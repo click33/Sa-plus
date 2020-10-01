@@ -41,6 +41,8 @@ public class FreeMarkerUtil {
 			Template t = new Template("template", new StringReader(str), new Configuration(Configuration.VERSION_2_3_23));
 			t.process(dataModel, result);
 		} catch (Exception e) {
+			System.err.println("------------------------------flt文件：" + flt_url);
+			System.err.println("------------------------------dataModel：" + dataModel);
 			throw new RuntimeException(e);
 		}
 

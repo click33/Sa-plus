@@ -26,7 +26,14 @@ hs_err_pid*
 *.iml
 .factorypath
 
+
+# 以下为测试时添加的忽略规则，如需使用git功能，请将以下规则全部删掉
+
 sp-server/src/main/java/com/pj/project/*
 sp-admin/sa-resources/menu-list.js
 sp-admin/sa-html/*
 sp-apidoc/project/*
+
+
+sp-com/sp-more/src/main/java/com/pj/project/*
+

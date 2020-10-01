@@ -12,7 +12,7 @@
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
-<#if t.hasFo('img', 'img_list', 'video', 'video_list', 'audio', 'audio_list', 'img_video_list', 'richtext') >
+<#if t.hasFo('img', 'audio', 'video', 'file', 'img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list', 'richtext') >
 	<#if cfg.fileUploadWay == 1 >
 		<script src="../../static/kj/upload-util.js"></script>
 	</#if>
@@ -44,7 +44,7 @@
 	<#if c.foType == 'text'>	
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
-							<el-input size="mini" v-model="m.${c.fieldName}"></el-input>
+							<el-input size="mini" v-model="m.${c.fieldName}" <#if c.foType == 'num'>type="number" </#if>></el-input>
 						</div>
 	<#elseif c.foType == 'num'>
 						<div class="c-item br">
@@ -69,11 +69,26 @@
 	<#elseif c.foType == 'enum'>
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
+				<#if c.getTx('a-type') == '1' || c.getTx('a-type') == '2'>
+							<el-radio-group v-model="m.${c.fieldName}" size="mini" <#if c.getTx('a-type') == '2'>class="s-radio-text" </#if>>
+								<#list c.jvList?keys as jv>
+								<el-radio :label="${jv}">${c.jvList[jv]}</el-radio>
+								</#list>
+							</el-radio-group>
+				<#elseif c.getTx('a-type') == '3'>
 							<el-radio-group v-model="m.${c.fieldName}" size="mini">
 								<#list c.jvList?keys as jv>
 								<el-radio-button :label="${jv}">${c.jvList[jv]}</el-radio-button>
 								</#list>
 							</el-radio-group>
+				<#elseif c.getTx('a-type') == '4'>
+							<el-select v-model="m.${c.fieldName}" size="mini">
+								<el-option label="请选择" :value="0" disabled></el-option>
+								<#list c.jvList?keys as jv>
+								<el-option label="${c.jvList[jv]}" :value="${jv}"></el-option>
+								</#list>
+							</el-select>
+				</#if>
 						</div>
 	<#elseif c.foType == 'img'>
 						<div class="c-item br">
@@ -94,7 +109,13 @@
 							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
 							<el-link type="primary" @click="sa.uploadVideo(src => {m.${c.fieldName} = src; sa.ok2('上传成功');})">上传</el-link>
 						</div>
-	<#elseif c.foType == 'img_list'>
+	<#elseif c.foType == 'file'>
+						<div class="c-item br">
+							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
+							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
+							<el-link type="primary" @click="sa.uploadFile(src => {m.${c.fieldName} = src; sa.ok2('上传成功');})">上传</el-link>
+						</div>
+	<#elseif c.foType == 'img-list'>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<div class="c-item-mline image-box">
@@ -111,7 +132,7 @@
 								</div>
 							</div>
 						</div>
-	<#elseif c.foType == 'audio_list'>
+	<#elseif c.isFoType('audio-list', 'video-list', 'file-list', 'img-video-list')>
 						<div class="c-item br">
 							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
 							<div class="c-item-mline">
@@ -122,36 +143,16 @@
 										<small style="vertical-align: top;">删除</small>
 									</el-link>
 								</div>
+			<#if c.foType == 'audio-list'>
 								<el-link type="primary" @click="sa.uploadAudioList(src => m.${c.fieldName}_arr.push(src))">上传</el-link>
-							</div>
-						</div>
-	<#elseif c.foType == 'video_list'>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<div class="c-item-mline">
-								<div v-for="item in m.${c.fieldName}_arr">
-									<el-link type="info" :href="item" target="_blank">{{item}}</el-link>
-									<el-link type="danger" class="del-rr" @click="sa.arrayDelete(m.${c.fieldName}_arr, item)">
-										<i class="el-icon-close"></i>
-										<small style="vertical-align: top;">删除</small>
-									</el-link>
-								</div>
+			<#elseif c.foType == 'video-list'>
 								<el-link type="primary" @click="sa.uploadVideoList(src => m.${c.fieldName}_arr.push(src))">上传</el-link>
-							</div>
-						</div>
-	<#elseif c.foType == 'img_video_list'>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<div class="c-item-mline">
-								<div v-for="item in m.${c.fieldName}_arr">
-									<el-link type="info" :href="item" target="_blank">{{item}}</el-link>
-									<el-link type="danger" class="del-rr" @click="sa.arrayDelete(m.${c.fieldName}_arr, item)">
-										<i class="el-icon-close"></i>
-										<small style="vertical-align: top;">删除</small>
-									</el-link>
-								</div>
+			<#elseif c.foType == 'file-list'>
+								<el-link type="primary" @click="sa.uploadFileList(src => m.${c.fieldName}_arr.push(src))">上传</el-link>
+			<#elseif c.foType == 'img-video-list'>
 								<el-link type="primary" @click="sa.uploadImageList(src => m.${c.fieldName}_arr.push(src))">上传图片</el-link>
 								<el-link type="primary" @click="sa.uploadVideoList(src => m.${c.fieldName}_arr.push(src))" style="margin-left: 7px;">上传视频</el-link>
+			</#if>
 							</div>
 						</div>
 	<#elseif c.foType == 'date'>
@@ -159,14 +160,14 @@
 							<label class="c-label">${c.columnComment3}：</label>
 							<el-date-picker size="mini" v-model="m.${c.fieldName}" type="datetime" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
 						</div>
-	<#elseif c.foType == 'date-create' || c.foType == 'date-update'>
+	<#elseif c.isFoType('date-create', 'date-update')>
 						<!-- ${c.foType}字段： m.${c.fieldName} - ${c.columnComment3} -->
 	<#elseif c.foType == 'fk-1'>
 						<div class="c-item br">
 							<label class="c-label">${c.fkPkConcatComment}：</label>
 							<el-select size="mini" v-model="m.${c.fieldName}">
-								<el-option label="不限" :value="0"></el-option>
-								<el-option v-for="${c.fkPkTableName} in ${c.fkPkTableName}List" :label="${c.fkPkTableName}.${c.fkPkConcatName}" :value="${c.fkPkTableName}.${c.fkPkColumnName}" :key="${c.fkPkTableName}.${c.fkPkColumnName}"></el-option>
+								<el-option label="请选择" :value="0" disabled></el-option>
+								<el-option v-for="item in ${c.fkPkTableName2}List" :label="item.${c.fkPkConcatName}" :value="item.${c.fkPkFieldName}" :key="item.${c.fkPkColumnName}"></el-option>
 							</el-select>
 						</div>
 	<#elseif c.foType == 'no'>
@@ -231,7 +232,7 @@
 					id: sa.p('id', 0),		// 获取超链接中的id参数（0=添加，非0=修改） 
 					m: null,		// 实体对象 
 				<#list t.getColumnListBy('fk-1') as c>
-					${c.fkPkTableName}List: [],		// ${c.fkPkConcatComment}
+					${c.fkPkTableName2}List: [],		// ${c.fkPkConcatComment}
 				</#list>
 				},
 				methods: {
@@ -241,7 +242,7 @@
 					<#list t.columnList as c>
 						<#if c.isFoType('no', 'date-create', 'date-update')>
 							// ${c.fieldName}: '',		// ${c.columnComment} 
-						<#elseif c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+						<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 							${c.fieldName}: '',		// ${c.columnComment} 
 							${c.fieldName}_arr: [],		// ${c.columnComment} - 转数组
 						<#else>
@@ -271,7 +272,7 @@
 					ok: function(){
 						// 验证 
 				<#list t.columnList as c>
-					<#if c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+					<#if c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 						this.m.${c.fieldName} = this.m.${c.fieldName}_arr.join(',');	// 图片数组转字符串 
 					</#if>
 					<#if c.foType == 'richtext'>
@@ -302,6 +303,11 @@
 					clean: function() {
 						if(this.id == 0) {
 							this.m = this.createModel();
+						<#if t.hasFo('richtext')>
+							this.$nextTick(function() {
+								create_editor('');
+							})
+						</#if>
 						} else {
 							parent.app.f5();		// 刷新父页面列表
 							sa.closeCurrIframe();	// 关闭本页 
@@ -323,7 +329,7 @@
 						<#if c.foType == 'date'>
 							res.data.${c.fieldName} = new Date(res.data.${c.fieldName});		// ${c.columnComment} 日期格式转换 
 						</#if>
-						<#if c.isFoType('img_list', 'audio_list', 'video_list', 'img_video_list')>
+						<#if c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 							res.data.${c.fieldName}_arr = sa.isNull(res.data.${c.fieldName}) ? [] : res.data.${c.fieldName}.split(',');		// ${c.columnComment} 字符串转数组 
 						</#if>
 					</#list>
@@ -343,7 +349,7 @@
 				<#list t.getColumnListBy('fk-1') as c>
 					// 加载 ${c.fkPkConcatComment}
 					sa.ajax('/${c.fkPkTableMkName}/getList?pageSize=1000', function(res) {
-						this.${c.fkPkTableName}List = res.data; // 数据集合 
+						this.${c.fkPkTableName2}List = res.data; // 数据集合 
 					}.bind(this), {msg: null});
 				</#list>
 			</#if>

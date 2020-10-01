@@ -16,7 +16,7 @@ public class SpGenerateApplication {
 	// 直接运行代码生成器
 	public static void main(String[] args) {
 
-		// 启动springboot  
+		// 启动springboot   
 		SpringApplication.run(SpGenerateApplication.class, args); 
 		
 
@@ -26,12 +26,13 @@ public class SpGenerateApplication {
         config.setUrl("jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
         config.setUsername("root");
         config.setPassword("root123456");
-        config.setPrintSql(true);		// 是否打印sql 
-        FlyObjects.setConfig(config);    // 注入到框架中
+        config.setPrintSql(true);		// 是否打印sql  
+        FlyObjects.setConfig(config);    // 注入到框架中 
+        // ！！！注意：如果报错创建连接失败，可尝试将连接字符串中的 useSSL=true 改为 useSSL=false 
 		
         
 		// ===================================  你可以重写一些内部逻辑，填充一些功能  =================================== 
-		// 请参考本文件最底部示例
+		// 请参考本文件最底部示例 
         
 		
 		// ===================================  一些全局设置  =================================== 
@@ -77,7 +78,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.15.0，更新于2020-8-27 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.20.0，更新于2020-9-26 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		
@@ -93,7 +94,7 @@ public class SpGenerateApplication {
 
 	// ===================================  你可以重写一些内部逻辑，填充一些功能  =================================== 
 	// 请参考本文件最底部示例
-//	// 例如 以下代码代表截取掉表前缀 
+//	// 例如 以下代码代表截取掉表前缀 (把这段代码复制上去) 
 //	DbModelManager.manager = new DbModelManager() {
 //		// 重写创建 DbTable 的函数 
 //		public DbTable getDbTable() {

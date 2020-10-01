@@ -1,10 +1,14 @@
 package com.pj.gen.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.pj.gen.SUtil;
 import com.pj.gen.cfg.GenCfgManager;
+import com.pj.gen.read.ReadUtil;
+import com.pj.gen.utils.AjaxError;
+import com.pj.gen.utils.SoMap;
 
 /**
  * 一个表
@@ -28,10 +32,16 @@ public class DbTable {
 	// private boolean has_img;					// 此表内是否包含img类型字段【只读字段】
 	// private boolean has_richtext;					// 此表内是否包含richtext类型字段【只读字段】
 	
+	private List<Ft> ftList;		// ft列表 
+	public List<DbFk> fkList = new ArrayList<DbFk>();			// 聚合外键列表  
 	
 	private List<DbColumn> columnList;			// 列集合 	
 
+	private String tableType;					// 表类型 
 	
+
+
+
 	/**
 	 * 范回列的String形式
 	 * @return
@@ -61,10 +71,79 @@ public class DbTable {
 	
 	// 表注释 
 	public String getTableComment() {
+		if(this.tableComment == null) {
+			return "";
+		}
 		return tableComment;
 	}
+	// -------------------- 写入表注释 
 	public void setTableComment(String tableComment) {
-		this.tableComment = tableComment;
+		
+		// 解析所有类型 
+		TheString ts = new TheString();
+		this.ftList = ReadUtil.getFtList(tableComment, ts);
+		this.tableComment = ts.str;
+		
+		// 开始整理
+		for (Ft ft : this.ftList) {
+			// 五大聚合函数 
+			if(Arrays.asList("fk-count", "fk-max", "fk-min", "fk-sum", "fk-avg", "fk-?").contains(ft.type)) {
+				// 构建对象 
+				DbFk df = new DbFk();
+				df.setDt(this);	// 表
+				df.setType(ft.type);	// 列 
+				// 解析特性 
+				SoMap tx = ft.txMap;
+				// 如果声明了简写 
+				if(tx.getString("js") != null) {
+					String jsInfo = ft.txMap.getString("js"); 
+					String[] jsArr = jsInfo.split("\\."); 
+					if(jsArr.length < 3) {
+						System.err.println("无法解析表(" + this.tableName + ")注释, 简写模式请至少提供三个值: " + jsInfo);
+					} else {
+						// 尝试写入但不覆盖 
+						tx.setDefaultValue("jt", jsArr[0]);
+						tx.setDefaultValue("jc", jsArr[1]);
+						tx.setDefaultValue("comment", jsArr[2]);
+					}
+				}
+//				System.out.println("--------------------------------df的特性：" + df.tx); 
+				// ------------ 检查是否包含必要的条件 
+				// 指定sql后，需要继续提供 as 或 jt jc 
+				if(ft.txMap.isNotNull("sql")) {		
+					if(ft.txMap.isNull("as") && ft.txMap.isContainNull("jt")) {
+						AjaxError.getAndThrow("无法解析表(" + this.tableName + ")注释, 指定了sql后，必须提供as或jt");
+					}
+				}
+				// 指定where后，需要继续提供 jt 
+				else if(ft.txMap.isNotNull("where")) {
+					if(ft.txMap.isNull("jt")) {
+						AjaxError.getAndThrow("无法解析表(" + this.tableName + ")注释, 指定了where后，必须提供jt值 ");
+					}
+				}
+				// 什么都没有指定，则必须有jt和jc 
+				else if(ft.txMap.isContainNull("jt", "jc")) {
+					AjaxError.getAndThrow("无法解析表(" + this.tableName + ")注释, 请至少提供jt、jc两个值 ");
+				}
+				// 所有情况都必须提供注释 
+				if(ft.txMap.isNull("comment")) {
+					AjaxError.getAndThrow("表(" + this.tableName + ")注释, 聚合外键必须指定comment值，否则无法给字段标注相应的注释");
+				}
+				// 写入特性 
+				df.setTx(ft.txMap);
+				this.fkList.add(df);
+			}
+			// tree树表
+			else if(ft.type.equals("tree")) {
+				this.tableType = "tree";
+			}
+			// 默认, 普通 
+			else {
+				this.tableType = "table"; 
+			}
+		}
+		
+//		this.tableComment = tableComment;
 	}
 	
 	// 表主键 
@@ -200,7 +279,7 @@ public class DbTable {
 	}
 	
 	// 返回这个表的所有外键字段：fk1、fk-2 
-	public List<DbFk> getAllDbFk() {
+	public List<DbFk> getAllDbFk_12() {
 		List<DbFk> list = new ArrayList<DbFk>();
 		for (DbColumn c : this.columnList) {
 			if(c.isFoType("fk-1", "fk-2")) {	// 如果是fk-1 或者 fk-2
@@ -211,18 +290,14 @@ public class DbTable {
 		}
 		return list;
 	}
-	
-	
-	
-	// 返回Dao名
-	public String getDaoName() {
-		return getModelName() + "Dao"; 
-	}
-	// 返回Service名
-	public String getServiceName() {
-		return getModelName() + "Service"; 
-	}
 
+	// 返回这个表的所有外键：fk-* (聚合外键)
+	public List<DbFk> getAllDbFk_jh() {
+		List<DbFk> list = fkList;
+		return list;
+	}
+	
+	
 	
 	// 返回服务端应该写入哪个文件夹
 	public String getServerIoPath() {
@@ -237,16 +312,6 @@ public class DbTable {
 		return GenCfgManager.cfg.getApidocIoPath();// + "\\";
 	}
 	
-	
-	//	// 返回Dao名 变量形式 
-//	public String getDaoName() {
-//		return getClassName() + "Dao"; 
-//	}
-//	// 返回Service名 变量形式 
-//	public String getServiceName() {
-//		return getClassName() + "Service"; 
-//	}
-//	
 
 	// 返回这个表的所有列 
 	public String getAllColumnString() {
@@ -303,8 +368,6 @@ public class DbTable {
 		return "";
 	}
 	
-	
-	
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
@@ -316,10 +379,44 @@ public class DbTable {
 
 
 
+	// ---------- 表信息相关
+	// 返回这个表的 默认ft
+	public Ft getDefFt() {
+		for (Ft ft : ftList) {
+			if(ft.type.equals("table")) {
+				return ft;
+			}
+		}
+		// 如果没有，则返回默认的
+		Ft ft = new Ft();
+		ft.type = "type";
+		return ft;
+	}
+	
+	// 返回后台管理的菜单icon
+	public String getIcon() {
+		return getDefFt().txMap.getString("icon", "el-icon-folder-opened");
+	}
+	
 	
 
 
 	
+	// 一坨坨get set
+
+	/**
+	 * @param tableType 要设置的 tableType
+	 */
+	public void setTableType(String tableType) {
+		this.tableType = tableType;
+	}
+	/**
+	 * @return tableType
+	 */
+	public String getTableType() {
+		return tableType;
+	}
+
 
 
 

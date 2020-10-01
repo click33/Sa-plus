@@ -20,7 +20,7 @@ var menuList =	[
 	{
 		id: '${t.kebabName}',
 		name: '${t.tableComment}',
-		icon: 'el-icon-folder-opened',
+		icon: '${t.getIcon()}',
 		info: '${t.tableComment}表数据的维护',
 		childList: [
 			{id: '${t.kebabName}-list', name: '${t.tableComment}-列表', url: 'sa-html/${t.kebabName}/${t.kebabName}-list.html'},

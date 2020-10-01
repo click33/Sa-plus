@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.role4permission.SpRolePermissionMapper">
+
+
+	<!-- 增 -->
+	<insert id="add" >
+		insert into 
+		sp_role_permission(role_id, permission_code, create_time) 
+		values (#{role_id}, #{pcode}, now())
+	</insert>
+	
+	<!-- 删除指定角色的所有权限 -->
+	<delete id="deleteByRoleId">
+		delete from sp_role_permission
+		where role_id = #{role_id} 
+	</delete>
+
+	<!-- 指定role_id的所有权限码   -->
+	<select id="getPcodeByRoleId" resultType="String">
+		select permission_code from sp_role_permission
+		where role_id = #{role_id}
+	</select>
+
+
+</mapper>

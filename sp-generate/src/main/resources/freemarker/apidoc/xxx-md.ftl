@@ -80,11 +80,14 @@
 		<#list t.columnList as c>
 			"${c.fieldName}": ${c.defaultValue},		// ${c.columnComment2}
 		</#list>
-		<#list t.getAllDbFk() as fk>
+		<#list t.getAllDbFk_12() as fk>
 			"${fk.fieldName}": "",			// ${fk.fkPkConcatComment}
 		</#list>
+		<#list t.getAllDbFk_jh() as fk>
+			"${fk.getAsColumnName_fs()}": "",			// ${fk.tx.comment} 
+		</#list>
 		},
-		"dataCount": null
+		"dataCount": -1
 	}
 ```
 

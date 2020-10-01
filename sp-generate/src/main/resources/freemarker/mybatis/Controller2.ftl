@@ -87,8 +87,8 @@ public class ${t.mkNameBig}Controller {
 	/** 查 - 集合（参数为null或0时默认忽略此条件） */  
 	@${cfg.apiMappingWayString}("getList")
 	AjaxJson getList() { 
-		SoMap so = SoMap.getRequestSoMap().startPage();
-		List<${t.modelName}> list = ${t.varName}Mapper.getList(so);
+		SoMap so = SoMap.getRequestSoMap();
+		List<${t.modelName}> list = ${t.varName}Mapper.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
 	}
 	
@@ -98,7 +98,7 @@ public class ${t.mkNameBig}Controller {
 	
 	
 	// 如需使用此接口，你可能需要删除鉴权代码, 并添加鉴别身份代码  
-	/** 改 - 空值不改 */  
+	/** 改 - 空值不改【G】 */  
 	@RequestMapping("updateByNotNull")
 <#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
 </#if>
@@ -108,7 +108,7 @@ public class ${t.mkNameBig}Controller {
 		SoMap so = SoMap.getRequestSoMap();
 		// 鉴别身份，是否为数据创建者
 		/*long userId = SP.publicMapper.getColumnByIdToLong("${t.tableName}", "user_id", so.get("id"));*/
-		/*AjaxError.throwBy(userId != StpUserUtil.getLoginId_asLong(), "此数据您无权限修改");*/
+		/*AjaxError.throwBy(userId != StpUserUtil.getLoginIdAsLong(), "此数据您无权限修改");*/
 		// 开始修改 (请只保留需要修改的字段)
 		so.clearNotIn(${t.getAllColumnString3()}).clearNull()<#if cfg.modelStyle == 2 >.humpToLineCase()</#if>;	
 		int line = SP.publicMapper.updateBySoMapBy("${t.tableName}", so, "id", so.get("id"));

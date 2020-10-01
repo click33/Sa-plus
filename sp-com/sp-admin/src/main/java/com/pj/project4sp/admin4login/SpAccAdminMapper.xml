@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.admin4login.SpAccAdminMapper">
+
+
+	<!-- 指定id的账号成功登录一次  -->
+	<update id="successLogin">
+		update sp_admin set 
+		login_ip = #{login_ip},
+		login_time = NOW(),
+		login_count = login_count + 1
+		where id = #{id}
+	</update>
+
+
+
+</mapper>

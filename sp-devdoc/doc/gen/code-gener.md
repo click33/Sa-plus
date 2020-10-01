@@ -37,7 +37,7 @@ CREATE TABLE `ser_goods` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '商品id [no]', 
   `name` varchar(200) DEFAULT NULL COMMENT '商品名称 [text]', 
   `avatar` varchar(512) DEFAULT NULL COMMENT '商品头像 [img]', 
-  `image_list` varchar(2048) COMMENT '轮播图片 [img_list]', 
+  `image_list` varchar(2048) COMMENT '轮播图片 [img-list]', 
   `content` text COMMENT '图文介绍 [f]', 
   `remark` varchar(512) DEFAULT NULL COMMENT '商品备注 [textarea]',
   `money` int(11) DEFAULT '0' COMMENT '商品价格 [num]', 
@@ -67,15 +67,17 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 
 | 声明				 | 说明															| 详见		|
 | :--------			| :--------														| :--------	|
-| [text]			| 声明一个普通输入框，这是默认值，还可以写成 `[t]`	（`[text j=like]代表模糊查询`）			| 无		|
+| [text]			| 声明一个普通输入框，这是默认值，还可以写成 `[t]`、`[input]`   （`[text j=like]代表模糊查询`）			| 无		|
 | [no]			| 代表生成表单时忽略此字段										| 无		|
 | [img]			| 声明一个图片字段，会生成图片上传								| 无		|
 | [audio]			| 声明一个音频字段，会生成音频上传								| 无		|
 | [video]			| 声明一个视频字段，会生成视频上传								| 无		|
-| [img_list]		| 声明一个图片集合字段，会生成多图片上传，还可以写成 `[imgList]`	| 无		|
-| [audio_list]		| 声明一个音频集合字段，会生成多音频上传，还可以写成 `[audioList]`	| 无		|
-| [video_list]		| 声明一个视频集合字段，会生成多视频上传，还可以写成 `[videoList]`	| 无		|
-| [img_video_list]		| 声明一个图片与视频混合的集合字段，还可以写成 `[imgVideoList]`	| 无		|
+| [file]			| 声明一个文件字段，会生成文件上传(需在`UploadConfig.java`中配置文件后缀白名单)			| 无		|
+| [img-list]		| 声明一个图片集合字段，会生成多图片上传，还可以写成 `[imgList]`、`[img_list]` 	| 无		|
+| [audio-list]		| 声明一个音频集合字段，会生成多音频上传，还可以写成 `[audioList]`、`[audio_list]`	| 无		|
+| [video-list]		| 声明一个视频集合字段，会生成多视频上传，还可以写成 `[videoList]`、`[video_list]`	| 无		|
+| [file-list]		| 声明一个文件集合字段，会生成多文件上传，还可以写成 `[fileList]`、`[file_list]`	| 无		|
+| [img-video-list]		| 声明一个图片与视频混合的集合字段，还可以写成 `[imgVideoList]`、`[img_video_list]`	| 无		|
 | [richtext]		| 声明一个富文本字段，会生成富文本插件，还可以写成 `[f]`			| 无		|
 | [textarea]		| 声明一个多行文本域											| 无		|
 | [num]			| 声明数值输入字段												| 无		|
