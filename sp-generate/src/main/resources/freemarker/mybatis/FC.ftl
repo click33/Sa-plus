@@ -6,9 +6,11 @@ import org.springframework.stereotype.Component;
 <#list cfg.tableList as t>
 import ${t.packagePath}.${t.mkNameBig}Mapper;
 </#list>
+import com.pj.project4sp.public4mapper.PublicMapper;
+import com.pj.project4sp.public4mapper.PublicService;
 
 /**
- * SpringBean依赖清单，所有Bean在此定义
+ * SpringBean依赖清单，项目中所有Bean在此定义
  */
 @Component
 public class FC {
@@ -16,13 +18,35 @@ public class FC {
 	// ======================================== 所有Mapper ============================================== 
 
 <#list cfg.tableList as t>
-	/** Mapper依赖：${t.tableComment}  */
-	public static ${t.mkNameBig}Mapper ${t.varName}Mapper;
-	@Autowired
-	public void set${t.mkNameBig}Mapper(${t.mkNameBig}Mapper ${t.varName}Mapper) {
-		FC.${t.varName}Mapper = ${t.varName}Mapper;
-	}
-	
+	public static ${t.mkNameBig}Mapper ${t.varName}Mapper;		// Mapper依赖：${t.tableComment}
 </#list>
+	public static PublicMapper publicMapper;					// Mapper: 公共Mapper 
+
+
+
+	// ======================================== 所有Service ============================================== 
+
+	public static PublicService publicService;						// Service：公共service
+
+
+
+	// ======================================== 所有注入所有Bean ============================================== 
+	
+	// 注入 
+	@Autowired
+	public void setBean(
+<#list cfg.tableList as t>
+			${t.mkNameBig}Mapper ${t.varName}Mapper, 
+</#list>
+			PublicMapper publicMapper,
+			PublicService publicService
+			) {
+<#list cfg.tableList as t>
+			FC.${t.varName}Mapper = ${t.varName}Mapper;
+</#list>
+			FC.publicMapper = publicMapper;
+			FC.publicService = publicService;
+	}
+
 
 }

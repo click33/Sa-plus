@@ -5,8 +5,8 @@
 	- [文档说明](/sa-lib/doc-exp)
 
 - **文档**
-	- [文章表 ](/project/ser-article)
+	- [文章表](/project/ser-article)
 	- [商品表](/project/ser-goods)
-	- [公告表 ](/project/sys-notice)
-	- [分类表  ](/project/sys-type)
+	- [公告表](/project/sys-notice)
+	- [分类表](/project/sys-type)
 

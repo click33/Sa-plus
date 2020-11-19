@@ -27,8 +27,8 @@ public class FlyReadMySql implements FlyRead{
 		for (String tableName : codeCfg.tableNameList) {
 			DbTable table = DbModelManager.manager.getDbTable();		// new DbTable();
 			table.setTableName(tableName);	// 表名字 
-			table.setTableComment(tcMap.get(tableName));	// 表注释
 			getColumnList(table);	// 获取字段信息
+			table.setTableComment(tcMap.get(tableName));	// 表注释
 			ReadUtil.f5TableFkName(table);  // 刷新重复的外键名称 
 			codeCfg.tableList.add(table);	// 添加进集合 
 		}
@@ -39,19 +39,20 @@ public class FlyReadMySql implements FlyRead{
 	// 获取指定表的所有列信息 
 	public void getColumnList(DbTable table){
 		List<DbColumn> columns = new ArrayList<>();
+		table.setColumnList(columns);	// 写入列集合 
 		try {
 			Map<String, String> jtMap = ReadUtil.getJtMap(codeCfg.sqlFly, table.getTableName());
 			ResultSet rs = codeCfg.sqlFly.getResultSet("show full columns from " + table.getTableName());
 			while (rs.next()) {
-				DbColumn column = DbModelManager.manager.getDbColumn();	 //new DbColumn();
-				column.setDt(table);
-				column.setColumnName(rs.getString("Field")); 				// 字段名 
-				column.setColumnType(rs.getString("Type"));					// DB类型 
-				column.setFieldType(jtMap.get(column.getColumnName()));		// java类型  
-				column.setColumnComment(rs.getString("Comment"));		 	// 注释 
+				DbColumn column = DbModelManager.manager.getDbColumn();	 // 获取一个new列类型 
 				columns.add(column);
+				column.setDt(table);
+				column.setType(1); 											// 此列的类型 
+				column.setColumnName(rs.getString("Field")); 				// 列名 
+				column.setColumnType(rs.getString("Type"));					// 此列在数据库中的类型 
+				column.setFieldType(jtMap.get(column.getColumnName()));		// 此列在java类中的类型  
+				column.setColumnComment(rs.getString("Comment"));		 	// 此列的注释 
 			}
-			table.setColumnList(columns);
 			table.setPrimaryKey(columns.get(0));	// 主键列 TODO 先写死，就是第一个 
 		} catch (Exception e) {
 			e.printStackTrace();

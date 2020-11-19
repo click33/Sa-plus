@@ -40,6 +40,7 @@ insert into sp_role_permission() values (0, '1', 'console', now());
 insert into sp_role_permission() values (0, '1', 'sql-console', now());
 insert into sp_role_permission() values (0, '1', 'redis-console', now());
 insert into sp_role_permission() values (0, '1', 'apilog-list', now());
+insert into sp_role_permission() values (0, '1', 'form-generator', now());
 
 insert into sp_role_permission() values (0, '1', 'auth', now());
 insert into sp_role_permission() values (0, '1', 'role-list', now());
@@ -50,7 +51,6 @@ insert into sp_role_permission() values (0, '1', 'admin-add', now());
 insert into sp_role_permission() values (0, '1', 'sp-cfg', now());
 insert into sp_role_permission() values (0, '1', 'sp-cfg-app', now());
 insert into sp_role_permission() values (0, '1', 'sp-cfg-server', now());
-insert into sp_role_permission() values (0, '1', 'form-generator', now());
 
 
 -- 系统管理员表 
@@ -120,6 +120,13 @@ CREATE TABLE `sp_apilog` (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE KEY `req_id` (`req_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='api请求记录表';
+
+
+
+
+
+
+
 
 
 

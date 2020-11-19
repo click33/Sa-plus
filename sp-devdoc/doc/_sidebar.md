@@ -17,6 +17,7 @@
 	- [导入代码生成器](/gen/import-sql)
 	- [单表生成](/gen/single-table)
 	- [表注释](/gen/table-comment)
+	- [连接外键](/gen/fk-s)
 	- [聚合外键](/gen/fk-poly)
 
 

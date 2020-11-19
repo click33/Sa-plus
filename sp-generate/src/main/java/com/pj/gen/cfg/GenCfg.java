@@ -10,7 +10,7 @@ import com.pj.gen.model.DbTable;
 import com.pj.gen.read.ReadUtil;
 
 /**
- * 总配置，
+ * 总配置Model，配置sa-plus的整体行为 
  * 
  * @author kong 一路向下
  */
@@ -28,12 +28,10 @@ public class GenCfg {
 	public String author = ""; 				// 生成的代码作者名字 
 
 	// 后台相关 
-//	public String adminPath = "";	// 后台管理项目地址
 	public String adminProjectName = "sp-admin";		// 后台管理项目名字 
 	public String adminCodePath = "";	// 后台管理代码存放目录 
 
 	// 接口文档相关
-//	public String apidocPath = "";	// 接口文档项目地址
 	public String apidocProjectName = "sp-apidoc";		// 接口文档项目名字 
 	public String apidocCodePath = "";	// 接口文档存放目录 
 	
@@ -51,19 +49,28 @@ public class GenCfg {
 	public int sqlEnclose = 2;			// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否)
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
 	public boolean mybatisPlus = false; // 是否使用mybatisPlus
+<<<<<<< HEAD
+	public boolean isOutFC = true; // 是否输出FC.java工厂类 
+=======
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 	
 	
 	public String packageUnderlineTo = "_"; 	// 将包名中的下划线转换成指定内容，比如：$、2、4 或者空字符串"" 
 
-
-	
-	// public String docPath = "doc/"; 		// 文档生成路径 
-	// public String package_somap;			// SoMap的包完全限定名 
-	// public String package_ajaxjson; // AjaxJson类的地址，在代码生成时会用到
-
 	public List<String> tableNameList = new ArrayList<>(); 		// 要检索的表名字集合 
 	public List<DbTable> tableList = new ArrayList<>(); 		// 检索出的表集合 
 
+	
+	// ---------------- 一些工具方法
+	// 获取换行 
+	public String getLine() {
+		return "\r\n";
+	}
+	// 获取双星文档注释 
+	public String getStarDoc(String str) {
+		return "\t/**\r\n\t * " + str + " \r\n\t */";
+	}
+		
 
 	
 	// ---------------- 项目根路径 
@@ -104,11 +111,6 @@ public class GenCfg {
 		return new File(path).getAbsolutePath() + "\\";
 	}
 		
-	// 返回文档写入地址
-//	public String getDocIOPath() {
-//		String path = new File(projectPath).getAbsolutePath() + "\\" + docPath + "\\";
-//		return path;
-//	}
 
 	// 追加所有表名字 
 	public GenCfg addTableAll() {
@@ -193,15 +195,6 @@ public class GenCfg {
 		return this;
 	}
 
-//	public String getDocPath() {
-//		return docPath;
-//	}
-//
-//	public GenCfg setDocPath(String docPath) {
-//		this.docPath = docPath;
-//		return this;
-//	}
-
 	
 	public List<DbTable> getTableList() {
 		return tableList;
@@ -211,14 +204,6 @@ public class GenCfg {
 		this.tableList = tableList;
 	}
 
-//	public String getAdminPath() {
-//		return adminPath;
-//	}
-//
-//	public GenCfg setAdminPath(String adminPath) {
-//		this.adminPath = adminPath;
-//		return this;
-//	}
 
 	public String getAdminCodePath() {
 		return adminCodePath;
@@ -235,19 +220,8 @@ public class GenCfg {
 		this.package_utils = package_utils;
 		return this;
 	}
-//	/**
-//	 * @return apidocPath
-//	 */
-//	public String getApidocPath() {
-//		return apidocPath;
-//	}
-//	/**
-//	 * @param apidocPath 要设置的 apidocPath
-//	 */
-//	public GenCfg setApidocPath(String apidocPath) {
-//		this.apidocPath = apidocPath;
-//		return this;
-//	}
+
+	
 	/**
 	 * @return apidocCodePath
 	 */
@@ -475,6 +449,8 @@ public class GenCfg {
 		this.saTokenAuthWay = saTokenAuthWay;
 		return this;
 	}
+<<<<<<< HEAD
+=======
 
 	public GenCfg setMybatisPlus(boolean mybatisPlus){
 		this.mybatisPlus = mybatisPlus;
@@ -497,10 +473,30 @@ public class GenCfg {
 //				+ ", apidocPath=" + apidocPath + ", apidocCodePath=" + apidocCodePath + ", tableNameList="
 //				+ tableNameList + ", tableList=" + tableList + "]";
 //	}
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 
+	public GenCfg setMybatisPlus(boolean mybatisPlus){
+		this.mybatisPlus = mybatisPlus;
+		return this;
+	}
+	public boolean getMybatisPlus(){
+		return mybatisPlus;
+	}
 	
 	
-	
+	/**
+	 * @return isOutFC
+	 */
+	public boolean isOutFC() {
+		return isOutFC;
+	}
+	/**
+	 * @param isOutFC 要设置的 isOutFC
+	 */
+	public GenCfg setOutFC(boolean isOutFC) {
+		this.isOutFC = isOutFC;
+		return this;
+	}
 	
 
 }

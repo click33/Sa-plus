@@ -28,7 +28,6 @@ public class FreeMarkerUtil {
 	 * @param parameMap 参数集合 
 	 * @return
 	 */
-	// public static String getResult(String flt_url, Map<String, Object> parameMap) {
 	public static String getResult(String flt_url, Object dataModel) {
 		
 		// 1、从文件中读取字符串

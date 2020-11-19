@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pj.current.satoken.AuthConst;
 import com.pj.project4sp.SP;
 import com.pj.utils.sg.AjaxJson;
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.stp.StpUtil;
 

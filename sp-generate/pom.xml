@@ -61,6 +61,14 @@
 		    <artifactId>sqlfly-spring</artifactId>
 		    <version>1.0.0</version>
 		</dependency>
+		
+        <!--Alijson插件-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.73</version>
+        </dependency>
+		
 
 	</dependencies>
 

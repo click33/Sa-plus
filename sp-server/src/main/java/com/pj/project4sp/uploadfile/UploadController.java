@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pj.utils.sg.AjaxJson;
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.util.SpringMvcUtil;
 

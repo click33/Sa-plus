@@ -20,51 +20,61 @@
 				<div class="c-title">检索参数</div>
 				<el-form ref="form" :model='p' @submit.native.prevent>
 <#-- --------------------------------------- 循环：list-查询条件 --------------------------------------- -->
-<#list t.columnList as c>
-	<#if c.isFoType('text', 'textarea', 'richtext', 'file', 'num', 'fk-2', 'no')>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}" <#if c.foType == 'num'>type="number" </#if>></el-input>
-					</div>
+<#list t.getTallList() as c>
+	<#if c.type == 3>
+	<#elseif c.istx('no-s')>
 	<#elseif c.isFoType('img', 'audio', 'video', 'file')>
 	<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
+	<#elseif c.isFoType('text', 'textarea', 'richtext', 'no')>
+					<div class="c-item">
+						<label class="c-label">${c.columnComment3}：</label>
+						<el-input size="mini" v-model="p.${c.fieldName}"></el-input>
+					</div>
+	<#elseif c.isFoType('num')>
+					<div class="c-item">
+						<label class="c-label">${c.columnComment3}：</label>
+						<el-input size="mini" v-model="p.${c.fieldName}" type="number"></el-input>
+					</div>
 	<#elseif c.foType == 'enum'>
 					<div class="c-item">
 						<label class="c-label">${c.columnComment3}：</label>
-			<#if c.getTx('s-type') == '1' || c.getTx('s-type') == '2'>
-						<el-radio-group v-model="p.${c.fieldName}" size="mini" <#if c.getTx('s-type') == '2'>class="s-radio-text" </#if>>
-							<el-radio :label="0">不限</el-radio>
+			<#if c.gtx('s-type') == '1' || c.gtx('s-type') == '2'>
+						<el-radio-group v-model="p.${c.fieldName}" size="mini" <#if c.gtx('s-type') == '2'>class="s-radio-text" </#if>>
+							<el-radio label="">不限</el-radio>
 							<#list c.jvList?keys as jv>
 							<el-radio :label="${jv}">${c.jvList[jv]}</el-radio>
 							</#list>
 						</el-radio-group>
-			<#elseif c.getTx('s-type') == '3'>
+			<#elseif c.gtx('s-type') == '3'>
 						<el-radio-group v-model="p.${c.fieldName}" size="mini">
-							<el-radio-button :label="0">不限</el-radio-button>
+							<el-radio-button label="">不限</el-radio-button>
 							<#list c.jvList?keys as jv>
 							<el-radio-button :label="${jv}">${c.jvList[jv]}</el-radio-button>
 							</#list>
 						</el-radio-group>
-			<#elseif c.getTx('s-type') == '4'>
+			<#elseif c.gtx('s-type') == '4'>
 						<el-select v-model="p.${c.fieldName}" size="mini">
-							<el-option label="不限" :value="0"></el-option>
+							<el-option label="不限" value=""></el-option>
 							<#list c.jvList?keys as jv>
 							<el-option label="${c.jvList[jv]}" :value="${jv}"></el-option>
 							</#list>
 						</el-select>
 			</#if>
 					</div>
-	<#elseif c.foType == 'fk-1'>
+	<#elseif c.foType == 'fk-s'>
+			<#if c.istx('drop')>
 					<div class="c-item">
-						<label class="c-label">${c.fkPkConcatComment}：</label>
-						<el-select size="mini" v-model="p.${c.fieldName}">
-							<el-option label="不限" :value="0"></el-option>
-							<el-option v-for="item in ${c.fkPkTableName2}List" :label="item.${c.fkPkConcatName}" :value="item.${c.fkPkFieldName}" :key="item.${c.fkPkColumnName}"></el-option>
+						<label class="c-label">${c.columnComment3}：</label>
+						<el-select size="mini" v-model="p.${c.fkSCurrDc.fieldName}">
+							<el-option label="不限" value=""></el-option>
+							<el-option v-for="item in ${c.fieldName}List" :label="item.${c.tx.catc}" :value="item.${c.tx.jc}" :key="item.${c.tx.jc}"></el-option>
 						</el-select>
 					</div>
+			</#if>
+	<#elseif c.foType == 'fk-p'>
 	<#else>
-					<!-- 未识别类型：${c.columnComment3}: p.${c.fieldName} -->
+					<!-- 未识别类型：${c.columnComment3}: p.${c.fieldName} 请检查配置 -->
 	</#if>
 </#list>
 					<div class="c-item" style="min-width: 0px;">
@@ -75,7 +85,7 @@
 						<label class="c-label">综合排序：</label>
 						<el-radio-group v-model="p.sortType">
 							<el-radio :label="0">最近添加</el-radio>
-<#list t.columnList as c>
+<#list t.t1List as c>
 						<#if c_index <= 3>
 							<el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio>
 						<#else>
@@ -88,26 +98,33 @@
 				<!-- ------------- 快捷按钮 ------------- -->
 				<div class="fast-btn">
 					<el-button size="mini" type="primary" icon="el-icon-plus" @click="add()">新增</el-button>
-					<el-button size="mini" type="success" icon="el-icon-edit" @click="update($refs['data-table'].selection[0])"
-						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length != 1">修改</el-button>
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()"
-						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length < 1">删除</el-button>
+					<el-button size="mini" type="success" icon="el-icon-view" @click="getBySelect()">查看</el-button>
+					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
 					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
 					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
 				</div>
 				<!-- ------------- 数据列表 ------------- -->
 				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
 					<el-table-column type="selection" width="45px"></el-table-column>
-<#list t.columnList as c>
-	<#if c.isFoType('text', 'textarea', 'num')>
+<#list t.tallList as c>
+	<#if c.istx('no-show')>
+	<#elseif c.istx('click')>
+					<el-table-column label="${c.columnComment3}">
+						<template slot-scope="s">
+							<el-link type="primary" @click="sa.showIframe(' id = ' + s.row.${c.getClickCatKeyColumn()} + '  详细信息', '../${c.getClickCatTableKebabName()}/${c.getClickCatTableKebabName()}-info.html?id=' + s.row.${c.getClickCatKeyColumn()})">
+								{{s.row.${c.fieldName}}} 
+							</el-link>
+						</template>
+					</el-table-column>
+	<#elseif c.isFoType('text', 'textarea', 'num', 'fk-s', 'fk-p')>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
 	<#elseif c.foType == 'richtext'>
 					<el-table-column label="${c.columnComment3}" min-width="150px">
 						<template slot-scope="s"><span>{{sa.maxLength(sa.text(s.row.${c.fieldName}), 100)}}</span></template>
 					</el-table-column>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
-					<el-table-column label="${c.columnComment3}" min-width="150px">
-						<template slot-scope="s"><span>{{sa.forDate(s.row.${c.fieldName}, 2)}}</span></template>
+					<el-table-column label="${c.columnComment3}">
+						<template slot-scope="s"><p style="min-width: 120px;">{{sa.forDate(s.row.${c.fieldName}, 2)}}</p></template>
 					</el-table-column>
 	<#elseif c.foType == 'img'>
 					<el-table-column label="${c.columnComment3}">
@@ -145,43 +162,13 @@
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
 		<#list c.jvList?keys as jv>
-							<p v-if="s.row.${c.fieldName} == ${jv}">${c.jvList[jv]}</p>
+							<b v-if="s.row.${c.fieldName} == ${jv}">${c.jvList[jv]}</b>
 		</#list>
 						</template>
 					</el-table-column>
-	<#elseif c.isFoType('fk-1', 'fk-2')>
-			<#if c.isTx('showfk')>
-				<#if c.isTx('link')>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<el-link type="primary" @click="sa.showIframe(' id = ' + s.row.${c.fieldName} + '  详细信息', '../${c.fkPkTableKebabName}/${c.fkPkTableKebabName}-info.html?id=' + s.row.${c.fieldName})">
-								{{s.row.${c.fieldName}}} 
-							</el-link>
-						</template>
-					</el-table-column>
-				<#else>
-					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
-				</#if>
-			</#if>
-			<#list c.fkPkConcatList as fk>
-				<#if c.isTx('link')>
-					<el-table-column label="${fk.fkPkConcatComment}">
-						<template slot-scope="s">
-							<el-link type="primary" @click="sa.showIframe('id = ' + s.row.${c.fieldName} + ' 详细信息', '../${c.fkPkTableKebabName}/${c.fkPkTableKebabName}-info.html?id=' + s.row.${c.fieldName})">
-								{{s.row.${fk.fieldName}}} 
-							</el-link>
-						</template>
-					</el-table-column>
-				<#else>
-					<el-table-column label="${fk.fkPkConcatComment}" prop="${fk.fieldName}" ></el-table-column>
-				</#if>
-			</#list>
 	<#else>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
 	</#if>
-</#list>
-<#list t.getAllDbFk_jh() as fk>
-					<el-table-column label="${fk.tx.comment}" prop="${fk.getAsColumnName_fs()}" ></el-table-column>
 </#list>
 					<el-table-column label="操作" width="240px">
 						<template slot-scope="s">
@@ -210,21 +197,17 @@
 				el: '.vue-box',
 				data: {
 					p: { // 查询参数  
-				<#list t.columnList as c>
-					<#if c.foType == 'enum'>
-						${c.fieldName}: 0,		// ${c.columnComment} 
-					<#else>
+				<#list t.getT1List() as c>
 						${c.fieldName}: '',		// ${c.columnComment} 
-					</#if>
 				</#list>
 						pageNo: 1,		// 当前页 
 						pageSize: 10,	// 页大小 
-						sortType: 0	// 排序方式 
+						sortType: 0		// 排序方式 
 					},
 					dataCount: 0,
 					dataList: [], // 数据集合 
-				<#list t.getColumnListBy('fk-1') as c>
-					${c.fkPkTableName2}List: [],		// ${c.fkPkConcatComment}集合
+				<#list t.getT2DropList() as c>
+					${c.fieldName}List: [],		// ${c.columnComment} 集合 
 				</#list>
 				},
 				methods: {
@@ -239,6 +222,14 @@
 					// 查看
 					get: function(data) {
 						sa.showIframe('数据详情', '${t.kebabName}-info.html?id=' + data.id, '950px', '90%');
+					},
+					// 查看 - 根据选中的
+					getBySelect: function(data) {
+						var selection = this.$refs['data-table'].selection;
+						if(selection.length == 0) {
+							return sa.msg('请选择一条数据')
+						}
+						this.get(selection[0]);
 					},
 					// 修改
 					update: function(data) {
@@ -260,9 +251,12 @@
 					},
 					// 批量删除
 					deleteByIds: function() {
-						// 获取选中元素的id列表
+						// 获取选中元素的id列表 
 						let selection = this.$refs['data-table'].selection;
 						let ids = sa.getArrayField(selection, 'id');
+						if(selection.length == 0) {
+							return sa.msg('请至少选择一条数据')
+						}
 						// 提交删除 
 						sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
 							sa.ajax('/${t.mkNameBig}/deleteByIds', {ids: ids.join(',')}, function(res) {
@@ -276,13 +270,13 @@
 				created: function() {
 					this.f5();
 					sa.onInputEnter();
-			<#if t.getColumnListBy('fk-1')?size != 0>
+			<#if t.getT2DropList()?size != 0>
 				
 					// ------------- 加载所需外键列表 -------------
-				<#list t.getColumnListBy('fk-1') as c>
-					// 加载 ${c.fkPkConcatComment}
-					sa.ajax('/${c.fkPkTableMkName}/getList?pageSize=1000', function(res) {
-						this.${c.fkPkTableName2}List = res.data; // 数据集合 
+				<#list t.getT2DropList() as c>
+					// 加载 ${c.columnComment} 
+					sa.ajax('/${c.getJtMkName()}/getList?pageSize=1000', function(res) {
+						this.${c.fieldName}List = res.data; // 数据集合 
 					}.bind(this), {msg: null});
 				</#list>
 			</#if>

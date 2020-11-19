@@ -22,6 +22,7 @@ window.menuList.unshift(
 			{id: 'sql-console', name: 'SQL监控台', url: 'sa-html-sp/sp-console/sql-console.html', info: 'sql控制台'},
 			{id: 'redis-console', name: 'Redis控制台', url: 'sa-html-sp/sp-console/redis-console.html', info: 'redis常用工具'},
 			{id: 'apilog-list', name: 'API请求日志', url: 'sa-html-sp/sp-apilog/api-log-list.html', info: '记录本系统所有的api请求'},
+			{id: 'form-generator', name: '在线表单构建', url: 'https://mrhj.gitee.io/form-generator/#/'},
 		]
 	},
 	{	
@@ -45,7 +46,6 @@ window.menuList.unshift(
 		childList: [
 			{id: 'sp-cfg-app', name: '系统对公配置', url: 'sa-html-sp/sp-cfg/app-cfg.html'},
 			{id: 'sp-cfg-server', name: '服务器私有配置', url: 'sa-html-sp/sp-cfg/server-cfg.html'},
-			{id: 'form-generator', name: '在线表单构建', url: 'https://mrhj.gitee.io/form-generator/#/'},
 		]
 	},
 );

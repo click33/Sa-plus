@@ -1,5 +1,5 @@
 /* 
-	更新于2020-9-11 
+	更新于2020-9-11 全面优化
  */
 
 /** 公共css */
@@ -184,8 +184,5 @@ input::-webkit-inner-spin-button {
 .c-item-mline{display: inline-block; width: calc(100% - 10em);}
 .del-rr{color: red !important; cursor: pointer; margin-left: 0.5em; vertical-align: middle;}
 /* .del-rr:hover{text-decoration: underline;} */
-
-
-
 
 

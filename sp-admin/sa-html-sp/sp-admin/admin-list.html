@@ -54,10 +54,8 @@
 				<!-- ------------- 快捷按钮 ------------- -->
 				<div class="fast-btn">
 					<el-button size="mini" type="primary" icon="el-icon-plus" @click="add()">新增</el-button>
-					<el-button size="mini" type="success" icon="el-icon-edit" @click="updateName($refs['data-table'].selection[0])"
-						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length != 1">修改</el-button>
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()"
-						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length < 1">删除</el-button>
+					<el-button size="mini" type="success" icon="el-icon-view" @click="getBySelect()">查看</el-button>
+					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
 					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
 					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
 				</div>
@@ -189,6 +187,14 @@
 						//sa.showIframe('账号详情', 'admin-info.html?id=' + data.id, '700px', '80%');
 						sa.$page.openAdminInfo(data.id, data.name);
 					},
+					// 查看 - 根据选中的
+					getBySelect: function(data) {
+						var selection = this.$refs['data-table'].selection;
+						if(selection.length == 0) {
+							return sa.msg('请选择一条数据')
+						}
+						this.get(selection[0]);
+					},
 					// 修改名称 
 					updateName: function(data) {
 						layer.prompt({title: '修改账号名称'}, function(pass, index){
@@ -271,6 +277,9 @@
 						// 获取选中元素的id列表
 						let selection = this.$refs['data-table'].selection;
 						let ids = sa.getArrayField(selection, 'id');
+						if(selection.length == 0) {
+							return sa.msg('请至少选择一条数据')
+						}
 						// 提交删除 
 						sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
 							sa.ajax('/admin/deleteByIds', {ids: ids.join(',')}, function(res) {

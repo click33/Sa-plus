@@ -11,14 +11,14 @@ var homeTab = {
 var sa_admin = new Vue({
 	el: '.app',
 	data: {
-		version: 'v2.4.2',		// 当前版本
-		update_time: '2020-09-03',		// 更新日期 
-		plusVersion: 'v1.20.0',	//sa-plus版本
-		plus_update_time: '2020-09-26',	//sa-plus版本
+		version: 'v2.4.4',		// 当前版本
+		update_time: '2020-11-14',		// 更新日期 
+		plusVersion: 'v1.21.0',	//sa-plus版本
+		plus_update_time: '2020-11-19',	//sa-plus版本
 		title: '',//'SA-后台模板',				// 页面标题  
 		logo_url: '',	// logo地址 
 		icon_url: '',	// icon地址 
-		github_url: 'https://github.com/click33/sa-plus',	// github地址 
+		github_url: 'https://github.com/click33/sa-admin',	// github地址 
 		default_active: '0',	// 默认的高亮菜单id
 		default_openeds: [],	// 默认的打开数组 
 		unique_opened: true,		// 是否保持只打开一个
@@ -177,6 +177,7 @@ var sa_admin = new Vue({
 		refMenuList: function(menu_list, parent_id) {
 			for (var i = 0; i < menu_list.length; i++) {
 				var menu = menu_list[i];
+				menu.id = menu.id + '';
 				menu.is_show = (menu.is_show === false ? false : true);
 				menu.parent_id = menu.parent_id || parent_id || 0;
 				// 隐藏的给去掉 
@@ -822,7 +823,9 @@ var sa_admin = new Vue({
 		updateSlideSize: function(ms) {
 			ms = ms || 1;
 			setTimeout(function() {
-				this.mySwiper.update();	// swipre重新计算大小  
+				if(this.mySwiper) {
+					this.mySwiper.update();	// swipre重新计算大小  
+				}
 			}.bind(this), ms);
 		},
 		// ------------------- 查找菜单相关 --------------------
@@ -991,6 +994,5 @@ setInterval(function() {
 	zong += Y + "-" + M + "-" + D + " " + sx + " " + h + ":" + m + ":" + s + " 周" + z;
 	sa_admin.now_time = zong;
 }, 1000)
-
 
 

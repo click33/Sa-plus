@@ -48,13 +48,15 @@ spring:
 # mybatis-plus配置  
 mybatis-plus: 
     # 配置别名包，在mapper.xml中可以直接返回SoMap
-    type-aliases-package: com.pj.utils.sg
+    type-aliases-package: com.pj.utils.so
     # 一些配置
     configuration: 
         # 控制打印sql 
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         # 是否开启下划线转驼峰 
         map-underscore-to-camel-case: false
-         
+        # 即使属性为null, 也要映射 
+        call-setters-on-nulls: true
+        
         
         

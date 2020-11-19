@@ -11,11 +11,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-8-18 增加了 toJSONString( )方法 
+ * <p>最新：2020-9-12 去除setThis() 
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -23,7 +22,6 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	private static final long serialVersionUID = 1L;
 
 	public SoMap() {
-		setThis();	// 自己set自己：方便mybatis的操作
 	}
 	
 
@@ -38,10 +36,19 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	// ============================= 读值 =============================
 
+	/** 获取一个值 */
+	@Override
+	public Object get(Object key) {
+		if(key.equals("this")) {
+			return this;
+		}
+		return super.get(key);
+	}
+
 	/** 如果为空，则返回默认值 */
-	public Object get(String key, Object defaultValue) {
-		Object value = super.get(key);
-		if(value == null) {
+	public Object get(Object key, Object defaultValue) {
+		Object value = get(key);
+		if(value == null || value.equals("")) {
 			return defaultValue;
 		}
 		return value;
@@ -59,7 +66,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	/** 如果为空，则返回默认值 */
 	public String getString(String key, String defaultValue) {
 		String value = getString(key);
-		if(value == null) {
+		if(value == null || value.equals("")) {
 			return defaultValue;
 		}
 		return value;
@@ -119,12 +126,12 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	}
 
 	/** 转为Date并返回，根据格式： yyyy-MM-dd */
-	public Date getDateBy__yyyyMMdd(String key) {
+	public Date getDate(String key) {
 		return getDateByFormat(key, "yyyy-MM-dd");
 	}
 
 	/** 转为Date并返回，根据格式： yyyy-MM-dd HH:mm:ss */
-	public Date getDateBy__yyyyMMdd_HHmmss(String key) {
+	public Date getDateTime(String key) {
 		return getDateByFormat(key, "yyyy-MM-dd HH:mm:ss");
 	}
 
@@ -255,7 +262,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	/** set一个值，连缀风格 */
 	public SoMap set(String key, Object value) {
-		if(key.equals("this") || key.equals("THIS")) {	// 防止敏感key
+		if(key.toLowerCase().equals("this")) {		// 防止敏感key 
 			return this;
 		}
 		put(key, value);
@@ -289,24 +296,12 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
-	/** 添加自身的引用 */
-	public SoMap setThis() {
-		this.put("this", this);
-		return this;
-	}
-
 	
 	// ============================= 删值 =============================
 
-	/** del一个值，连缀风格 */
+	/** delete一个值，连缀风格 */
 	public SoMap delete(String key) {
 		remove(key);
-		return this;
-	}
-
-	/** 删除自身的引用 */
-	public SoMap deleteThis() {
-		this.delete("this");
 		return this;
 	}
 
@@ -342,7 +337,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		Iterator<String> iterator = this.keySet().iterator();
 		while(iterator.hasNext()) {
 			String key = iterator.next();
-			if(keys2.contains(key) == false && key.equals("this") == false) {
+			if(keys2.contains(key) == false) {
 				iterator.remove();
 				this.remove(key);
 			}
@@ -350,7 +345,11 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		}
 		return this;
 	}
-	
+	/** 清理掉所有key */
+	public SoMap clearAll() {
+		clear();
+		return this;
+	}
 	
 
 	// ============================= 快速构建 ============================= 
@@ -385,45 +384,50 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return so;
 	}
 
-	/** 将所有key转为大写，返回一个新的SoMap */
+	/** 将所有key转为大写 */
 	public SoMap toUpperCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(key.toUpperCase(), this.get(key));
 		}
-		return so;
+		this.clearAll().setMap(so);
+		return this;
 	}
-	/** 将所有key转为小写，返回一个新的SoMap */
+	/** 将所有key转为小写 */
 	public SoMap toLowerCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(key.toLowerCase(), this.get(key));
 		}
-		return so;
+		this.clearAll().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为中划线模式 (kebab-case风格)，返回一个新的SoMap */
+	/** 将所有key中下划线转为中划线模式 (kebab-case风格) */
 	public SoMap toKebabCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordEachKebabCase(key), this.get(key));
 		}
-		return so;
+		this.clearAll().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为小驼峰模式，返回一个新的SoMap */
+	/** 将所有key中下划线转为小驼峰模式 */
 	public SoMap toHumpCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordEachBigFs(key), this.get(key));
 		}
-		return so;
+		this.clearAll().setMap(so);
+		return this;
 	}
-	/** 将所有key中下划线转为小驼峰模式，返回一个新的SoMap */
+	/** 将所有key中小驼峰转为下划线模式 */
 	public SoMap humpToLineCase() {
 		SoMap so = new SoMap();
 		for (String key : this.keySet()) {
 			so.set(wordHumpToLine(key), this.get(key));
 		}
-		return so;
+		this.clearAll().setMap(so);
+		return this;
 	}
 	
 	
@@ -462,50 +466,17 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
+	static Pattern patternNumber = Pattern.compile("[0-9]*");
 	/** 指定key是否为数字 */
 	public boolean isNumber(String key) {
 		String value = getString(key);
 		if(value == null) {
 			return false;
 		}
-		Pattern pattern = Pattern.compile("[0-9]*");
-	    return pattern.matcher(value).matches();   
+	    return patternNumber.matcher(value).matches();   
 	}
 
 	
-	
-	
-
-
-
-	// ============================= 常见key （以下key经常用，所以封装以下，方便写代码） =============================
-
-	/** get 当前页  */
-	public int getKeyPageNo() {
-		int pageNo = getInt("pageNo", 1);
-		if(pageNo <= 0) {
-			pageNo = 1;
-		}
-		return pageNo;
-	}
-	/** get 页大小  */
-	public int getKeyPageSize() {
-		int pageSize = getInt("pageSize", 10);
-		if(pageSize <= 0 || pageSize > 1000) {
-			pageSize = 10;
-		}
-		return pageSize;
-	}
-
-	/** get 排序方式 */
-	public int getKeySortType() {
-		return getInt("sortType");
-	}
-
-
-
-
-
 	
 	
 
@@ -541,10 +512,54 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return str.replaceAll("_", "-");
 	}
 
-	// 驼峰转中划线 
+	// 驼峰转下划线 
 	private static String wordHumpToLine(String str) {
 		return str.replaceAll("[A-Z]", "_$0").toLowerCase();
 	}
+
+
+	// ============================= 常见key （以下key经常用，所以封装以下，方便写代码） =============================
+
+
+	// key: 表示字段的主类型 
+	public static final String key_fo_type = "fo_type";		
+	public String getFoType() {
+		return getString(key_fo_type, "text");
+	}
+	public SoMap setFoType(String value) {
+		set(key_fo_type, value);
+		return this;
+	}
+
+	// key: 表示字段的注释 (解析后的)
+	public static final String key_comment = "comment";		
+	public String getComment() {
+		return getString(key_comment);
+	}
+	public SoMap setComment(String value) {
+		set(key_comment, value);
+		return this;
+	}
+
+	// key: 表示字段的注释 (解析前的)
+	public static final String key_intro = "intro";		
+	public String getIntro() {
+		return getString(key_intro);
+	}
+	public SoMap setIntro(String value) {
+		set(key_intro, value);
+		return this;
+	}
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 
 }

@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pj.current.satoken.StpUserUtil;
 import com.pj.utils.LogUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.WebNbUtil;
@@ -60,9 +61,8 @@ public class SpApilogUtil {
     	a.setReq_token(StpUtil.getTokenValue());			// 请求token 
     	a.setReq_header(JSON.toJSONString(WebNbUtil.getHeaderMap(request)));			// 请求header 
     	a.setReq_type(request.getMethod());			// 请求类型 
-    	a.setUser_id(0);		// 本次请求user_id 
     	a.setAdmin_id(StpUtil.getLoginId(0L));	// 本次请求admin_id 
-//    	a.setUser_id(StpUserUtil.getLoginId(0L));		// 本次请求user_id 
+    	a.setUser_id(StpUserUtil.getLoginId(0L));		// 本次请求user_id 
     	a.setStart_time(new Date());				// 请求开始时间 
     	request.setAttribute(apilog_obj_save_key, a);
     	

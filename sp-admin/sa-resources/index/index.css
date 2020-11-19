@@ -55,7 +55,7 @@ body{height: 100vh;background-color: #EEE;background-image: url(admin-loading.gi
 }
 
 /* 第一行建筑物 */
-.nav-right-1{position: relative; height: 49px; line-height: 49px; border-bottom: 1px #DDD solid; }
+.nav-right-1{position: relative; height: 49px; line-height: 49px; border-bottom: 1px #DDD solid; overflow: hidden;}
 
 .tools-left{border: 0px #000 solid; float: left;}
 .tools-right{float: right;}
@@ -172,7 +172,10 @@ body{height: 100vh;background-color: #EEE;background-image: url(admin-loading.gi
 /* 去除掉便签的大边框 */
 .layer-note-class .layui-layer-input{outline: 0; box-shadow: none !important; border: 1px #ddd solid; margin: 1em; padding: 0.5em !important; font-family: 'Times New Roman', Times, serif;}
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 /* 解决淡入效果下部分场景slide滚动条失效的问题 */
 /* 解决方案1 */
 .swiper-container-fade .swiper-slide iframe{height: calc(100vh - 85px);}
@@ -182,5 +185,9 @@ body{height: 100vh;background-color: #EEE;background-image: url(admin-loading.gi
 /* .swiper-container-fade .swiper-slide iframe{display: none;}
 .swiper-container-fade .swiper-slide.swiper-slide-active iframe{
 	display: block;
+<<<<<<< HEAD
+} */
+=======
 } */
 
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1

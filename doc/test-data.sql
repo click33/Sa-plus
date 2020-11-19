@@ -22,7 +22,8 @@ CREATE TABLE `sys_notice` (
   `create_time` datetime COMMENT '创建日期 [date-create]',
   `update_time` datetime COMMENT '修改日期 [date-update]',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=gbk ROW_FORMAT=COMPACT COMMENT='公告表 [table icon=el-icon-bell]';
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=gbk ROW_FORMAT=COMPACT 
+COMMENT='公告表 [table icon=el-icon-bell]';
 
 -- select * from sys_notice;
 INSERT INTO `sys_notice`(`id`, `title`, `content`, `img`, `audio`, `video`, `img_list`, `audio_list`, `video_list`, `img_video_list`, `is_show`, `is_lock`, `see_count`, `sort`, `create_time`, `update_time`) 
@@ -57,7 +58,7 @@ VALUES (104, '虚拟物品', 'http://demo.dev33.cn/sp-server/upload/image/2020/0
 
 
 
--- 商品表 
+-- 商品表 (演示点: 连接外键)
 drop table if exists ser_goods;
 CREATE TABLE `ser_goods` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '记录id [no]', 
@@ -66,14 +67,17 @@ CREATE TABLE `ser_goods` (
   `image_list` varchar(2048) COMMENT '轮播图片 [img-list]', 
   `content` text COMMENT '图文介绍 [f]', 
   `money` int(11) DEFAULT '0' COMMENT '商品价格 [num]', 
-	`type_id` bigint(20) COMMENT '所属分类 [fk-1 js=sys_type.id.name.所属分类]', 
+	`type_id` bigint(20) COMMENT '所属分类 [num]', 
   `stock_count` int(11) DEFAULT 0 COMMENT '剩余库存 [num]',
   `status` int(11) DEFAULT '1' COMMENT '商品状态 (1=上架,2=下架) [j]',
   `create_time` datetime COMMENT '创建日期 [date-create]',
   `update_time` datetime COMMENT '更新日期 [date-update]',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT 
-COMMENT='商品表[table icon=el-icon-apple]';
+COMMENT='商品表
+[table icon=el-icon-apple]
+[fk-s js=(type_id=sys_type.id), show=name.所属分类, drop]
+';
 
 -- select * from ser_goods
 INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`, `type_id`, `stock_count`, `status`, `create_time`, `update_time`) VALUES (1001, '红富士苹果', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/15997970168761290331860.jpg', 'http://demo.dev33.cn/sp-server/upload/image/2020/09-11/1599797023755588872264.jpg,http://demo.dev33.cn/sp-server/upload/image/2020/09-11/159979702375259508173.jpg', '<p>红富士苹果、又大又甜</p>', 99, 101, 123, 1, now(), now());
@@ -85,20 +89,23 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `content`, `money`
 
 
 
--- 文章表 
+-- 文章表 (演示点: 综合演示)
 drop table if exists ser_article;
 CREATE TABLE `ser_article` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '记录id [no]',
   `title` varchar(150) DEFAULT NULL COMMENT '文章标题 [t j=like]',
   `content` longtext COMMENT '文章内容 [f]',
-  `type_id` bigint(20) COMMENT '所属分类 [fk-1 js=sys_type.id.name.所属分类]', 
-  `goods_id` bigint(20) COMMENT '推荐商品 [fk-2 js=ser_goods.id.name.商品名称]', 
+  `type_id` bigint(20) COMMENT '所属分类 [num]', 
+  `goods_id` bigint(20) COMMENT '推荐商品 [num click=ser_goods.id]', 
   `eff_time` datetime COMMENT '有效日期 [date]', 
   `create_time` datetime COMMENT '创建日期 [date-create]', 
   `status` int(11) DEFAULT '2' COMMENT '所属状态(1=正常,2=禁用) [j]', 
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT 
-COMMENT='文章表 [table icon=el-icon-document-remove]';
+COMMENT='文章表 
+[table icon=el-icon-document-remove]
+[fk-s js=(type_id=sys_type.id), show=name.所属分类, drop]
+[fk-s js=(goods_id=ser_goods.id), show=name.商品名称, click]';
 
 -- select * from ser_article;
 INSERT INTO `ser_article`(`id`, `title`, `content`, `type_id`, `goods_id`, `eff_time`, `create_time`, `status`) 

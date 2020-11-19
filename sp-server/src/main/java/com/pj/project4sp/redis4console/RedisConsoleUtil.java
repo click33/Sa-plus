@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 
 /**

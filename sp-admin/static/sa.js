@@ -1,8 +1,8 @@
 // =========================== sa对象封装一系列工具方法 ===========================  
 var sa = {
-	version: '2.4.2',
-	update_time: '2020-9-3',
-	info: '添加了弹窗的回车事件'
+	version: '2.4.3',
+	update_time: '2020-10-2',
+	info: '新增双击layer标题处全屏'
 };
 
 // ===========================  当前环境配置  ======================================= 
@@ -22,7 +22,10 @@ var sa = {
 		api_url: 'http://www.baidu.com',
 		web_url: 'http://www.baidu.com'
 	}
-	sa.cfg = cfg_dev; // 最终环境 , 上线前请选择正确的环境 
+	// 最终环境 , 上线前请选择正确的环境 
+	sa.cfg = cfg_dev; 
+	// sa.cfg = cfg_test; 
+	// sa.cfg = cfg_prod; 
 })();
 
 
@@ -109,12 +112,16 @@ var sa = {
 			type: cfg.type, 
 			data: data,
 			dataType: 'json',
-			xhrFields: {
-				withCredentials: true // 携带跨域cookie
-			},
-			crossDomain: true,
+			// xhrFields: {
+			// 	withCredentials: true // 携带跨域cookie
+			// },
+			// crossDomain: true,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
+				// 追加token
+				if(localStorage.tokenName) {
+					xhr.setRequestHeader(localStorage.tokenName, localStorage.tokenValue);
+				}
 			},
 			success: function(res){
 				console.log('返回数据：', res);
@@ -219,7 +226,7 @@ var sa = {
 		layer.msg(msg, {anim: 6, icon: 5 }); 
 	}
 	
-	// alert弹窗 [text=提示文字, cfg=配置(可省略), okFn=点击确定之后的回调函数]
+	// alert弹窗 [text=提示文字, okFn=点击确定之后的回调函数]
 	me.alert = function(text, okFn) {
 		// 开始弹窗 
 		layer.alert(text, function(index) {
@@ -415,12 +422,15 @@ var sa = {
 	
 	
 	// 监听回车事件，达到回车关闭弹窗的效果 
-	$(document).on('keydown', function() {
-		if(event.keyCode === 13 && $(".layui-layer-btn0").length == 1){
-			$(".layui-layer-btn0").click();
-			return false;
-		}
-	}); 
+	if(window.$) {
+		$(document).on('keydown', function() {
+			if(event.keyCode === 13 && $(".layui-layer-btn0").length == 1 && !window.is_not_watch_enter && $(this).find('.layui-layer-input').length == 0){
+				$(".layui-layer-btn0").click();
+				return false;
+			}
+		}); 
+	}
+	
 	
 	
 })();
@@ -842,7 +852,7 @@ var sa = {
 			var newObj = {};
 			if(obj != undefined && obj != null) {
 				for(var key in obj) {
-					if(obj[key] === undefined || obj[key] === null || obj[key] == '') {
+					if(obj[key] === undefined || obj[key] === null || obj[key] === '') {
 						// 
 					} else {
 						newObj[key] = obj[key];
@@ -1052,6 +1062,20 @@ var sa = {
 			}
 		}
 			
+		// 双击layer标题处全屏
+		if(window.$) {
+			$(document).on('mousedown', '.layui-layer-title', function(e) {
+				// console.log('单击中');
+				if(window.layer_title_last_click_time) {
+					var cz = new Date().getTime() - window.layer_title_last_click_time;
+					if(cz < 250) {
+						console.log('双击');
+						$(this).parent().find('.layui-layer-max').click();
+					}
+				}
+				window.layer_title_last_click_time = new Date().getTime();
+			})
+		}
 		
 		// == if 结束
 	}

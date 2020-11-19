@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 /**
  * 公用Mapper，一大堆常见方法 

@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.pj.utils.so.SoMap;
+
 
 /**
  * ajax请求返回Json格式数据的封装 <br>

@@ -31,8 +31,9 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<el-form size="mini" v-if="m">
-<#list t.columnList as c>
-	<#if c.foType == 'text'>	
+<#list t.tallList as c>
+	<#if c.istx('no-show')>
+	<#elseif c.foType == 'text'>	
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
 							<span>{{m.${c.fieldName}}}</span>
@@ -49,7 +50,7 @@
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
 		<#list c.jvList?keys as jv>
-							<span v-if="m.${c.fieldName} == ${jv}">${c.jvList[jv]}</span>
+							<b v-if="m.${c.fieldName} == ${jv}">${c.jvList[jv]}</b>
 		</#list>
 						</div>
 	<#elseif c.foType == 'img'>
@@ -109,12 +110,6 @@
 							<span>{{m.${c.fieldName}}}</span>
 						</div>
 	</#if>
-</#list>
-<#list t.getAllDbFk_jh() as fk>
-						<div class="c-item br">
-							<label class="c-label">${fk.tx.comment}：</label>
-							<span>{{m.${fk.getAsColumnName_fs()}}}</span>
-						</div>
 </#list>
 					</el-form>
 				</div>

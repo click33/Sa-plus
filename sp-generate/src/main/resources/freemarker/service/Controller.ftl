@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ${cfg.package_utils};
 import com.pj.project4sp.SP;
 
-
+import com.pj.current.satoken.StpUserUtil;
 <#if cfg.saTokenAuthWay == 1 >import cn.dev33.satoken.stp.StpUtil;
 <#else>import cn.dev33.satoken.annotation.SaCheckPermission;
 </#if>
@@ -23,21 +23,16 @@ import com.pj.project4sp.SP;
 @RequestMapping("/${t.mkNameBig}/")
 public class ${t.mkNameBig}Controller {
 
-	/** 权限常量 */
-	static final String PERMISSION_CODE = "${t.kebabName}";
-
 	/** 底层 Service 对象 */
 	@Autowired
 	${t.mkNameBig}Service ${t.varName}Service;
 
 	/** 增 */  
 	@${cfg.apiMappingWayString}("add")
-<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
-</#if>
+<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(${t.modelName}.PERMISSION_CODE)${cfg.line}</#if><#rt>
 	@Transactional(rollbackFor = Exception.class)
 	public AjaxJson add(${t.modelName} ${t.varNameSimple}){
-<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
-</#if>
+<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
 		${t.varName}Service.add(${t.varNameSimple});
 		${t.varNameSimple} = ${t.varName}Service.getById(SP.publicMapper.getPrimarykey());
 		return AjaxJson.getSuccessData(${t.varNameSimple});
@@ -45,22 +40,18 @@ public class ${t.mkNameBig}Controller {
 
 	/** 删 */  
 	@${cfg.apiMappingWayString}("delete")
-<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
-</#if>
-	AjaxJson delete(${t.primaryKey.fieldType} id){
-<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
-</#if>
+<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(${t.modelName}.PERMISSION_CODE)${cfg.line}</#if><#rt>
+	public AjaxJson delete(${t.primaryKey.fieldType} id){
+<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
 		int line = ${t.varName}Service.delete(id);
 		return AjaxJson.getByLine(line);
 	}
 	
 	/** 删 - 根据id列表 */  
 	@${cfg.apiMappingWayString}("deleteByIds")
-<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
-</#if>
-	AjaxJson deleteByIds(){
-<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
-</#if>
+<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(${t.modelName}.PERMISSION_CODE)${cfg.line}</#if><#rt>
+	public AjaxJson deleteByIds(){
+<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
 		List<Long> ids = SoMap.getRequestSoMap().getListByComma("ids", long.class); 
 		int line = SP.publicMapper.deleteByIds("${t.tableName}", ids);
 		return AjaxJson.getByLine(line);
@@ -68,52 +59,46 @@ public class ${t.mkNameBig}Controller {
 	
 	/** 改 */  
 	@${cfg.apiMappingWayString}("update")
-<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
-</#if>
-	AjaxJson update(${t.modelName} ${t.varNameSimple}){
-<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
-</#if>
+<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(${t.modelName}.PERMISSION_CODE)${cfg.line}</#if><#rt>
+	public AjaxJson update(${t.modelName} ${t.varNameSimple}){
+<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
 		int line = ${t.varName}Service.update(${t.varNameSimple});
 		return AjaxJson.getByLine(line);
 	}
 
-	/** 查 */  
+	/** 查 - 根据id */  
 	@${cfg.apiMappingWayString}("getById")
-	AjaxJson getById(${t.primaryKey.fieldType} id){
+	public AjaxJson getById(${t.primaryKey.fieldType} id){
 		${t.modelName} ${t.varNameSimple} = ${t.varName}Service.getById(id);
 		return AjaxJson.getSuccessData(${t.varNameSimple});
 	}
 
-	/** 查 - 集合（参数为null或0时默认忽略此条件） */  
+	/** 查集合 - 根据条件（参数为空时代表忽略指定条件） */  
 	@${cfg.apiMappingWayString}("getList")
-	AjaxJson getList() { 
+	public AjaxJson getList() { 
 		SoMap so = SoMap.getRequestSoMap();
 		List<${t.modelName}> list = ${t.varName}Service.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
 	}
 	
 	
-	
 	// ------------------------- 前端接口 -------------------------
 	
 	
-	// 如需使用此接口，你可能需要删除鉴权代码, 并添加鉴别身份代码  
-	/** 改 - 空值不改【G】 */  
+	/** 改 - 不传不改 [G] */
 	@RequestMapping("updateByNotNull")
-<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(PERMISSION_CODE)
-</#if>
-	AjaxJson updateByNotNull(){
-<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(PERMISSION_CODE);
-</#if>
+	public AjaxJson updateByNotNull(${t.primaryKey.fieldType} id){
+		AjaxError.throwBy(true, "如需正常调用此接口，请删除此行代码");
+		// 鉴别身份，是否为数据创建者 
+		long userId = SP.publicMapper.getColumnByIdToLong(${t.modelName}.TABLE_NAME, "user_id", id);
+		AjaxError.throwBy(userId != StpUserUtil.getLoginIdAsLong(), "此数据您无权限修改");
+		// 开始修改 (请只保留需要修改的字段)
 		SoMap so = SoMap.getRequestSoMap();
-		// 鉴别身份，是否为数据创建者
-		/*long userId = SP.publicMapper.getColumnByIdToLong("${t.tableName}", "user_id", so.get("id"));*/
-		/*AjaxError.throwBy(userId != StpUserUtil.getLoginIdAsLong(), "此数据您无权限修改");*/
-		// 开始修改(请只保留需要修改的字段)
-		so.clearNotIn(${t.getAllColumnString3()}).clearNull()<#if cfg.modelStyle == 2 >.humpToLineCase()</#if>;	
-		int line = SP.publicMapper.updateBySoMapBy("${t.tableName}", so, "id", so.get("id"));
+		so.clearNotIn(${t.getT1ListCatString3()}).clearNull()<#if cfg.modelStyle == 2 >.humpToLineCase()</#if>;	
+		int line = SP.publicMapper.updateBySoMapById(${t.modelName}.TABLE_NAME, so, id);
 		return AjaxJson.getByLine(line);
 	}
+	
 	
 	
 	

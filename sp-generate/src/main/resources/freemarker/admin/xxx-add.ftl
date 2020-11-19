@@ -40,11 +40,12 @@
 				<div class="c-panel">
 					<div class="c-title">数据添加</div>
 					<el-form size="mini" v-if="m">
-<#list t.columnList as c>
-	<#if c.foType == 'text'>	
+<#list t.t12List as c>
+	<#if c.istx('no-add')>	
+	<#elseif c.foType == 'text'>	
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
-							<el-input size="mini" v-model="m.${c.fieldName}" <#if c.foType == 'num'>type="number" </#if>></el-input>
+							<el-input size="mini" v-model="m.${c.fieldName}"></el-input>
 						</div>
 	<#elseif c.foType == 'num'>
 						<div class="c-item br">
@@ -64,24 +65,24 @@
 							<div class="editor-box">
 								<div id="editor"></div>
 							</div>
+							<div style="clear: both;"></div>
 						</div>
-						<div style="clear: both;"></div>
 	<#elseif c.foType == 'enum'>
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
-				<#if c.getTx('a-type') == '1' || c.getTx('a-type') == '2'>
-							<el-radio-group v-model="m.${c.fieldName}" size="mini" <#if c.getTx('a-type') == '2'>class="s-radio-text" </#if>>
+				<#if c.gtx('a-type') == '1' || c.gtx('a-type') == '2'>
+							<el-radio-group v-model="m.${c.fieldName}" size="mini" <#if c.gtx('a-type') == '2'>class="s-radio-text" </#if>>
 								<#list c.jvList?keys as jv>
 								<el-radio :label="${jv}">${c.jvList[jv]}</el-radio>
 								</#list>
 							</el-radio-group>
-				<#elseif c.getTx('a-type') == '3'>
+				<#elseif c.gtx('a-type') == '3'>
 							<el-radio-group v-model="m.${c.fieldName}" size="mini">
 								<#list c.jvList?keys as jv>
 								<el-radio-button :label="${jv}">${c.jvList[jv]}</el-radio-button>
 								</#list>
 							</el-radio-group>
-				<#elseif c.getTx('a-type') == '4'>
+				<#elseif c.gtx('a-type') == '4'>
 							<el-select v-model="m.${c.fieldName}" size="mini">
 								<el-option label="请选择" :value="0" disabled></el-option>
 								<#list c.jvList?keys as jv>
@@ -162,14 +163,16 @@
 						</div>
 	<#elseif c.isFoType('date-create', 'date-update')>
 						<!-- ${c.foType}字段： m.${c.fieldName} - ${c.columnComment3} -->
-	<#elseif c.foType == 'fk-1'>
-						<div class="c-item br">
-							<label class="c-label">${c.fkPkConcatComment}：</label>
-							<el-select size="mini" v-model="m.${c.fieldName}">
-								<el-option label="请选择" :value="0" disabled></el-option>
-								<el-option v-for="item in ${c.fkPkTableName2}List" :label="item.${c.fkPkConcatName}" :value="item.${c.fkPkFieldName}" :key="item.${c.fkPkColumnName}"></el-option>
+	<#elseif c.foType == 'fk-s'>
+				<#if c.istx('drop')>
+						<div class="c-item">
+							<label class="c-label">${c.columnComment3}：</label>
+							<el-select size="mini" v-model="m.${c.fkSCurrDc.fieldName}">
+								<el-option label="请选择" value="" disabled></el-option>
+								<el-option v-for="item in ${c.fieldName}List" :label="item.${c.tx.catc}" :value="item.${c.tx.jc}" :key="item.${c.tx.jc}"></el-option>
 							</el-select>
 						</div>
+				</#if>
 	<#elseif c.foType == 'no'>
 						<!-- no字段： m.${c.fieldName} - ${c.columnComment3} -->
 	<#else>
@@ -231,15 +234,15 @@
 				data: {
 					id: sa.p('id', 0),		// 获取超链接中的id参数（0=添加，非0=修改） 
 					m: null,		// 实体对象 
-				<#list t.getColumnListBy('fk-1') as c>
-					${c.fkPkTableName2}List: [],		// ${c.fkPkConcatComment}
+				<#list t.getT2DropList() as c>
+					${c.fieldName}List: [],		// ${c.columnComment} 集合 
 				</#list>
 				},
 				methods: {
 					// 创建一个 默认Model 
 					createModel: function() {
 						return {
-					<#list t.columnList as c>
+					<#list t.t1List as c>
 						<#if c.isFoType('no', 'date-create', 'date-update')>
 							// ${c.fieldName}: '',		// ${c.columnComment} 
 						<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
@@ -256,7 +259,7 @@
 						try{
 							var m = this.m;		// 获取 m对象 
 							
-					<#list t.columnList as c>
+					<#list t.t1List as c>
 						<#if c.isFoType('no', 'date-create', 'date-update')>
 							// sa.checkNull(m.${c.fieldName}, '请输入${c.columnComment3}');
 						<#else>
@@ -286,7 +289,7 @@
 							return;
 						}
 						// 开始增加或修改
-					<#list t.columnListByNotAdd as c>
+					<#list t.getT1ListByNotAdd() as c>
 						this.m.${c.fieldName} = undefined;		// 不提交属性：${c.columnComment3}
 					</#list>
 						if(this.id <= 0) {	// 添加
@@ -325,7 +328,7 @@
 					</#if>
 					} else {	
 						sa.ajax('/${t.mkNameBig}/getById?id=' + this.id, function(res) {
-					<#list t.columnList as c>
+					<#list t.t1List as c>
 						<#if c.foType == 'date'>
 							res.data.${c.fieldName} = new Date(res.data.${c.fieldName});		// ${c.columnComment} 日期格式转换 
 						</#if>
@@ -334,7 +337,7 @@
 						</#if>
 					</#list>
 							this.m = res.data;
-					<#list t.columnList as c>
+					<#list t.t1List as c>
 						<#if c.foType == 'richtext'>
 							this.$nextTick(function() {
 								create_editor(this.m.${c.fieldName});
@@ -343,13 +346,13 @@
 					</#list>
 						}.bind(this))
 					}
-			<#if t.getColumnListBy('fk-1')?size != 0>
+			<#if t.getT2DropList()?size != 0>
 				
-					// ============ 加载所需外键列表 ============
-				<#list t.getColumnListBy('fk-1') as c>
-					// 加载 ${c.fkPkConcatComment}
-					sa.ajax('/${c.fkPkTableMkName}/getList?pageSize=1000', function(res) {
-						this.${c.fkPkTableName2}List = res.data; // 数据集合 
+					// ------------- 加载所需外键列表 -------------
+				<#list t.getT2DropList() as c>
+					// 加载 ${c.columnComment} 
+					sa.ajax('/${c.getJtMkName()}/getList?pageSize=1000', function(res) {
+						this.${c.fieldName}List = res.data; // 数据集合 
 					}.bind(this), {msg: null});
 				</#list>
 			</#if>

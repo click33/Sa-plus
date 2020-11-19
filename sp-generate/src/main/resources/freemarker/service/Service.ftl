@@ -38,7 +38,7 @@ public class ${t.mkNameBig}Service {
 		return ${t.varName}Mapper.getById(${t.primaryKey.fieldName});
 	}
 
-	/** 查 - 集合（参数为null或0时默认忽略此条件） */
+	/** 查集合 - 根据条件（参数为空时代表忽略指定条件） */  
 	List<${t.modelName}> getList(SoMap so) { 
 		return ${t.varName}Mapper.getList(so);	
 	}

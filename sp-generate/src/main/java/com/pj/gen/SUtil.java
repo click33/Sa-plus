@@ -3,6 +3,11 @@ package com.pj.gen;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.pj.gen.model.TheString;
+import com.pj.gen.utils.SoMap;
 
 /**
  * String处理工具类
@@ -12,39 +17,8 @@ import java.io.Writer;
 public class SUtil {
 
 
-	// 防止 一次有变，到处乱改
-	//static String path_fly_jdbc = "com.fly.jdbc";
-
-//	static String fly = "Fly";
-//	static String fly_run = "FlyRun";
-//	static String fly_code = "FlyCode";
-//	static String sql_fly = "SqlFly";
-//	static String fly_factory = "FlyFactory";
-//	
-//	static String path_fly_util = "com.fly.util";
-	
-
-	static String package_fly = "com.fly.jdbc";				// 框架 总包地址
-	static String package_Page = package_fly + ".pageing";	// Page 包地址   
-	static String package_AjaxJson = "com.pj.utils";		// AjaxJson 包地址   
-	
-	static String class_SqlFly = "SqlFly";			// SqlFly 类名 
-	static String class_SqlFlyFactory = "SqlFlyFactory";		// SqlFlyFactory 类名 
-	static String class_FlyUtil = "FlyUtil";		//FlyUtil 类名
-	static String class_Page = "Page";				//Page 类名   
-	static String class_SAP = "SAP";				//SAP 类名   
-	static String class_AjaxJson = "AjaxJson";		// AjaxJson 类名   
-
-	static String import_sqlfly = "import " + package_fly + ".*;";	// sqlfly 本尊导入  
-	static String import_Page = "import " + package_Page + "." + class_Page + ";";	// Page 导入  
-	
-	
-	static String method_add = "add";		// 函数名 增
-	static String method_delete = "delete";		// 函数名 删
-	static String method_update = "update";		// 函数名 改
-	static String method_getById = "getById";		// 函数名 查 
-	static String method_getList = "getList";		// 函数名 查 - 集合 
-	
+	// ------ 新
+	public static final String str_notp = "--notp";		// 一个字段注释，包含了这个字符串，才不会被解析 
 	
 	
 	
@@ -144,17 +118,9 @@ public class SUtil {
 	public static String wordEachBig_fs(String str){
 		return wordFirstSmall(wordEachBig(str));
 	}
+
+
 	
-//	public static void main(String[] args) {
-//		System.out.println();
-//	}
-	
-	
-	
-//	public static void main(String[] args) {
-////		System.out.println(txStringToMap("name=1, bas= 21, kjsa, ss=,"));
-//		System.out.println(txStringToMap(null));
-//	}
 	
 	// 下划线转中划线
 	public static String xia_2_zhong(String str) {
@@ -190,33 +156,150 @@ public class SUtil {
 //		return setMethod;
 //	}
 	
-	// 获取SO的getPage方法代码
-	public static String get_getPage() {
-		String str = 
-				"\tpublic Page getPage() {\r\n" + 
-				"\t\tif(this.page == null){\r\n" + 
-				"\t\t\tthis.page = Page.getPage(this.pageNo, this.pageSize);\r\n" + 
-				"\t\t}\r\n" + 
-				"\t\treturn this.page;\r\n" + 
-				"\t}";
-		return str;
+	
+
+	
+	// ---------------------------- 注释解析相关 ----------------------------
+
+	// 将类似 "name=张三, age=18" 样式的字符串, 转换为SoMap(特性)
+	public static SoMap parseStringToTxMap(String txStr) {
+		SoMap soMap = new SoMap();
+		if(txStr == null) {
+			return soMap;
+		}
+		String[] arr = txStr.split(",");
+		for (String str : arr) {
+			try {
+				str = str.trim();
+				if(str.equals("")) {	// 如果是空
+					
+				}
+				else if(str.indexOf("=") == -1) {	// 如果没有=
+					soMap.put(str, "true");
+				}
+				else {	
+					String[] darr = str.split("=");
+					if(darr.length == 1) {
+						soMap.put(darr[0], "true");
+					} else {
+						String value = darr[1];
+						if(darr.length > 2) {
+							for (int i = 2; i < darr.length; i++) {
+								value += "=" + darr[i];
+							}
+						}
+						// 去掉空格和左右括号 
+						value = value.trim();
+						if(value.startsWith("(")) {
+							value = SUtil.strFirstDrop(value);
+						}
+						if(value.endsWith(")")) {
+							value = SUtil.strLastDrop(value);
+						}
+						if(value.equals("")) {
+							value = "true";
+						}
+						// 添加进map 
+						soMap.set(darr[0], value);
+					}
+				}
+			} catch (Exception e) {
+				System.err.println("特性：" + str + "解析出错：" + e.getMessage());
+			}
+		}
+		return soMap;
 	}
 
-	// 获取SO的getSortString方法代码
-	public static String get_getSortString() {
-		String str = "\tpublic String getSortString(){\r\n" + 
-				"\t\treturn \" order by \" + arr[this.sort_type];\r\n" + 
-				"\t}\r\n";
-		return str;
+	// 将类似 "[str x=xx]" 样式的字符串, 转换为SoMap(特性+fo_type)
+	private static SoMap parseStringToFtMap(String ftStr) {
+		try {
+			// 解析特性str 
+			SoMap so = new SoMap();
+			String ftStr2 = ftStr.substring(1, ftStr.length()-1).trim();	// 去掉第一个和最后一个字符 
+			// 如果包含空格
+			if(ftStr2.indexOf(" ") > -1) {
+				// 特性 
+				int tx_index = ftStr2.indexOf(" ");
+				String txStr = ftStr2.substring(tx_index + 1, ftStr2.length());	// 特性列表字符串 
+				so.setMap(SUtil.parseStringToTxMap(txStr));
+				// fo_type 
+				so.setFoType(ftStr2.substring(0, tx_index));	
+			} else {
+				// 没有特性，直接写入
+				so.setFoType(ftStr2);		// fo 类型 
+			}
+
+			// 返回 
+			return so;
+		} catch (Exception e) {
+			System.err.println("字符串(" + ftStr + ")解析异常：" + e.getMessage());
+			throw new RuntimeException(e);
+		}
 	}
-	
-	// 获取getSqlFly()的代码
-	public static String get_getSqlFly() {
-		String getfly = "\t// 底层SqlFly对象\r\n\tprivate " + SUtil.class_SqlFly 
-				+ " getSqlFly() {\r\n\t\treturn " + SUtil.class_SqlFlyFactory 
-				+ ".getSqlFly();\r\n\t}\r\n\r\n";
-		return getfly;
+
+	// 从一个字符串里"bala [str x=xx]"，获取一个SoMap (特性、fo_type、comment)
+	public static SoMap getFt(String str) { 
+		// 过滤掉换行符 
+		str = str.replaceAll("\r","").replaceAll("\n","");	
+		
+		SoMap so = new SoMap();
+
+		// 如果包含 非解析字符， 代表不要解析
+		if(str.indexOf(SUtil.str_notp) > -1) {
+			so.setComment(str.replace(SUtil.str_notp, ""));
+			return so;
+		}
+		
+		// 判断是否包含[] , 如果没有直接返回 
+		if(str.indexOf("[") > -1 && str.indexOf("]") > -1) {
+		} else {
+			so.setComment(str);
+			return so;
+		}
+		
+		// 开始解析 
+		int index_l = str.indexOf("[");
+		int index_r = str.indexOf("]");
+		String ftStr = str.substring(index_l, index_r + 1);
+		// 去除表单声明信息 
+		so = parseStringToFtMap(ftStr);
+		so.setComment(str.replace(ftStr, "").trim());	// 去掉特殊声明后的注释 
+		
+		return so;
 	}
+
+	// 从一个字符串里"bala [str x=xx][str2 x=xx]"，获取多个SoMap 
+	public static List<SoMap> getFtList(String str, TheString ts) {
+			
+			List<SoMap> ftList = new ArrayList<SoMap>();
+			str = str.replaceAll("\r","").replaceAll("\n","");	// 过滤掉换行符 
+
+			// 如果包含 非解析字符， 代表不要解析
+			if(str.indexOf(SUtil.str_notp) > -1) {
+				return ftList;
+			}
+			
+			// 一直解析 
+			for (;;) {
+				// 判断是否包含[] , 如果没有直接返回 
+				if(str.indexOf("[") > -1 && str.indexOf("]") > -1) {
+					// 开始解析 
+					int index_l = str.indexOf("[");
+					int index_r = str.indexOf("]");
+					String ftStr = str.substring(index_l, index_r + 1);
+					SoMap so = parseStringToFtMap(ftStr);
+//					str = str.replace(ftStr, "").trim();	// 去除掉这个 
+					str = str.substring(0, index_l) + str.substring(index_r + 1);			// 去除掉这个 
+					ftList.add(so);
+				} else {
+					if(ts != null) {
+						ts.str = str;
+					}
+					return ftList;
+				}
+			}
+		}
+		
 	
 	
 	// =====================  代码doc相关 markdown  =========================   
@@ -308,8 +391,7 @@ public class SUtil {
 	}
 	
 	
-	
-	
+		
 	
 	
 	

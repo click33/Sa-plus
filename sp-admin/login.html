@@ -70,7 +70,7 @@
 			
 			// 所有参考属性  
 			var page_title = 'sa-plus 后台登录';		// 页面标题 
-			var key = 'sa';						// 默认的key 
+			var key = 'sa';						// 默认的账号 
 			var password = '123456';					// 默认的password  
 			var logo_url = 'sa-resources/admin-logo.png';	// logo地址，为空字符串则不显示 
 			
@@ -87,7 +87,13 @@
 				}
 				// 3、请求后台
 				sa.ajax('/AccAdmin/doLogin', p, function(res){
-					sa.setAuth(res.data.per_list);		// 当前用户权限码集合   写入本地集合 	
+					// 写入token
+					if(res.data.tokenInfo) {
+						localStorage.tokenName = res.data.tokenInfo.tokenName; 
+						localStorage.tokenValue = res.data.tokenInfo.tokenValue; 
+					}
+					// 当前用户权限码集合   写入本地集合 	
+					sa.setAuth(res.data.per_list);		
 					// sa.$sys.setCurrUser(res.data.admin);	// 当前账号对象 
 					sa.ok2("欢迎你，" + res.data.admin.name); 	// 打个招呼 
 					setTimeout(function () {

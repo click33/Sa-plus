@@ -4,7 +4,11 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+<<<<<<< HEAD
+import com.pj.utils.so.*;
+=======
 import ${cfg.package_utils};
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 <#if cfg.mybatisPlus>
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 </#if>
@@ -14,14 +18,18 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author ${cfg.author} 
  */
 @Mapper
+<<<<<<< HEAD
+public interface ${t.mkNameBig}Mapper<#if cfg.mybatisPlus> extends BaseMapper <${t.modelName}></#if> {
+=======
 public interface ${t.mkNameBig}Mapper <#if cfg.mybatisPlus>extends BaseMapper <${t.modelName}></#if>{
+>>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 
 	/**
 	 * 增  
-	 * @param ${t.varName} 新增对象 
+	 * @param ${t.varNameSimple} 实体对象 
 	 * @return 受影响行数 
 	 */
-	int add(${t.modelName} ${t.varName});
+	int add(${t.modelName} ${t.varNameSimple});
 
 	/**
 	 * 删  
@@ -32,22 +40,22 @@ public interface ${t.mkNameBig}Mapper <#if cfg.mybatisPlus>extends BaseMapper <$
 
 	/** 
 	 * 改  
-	 * @param ${t.varName} 修改对象 
+	 * @param ${t.varNameSimple} 实体对象 
 	 * @return 受影响行数 
 	 */
-	int update(${t.modelName} ${t.varName});
+	int update(${t.modelName} ${t.varNameSimple});
 
 	/** 
-	 * 查  
+	 * 查 - 根据id  
 	 * @param id 要查询的数据id 
 	 * @return 实体对象 
 	 */
 	${t.modelName} getById(${t.primaryKey.fieldType} ${t.primaryKey.fieldName});	<#-- 根据主键 --> 
 
 	/**
-	 * 查 - 集合（参数为null或0时默认忽略此条件）
+	 * 查集合 - 根据条件（参数为空时代表忽略指定条件）
 	 * @param so 参数集合 
-	 * @return 数据集合 
+	 * @return 数据列表 
 	 */
 	List<${t.modelName}> getList(SoMap so);
 

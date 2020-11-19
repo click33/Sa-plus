@@ -1,4 +1,4 @@
-package com.pj.utils.sg;
+package com.pj.utils.so;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
@@ -33,7 +33,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	
 
 	/** 以下元素会在isNull函数中被判定为Null， */
-	public static final Object[] NULL_ELEMENT_ARRAY = {null, "", "0", "0.0"};
+	public static final Object[] NULL_ELEMENT_ARRAY = {null, ""};
 	public static final List<Object> NULL_ELEMENT_LIST;
 
 	
