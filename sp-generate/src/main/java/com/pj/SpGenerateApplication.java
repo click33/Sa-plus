@@ -58,14 +58,9 @@ public class SpGenerateApplication {
             .setSqlSelectColumnWay(1) 		// mapper.xml中的通用查询，是select * 还是所有列 (1=select *, 2=select 所有列) 
             .setSqlEnclose(2) 				// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否) 
             .setSaTokenAuthWay(2)   		// 鉴权代码的方式 (1=代码式鉴权, 2=注解式鉴权)
-<<<<<<< HEAD
 			.setMybatisPlus(false)			// 是否生成的代码遵循mybatis-plus风格(继承一些mp的特定父类)
 			.setOutFC(true)					// 是否输出FC.java工厂类 
-//			 .addTableName("sys_redeem")	// 添加要生成的表 (单个添加)
-=======
-			.setMybatisPlus(true)			// 是否开启mybatisPlus
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 			.addTableAll()		// 添加要生成的表 (一次性添加所有表)
             .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
             ;

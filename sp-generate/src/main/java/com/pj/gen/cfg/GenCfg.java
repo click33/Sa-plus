@@ -49,10 +49,7 @@ public class GenCfg {
 	public int sqlEnclose = 2;			// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否)
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
 	public boolean mybatisPlus = false; // 是否使用mybatisPlus
-<<<<<<< HEAD
 	public boolean isOutFC = true; // 是否输出FC.java工厂类 
-=======
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 	
 	
 	public String packageUnderlineTo = "_"; 	// 将包名中的下划线转换成指定内容，比如：$、2、4 或者空字符串"" 
@@ -449,31 +446,6 @@ public class GenCfg {
 		this.saTokenAuthWay = saTokenAuthWay;
 		return this;
 	}
-<<<<<<< HEAD
-=======
-
-	public GenCfg setMybatisPlus(boolean mybatisPlus){
-		this.mybatisPlus = mybatisPlus;
-		return this;
-	}
-	public boolean getMybatisPlus(){
-		return mybatisPlus;
-	}
-	
-//	/* （非 Javadoc）
-//	 * @see java.lang.Object#toString()
-//	 */
-//	@Override
-//	public String toString() {
-//		return "GenCfg [sqlFly=" + sqlFly + ", projectPath=" + projectPath + ", codePath=" + codePath + ", packagePath="
-//				+ packagePath + ", author=" + author + ", package_utils=" + package_utils
-//				+ ", fieldType=" + fieldType + ", is_lomock=" + is_lomock + ", fileUploadWay=" + fileUploadWay
-//				+ ", modelVisitWay=" + modelVisitWay + ", modelDocWay=" + modelDocWay + ", modelStyle=" + modelStyle
-//				+ ", resultMapWay=" + resultMapWay + ", adminPath=" + adminPath + ", adminCodePath=" + adminCodePath
-//				+ ", apidocPath=" + apidocPath + ", apidocCodePath=" + apidocCodePath + ", tableNameList="
-//				+ tableNameList + ", tableList=" + tableList + "]";
-//	}
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 
 	public GenCfg setMybatisPlus(boolean mybatisPlus){
 		this.mybatisPlus = mybatisPlus;
