@@ -4,11 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-<<<<<<< HEAD
 import com.pj.utils.so.*;
-=======
-import ${cfg.package_utils};
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 <#if cfg.mybatisPlus>
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 </#if>
@@ -18,11 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author ${cfg.author} 
  */
 @Mapper
-<<<<<<< HEAD
 public interface ${t.mkNameBig}Mapper<#if cfg.mybatisPlus> extends BaseMapper <${t.modelName}></#if> {
-=======
-public interface ${t.mkNameBig}Mapper <#if cfg.mybatisPlus>extends BaseMapper <${t.modelName}></#if>{
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 
 	/**
 	 * 增  

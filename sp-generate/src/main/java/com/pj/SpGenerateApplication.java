@@ -63,7 +63,7 @@ public class SpGenerateApplication {
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)
 			.addTableAll()		// 添加要生成的表 (一次性添加所有表)
             .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
-            ;
+            ; 
 		
 		System.out.println("\n\n\n--------------------------------------------\n\n\n");
 		

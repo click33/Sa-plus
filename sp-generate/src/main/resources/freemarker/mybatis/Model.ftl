@@ -4,13 +4,7 @@ import java.io.Serializable;
 <#if t.hasFo("date", "date-create", "date-update") >import java.util.*;
 </#if>
 <#if cfg.mybatisPlus>
-<<<<<<< HEAD
 import com.baomidou.mybatisplus.annotation.*;
-=======
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.EqualsAndHashCode;
 </#if>
@@ -25,7 +19,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 <#if cfg.mybatisPlus>
-<<<<<<< HEAD
 @TableName(${t.modelName}.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 </#if>
@@ -45,22 +38,6 @@ public class ${t.modelName}<#if cfg.mybatisPlus> extends Model<${t.modelName}></
 <#if cfg.modelDocWay = 2 || cfg.modelDocWay = 3>${cfg.getStarDoc(c.columnComment)}${cfg.line}</#if><#rt>
 <#if cfg.mybatisPlus && t.primaryKey.columnName == c.columnName>	@TableId(type = IdType.AUTO)${cfg.line}</#if><#rt>
 	${cfg.modelVisitWayString} ${c.fieldType} ${c.fieldName};	<#if cfg.modelDocWay == 1>	// ${c.columnComment} </#if><#if cfg.modelDocWay = 3>${cfg.line}</#if>
-=======
-@TableName("${t.tableName}")
-@EqualsAndHashCode(callSuper = false)
-</#if>
-public class ${t.modelName} <#if cfg.mybatisPlus> extends Model<${t.modelName}></#if> implements Serializable {
-
-	private static final long serialVersionUID = 1L;
-
-<#list t.columnList as c>
-<#if  cfg.modelDocWay == 2 >	/** ${c.columnComment} */
-</#if>
-	<#if cfg.mybatisPlus&& t.primaryKey.columnName == c.columnName>
-	@TableId(type = IdType.AUTO)
-	</#if>
-	${cfg.modelVisitWayString} ${c.fieldType} ${c.fieldName};	<#if cfg.modelDocWay == 1>	// ${c.columnComment} </#if>
->>>>>>> a1f9daf73478d93e0e16bcd68533e58b4ae0d9b1
 </#list>
 
 
