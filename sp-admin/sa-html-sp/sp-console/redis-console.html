@@ -146,7 +146,7 @@
 					p: { // 查询参数 
 						k: '',
 						pageNo: 1,		// 当前页 
-						pageSize: 100000,	// 页大小 
+						pageSize: 10000,	// 页大小 
 						sortType: 0	// 排序方式 
 					},
 					isLike: true,	// 是否为模糊匹配
@@ -181,7 +181,14 @@
 							this.dataList = dataList;
 							this.dataCount = this.dataList.length;
 							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this)); 
+						}.bind(this), {
+							success501: function(res) {
+								sa.msg(res.msg);
+								this.dataList = [];
+								this.dataCount = 0;
+								sa.f5TableHeight();	// 刷新表格高度
+							}.bind(this)
+						}); 
 					},
 					// 刷新预览 
 					f5_pre: function(is_f5_keys) {
@@ -197,7 +204,9 @@
 							if(this.preData.keys_count <= 1000) {
 								this.f5();
 							} else {
-								sa.confirm('key值数量已达' + this.preData.keys_count + '，继续检索可能会严重影响系统性能，是否继续加载？(您可以增加筛选条件缩短记录总数)', function(res) {
+								var tipStr = 'key值数量已达' + this.preData.keys_count + '，继续检索可能会严重影响系统性能，是否继续加载？(您可以增加筛选条件缩短记录总数)';
+								tipStr = '<b style="color: red;">' + tipStr + '</b>';
+								sa.confirm(tipStr, function(res) {
 									this.f5();
 								}.bind(this))
 							}

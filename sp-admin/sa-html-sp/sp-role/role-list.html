@@ -71,7 +71,7 @@
 						:current-page.sync="p.pageNo" 
 						:page-size.sync="p.pageSize" 
 						:total="dataList.length" 
-						:page-sizes="[10000]" 
+						:page-sizes="[1000]" 
 						@current-change="f5()" 
 						@size-change="f5()">
 					</el-pagination>
@@ -86,7 +86,7 @@
 					p: {	// 查询参数 
 						role_name: '',
 						pageNo: 1,
-						pageSize: 10000,
+						pageSize: 1000,
 					},
 					dataList: [],	// 数据集合
 				},

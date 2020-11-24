@@ -105,6 +105,7 @@ var sa = {
 		if(cfg.msg != null){
 			sa.loading(cfg.msg);
 		}
+		console.log(cfg);
 		
 		// 开始请求ajax 
 		return $.ajax({

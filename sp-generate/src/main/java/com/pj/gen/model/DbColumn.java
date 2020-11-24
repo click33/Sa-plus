@@ -145,6 +145,10 @@ public class DbColumn {
 						try {
 							String key = e.split("=")[0].trim();
 							String value = e.split("=")[1].trim();
+							// 判断是否为String类型, 如果是，则添加上单引号 
+							if(tx.getString("dt", "").toLowerCase().equals("string")) {
+								key = "'" + key + "'";
+							}
 							this.jvList.put(key, value);
 						} catch (Exception e2) {
 							System.err.println("枚举字段(" + this.dt.getTableName() + "." + this.columnName + ")"+")解析可能出错：" + e2.getMessage());

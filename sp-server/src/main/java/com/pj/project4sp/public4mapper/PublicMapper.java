@@ -78,6 +78,19 @@ public interface PublicMapper {
 			);
 
 	/**
+	 * 指定表的指定字段增加指定值，可以为负值 
+	 * <p>
+	 * 参数：表明、列表、增加的值、id列表  
+	 */
+	public int columnAddByIds(
+			@Param("tableName") String tableName, 
+			@Param("columnName") String columnName, 
+			@Param("num") long num,  
+			@Param("ids") List<?> ids
+			);
+
+
+	/**
 	 * 指定表的指定字段更新为指定值,根据指定id  
 	 * <p>
 	 * 参数：表名、列名、值、id值 
@@ -155,6 +168,19 @@ public interface PublicMapper {
 	 * 参数：表名、列名、id值 
 	 */
 	public String getColumnByWhere(
+			@Param("tableName") String tableName, 
+			@Param("columnName") String columnName, 
+			@Param("whereName") String whereName, 
+			@Param("whereValue") Object whereValue
+			);
+	
+
+	/**
+	 * 获取指定表的指定字段值列表,并转化为long, 根据指定条件(whereName=whereValue)
+	 * <p>
+	 * 参数：表名、列名、id值 
+	 */
+	public List<Long> getColumnListToLongByWhere(
 			@Param("tableName") String tableName, 
 			@Param("columnName") String columnName, 
 			@Param("whereName") String whereName, 

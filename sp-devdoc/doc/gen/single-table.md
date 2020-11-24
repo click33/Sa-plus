@@ -81,6 +81,10 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 ``` js
 	`status` int(11) COMMENT '商品状态 (1=上架, 2=下架) [j]',
 ```
+- 如果你的枚举取值为`String`类型，你需要指定dt属性：`[j dt=string]`, 如下示例：
+``` js
+	`status` varchar(20) COMMENT '商品状态 (on=上架, off=下架) [j dt=string]',
+```
 - 其还有两个附加属性，决定表单样式
 	- `s-type`：标注列表查询页生成的样式, 取值：1=普通单选, 2=单选文字, 3=单选按钮, 4=下拉选择，`默认值=2`
 	- `a-type`：标注添加修改页生成的样式, 取值同上，`默认值=3`

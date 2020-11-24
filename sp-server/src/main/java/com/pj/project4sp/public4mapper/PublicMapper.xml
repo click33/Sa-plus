@@ -41,10 +41,19 @@
 	<!-- 指定表的指定字段加num（可以小于0 ）,根据指定id -->
 	<update id="columnAdd">
 		update ${tableName} set 
-		${columnName} = ${columnName} + #{num} 
+		${columnName} = IFNULL(${columnName}, 0) + #{num} 
 		where id = #{id};
 	</update>
 	
+	<!-- 指定表的指定字段增加指定值，可以为负值  -->
+	<update id="columnAddByIds">
+		update ${tableName} set 
+		${columnName} = ${columnName} + #{num} 
+		where id in
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</update>
 
 	<!-- 指定表的指定字段更新为指定值,根据指定id -->
 	<update id="updateColumnById">
@@ -64,9 +73,7 @@
 	<update id="updateBySoMapById">
 		update ${tableName} set 
 		<foreach collection="soMap.entrySet()" item="value"  index="key" separator=",">
-			<if test=' key != "this" '>
-	       		${key} = #{value} 
-			</if>
+			${key} = #{value} 
 		</foreach>
 		where id = #{id} 
 	</update>
@@ -75,9 +82,7 @@
 	<update id="updateBySoMapBy">
 		update ${tableName} set 
 		<foreach collection="soMap.entrySet()" item="value"  index="key" separator=",">
-			<if test=' key != "this" '>
-	       		${key} = #{value}
-			</if>
+			${key} = #{value}
 		</foreach>
 		where ${whereName} = #{whereValue} 
 	</update>
@@ -102,6 +107,12 @@
 		where ${whereName} = #{whereValue} 
 	</select>
 
+
+	<!-- 获取指定表的指定字段值列表,并转化为long, 根据指定条件(whereName=whereValue) -->
+	<select id="getColumnListToLongByWhere" resultType="long">
+		select ${columnName} from ${tableName} 
+		where ${whereName} = #{whereValue} 
+	</select>
 
 
 	

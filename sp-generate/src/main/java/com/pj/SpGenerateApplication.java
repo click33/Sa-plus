@@ -60,6 +60,7 @@ public class SpGenerateApplication {
             .setSaTokenAuthWay(2)   		// 鉴权代码的方式 (1=代码式鉴权, 2=注解式鉴权)
 			.setMybatisPlus(false)			// 是否生成的代码遵循mybatis-plus风格(继承一些mp的特定父类)
 			.setOutFC(true)					// 是否输出FC.java工厂类 
+			.setDefaultMeunIcon("el-icon-folder-opened")	// 生成后台管理页面时，默认的菜单图标
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)
 			.addTableAll()		// 添加要生成的表 (一次性添加所有表)
             .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
@@ -79,7 +80,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.21.0，更新于2020-11-19 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.22.0，更新于2020-11-25 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

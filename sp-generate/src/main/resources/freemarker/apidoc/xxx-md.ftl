@@ -105,7 +105,7 @@
 <#list t.t1List as c>
 	{${c.fieldType}}	${c.fieldName}			${c.columnComment2} 
 </#list>
-	{int}	sortType = 0		排序方式 (0 = 默认<#list t.t1List as c>, ${c_index + 1} = ${c.columnComment2}</#list>)
+	{int}	sortType = 0		排序方式 (0 = 默认<#list t.getTallListBySort() as c>, ${c_index + 1} = ${c.columnComment2}</#list>)
 ```
 - 返回 
 ``` js

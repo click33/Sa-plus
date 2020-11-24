@@ -21,7 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-9-12 去除setThis() 
+ * <p>最新：2020-11-23 新增has方法
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -55,7 +55,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	/** 如果为空，则返回默认值 */
 	public Object get(Object key, Object defaultValue) {
 		Object value = get(key);
-		if(value == null || value.equals("")) {
+		if(valueIsNull(value)) {
 			return defaultValue;
 		}
 		return value;
@@ -72,55 +72,55 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	/** 如果为空，则返回默认值 */
 	public String getString(String key, String defaultValue) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return defaultValue;
 		}
-		return value;
+		return String.valueOf(value);
 	}
 
 	/** 转为int并返回 */
 	public int getInt(String key) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return 0;
 		}
-		return Integer.valueOf(value);
+		return Integer.valueOf(String.valueOf(value));
 	}
 	/** 转为int并返回，同时指定默认值 */
 	public int getInt(String key, int defaultValue) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return defaultValue;
 		}
-		return Integer.valueOf(value);
+		return Integer.valueOf(String.valueOf(value));
 	}
 
 	/** 转为long并返回 */
 	public long getLong(String key) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return 0;
 		}
-		return Long.valueOf(value);
+		return Long.valueOf(String.valueOf(value));
 	}
 
 	/** 转为double并返回 */
 	public double getDouble(String key) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return 0.0;
 		}
-		return Double.valueOf(value);
+		return Double.valueOf(String.valueOf(value));
 	}
 
 	/** 转为boolean并返回 */
 	public boolean getBoolean(String key) {
-		String value = getString(key);
-		if(value == null || value.equals("")) {
+		Object value = get(key);
+		if(valueIsNull(value)) {
 			return false;
 		}
-		return Boolean.valueOf(value);
+		return Boolean.valueOf(String.valueOf(value));
 	}
 
 	/** 转为Date并返回，根据自定义格式 */
@@ -142,7 +142,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return getDateByFormat(key, "yyyy-MM-dd HH:mm:ss");
 	}
 
-	/** 获取集合 */
+	/** 获取集合(必须原先就是个集合，否则会创建个新集合并返回) */
 	@SuppressWarnings("unchecked")
 	public List<Object> getList(String key) {
 		Object value = get(key);
@@ -159,7 +159,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return list;
 	}
 
-	/** 获取集合(指定类型) */
+	/** 获取集合 (指定泛型类型) */
 	public <T> List<T> getList(String key, Class<T> cs) {
 		List<Object> list = getList(key);
 		List<T> list2 = new ArrayList<T>();
@@ -445,7 +445,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	/** 指定key是否为null，判定标准为 NULL_ELEMENT_ARRAY 中的元素  */
 	public boolean isNull(String key) {
-		return NULL_ELEMENT_LIST.contains(getString(key));
+		return valueIsNull(get(key));
 	}
 
 	/** 指定key列表中是否包含value为null的元素，只要有一个为null，就会返回true */
@@ -462,7 +462,16 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	public boolean isNotNull(String key) {
 		return !isNull(key);
 	}
-
+	/** 指定key的value是否为null，作用同isNotNull() */
+	public boolean has(String key) {
+		return !isNull(key);
+	}
+	
+	/** 指定value在此SoMap的判断标准中是否为null */
+	public boolean valueIsNull(Object value) {
+		return NULL_ELEMENT_LIST.contains(value);
+	}
+	
 	/** 验证指定key不为空，为空则抛出异常 */
 	public SoMap checkNull(String ...keys) {
 		for (String key : keys) {

@@ -161,9 +161,15 @@
 				</el-table>
 				<!-- 分页 -->
 				<div class="page-box">
-					<el-pagination background layout="total, prev, pager, next, sizes, jumper" :current-page.sync="p.pageNo"
-					 :page-size.sync="p.pageSize" :total="dataCount" :page-sizes="[1, 5, 10, 20, 30, 40, 50, 100, 1000, 10000]" @current-change="f5()"
-					 @size-change="f5()">
+					<el-pagination 
+						background 
+						layout="total, prev, pager, next, sizes, jumper" 
+						:current-page.sync="p.pageNo"
+						:page-size.sync="p.pageSize" 
+						:total="dataCount" 
+						:page-sizes="[1, 5, 10, 20, 30, 40, 50, 100, 1000]" 
+						@current-change="f5()"
+						@size-change="f5()">
 					</el-pagination>
 				</div>
 			</div>

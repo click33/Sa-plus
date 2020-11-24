@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
+import com.pj.utils.sg.AjaxError;
 import com.pj.utils.so.SoMap;
 
 
@@ -82,9 +83,12 @@ public class RedisConsoleUtil {
 			k = "*";
 		}
 		
-		// 如果小于1万，直接返回 
+		// 检查是否超过上限 
 		long max = 10000;
 		Set<String> keys_set = stringRedisTemplate.keys(k);
+		AjaxError.throwBy(keys_set.size() > max, 501, "key值数量超" + max + "<br/>为性能考虑无法返回数据，请更换筛选条件");
+		
+		// 排序
 		List<String> keys = new ArrayList<String>();
 		keys.addAll(keys_set);
 		
@@ -97,24 +101,24 @@ public class RedisConsoleUtil {
   
             }  
         });
+
+		//  如果小于max，则直接返回 
+//		if(keys.size() <= max) {
+//			return keys;
+//		}
 		
-		//  如果小于一万，则只返回一万 
-		if(keys.size() <= max) {
-			return keys;
-		}
+		//  如果大于max，则只返回max
+//		int i = 0;
+//		List<String> keys2 = new ArrayList<String>();
+//		for (String key : keys) {
+//			keys2.add(key);
+//			i++;
+//			if(i >= max) {
+//				break;
+//			}
+//		}
 		
-		//  如果大于一万，则只返回一万 
-		int i = 0;
-		List<String> keys2 = new ArrayList<String>();
-		for (String key : keys) {
-			keys2.add(key);
-			i++;
-			if(i >= max) {
-				break;
-			}
-		}
-		
-		return keys2;
+		return keys;
 	}
 
 

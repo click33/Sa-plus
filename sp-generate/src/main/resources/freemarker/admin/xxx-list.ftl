@@ -84,13 +84,9 @@
 					<div class="c-item s-radio-text">
 						<label class="c-label">综合排序：</label>
 						<el-radio-group v-model="p.sortType">
-							<el-radio :label="0">最近添加</el-radio>
-<#list t.t1List as c>
-						<#if c_index <= 3>
+							<el-radio :label="0">默认</el-radio>
+<#list t.getTallListBySort() as c>
 							<el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio>
-						<#else>
-							<!-- <el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio> -->
-						</#if>
 </#list>
 						</el-radio-group>
 					</div>

@@ -132,6 +132,9 @@
 				mounted: function() {
 					sa.ajax('/${t.mkNameBig}/getById?id=' + this.id, function(res) {
 						this.m = res.data;
+						if(res.data == null) {
+							sa.alert('未能查找到 id=' + this.id + " 详细数据");
+						}
 					}.bind(this))
 				}
 			})

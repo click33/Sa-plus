@@ -53,6 +53,7 @@ public class GenCfg {
 	
 	
 	public String packageUnderlineTo = "_"; 	// 将包名中的下划线转换成指定内容，比如：$、2、4 或者空字符串"" 
+	public String defaultMeunIcon = "el-icon-folder-opened"; 	// 生成后台管理页面时，默认的菜单图标
 
 	public List<String> tableNameList = new ArrayList<>(); 		// 要检索的表名字集合 
 	public List<DbTable> tableList = new ArrayList<>(); 		// 检索出的表集合 
@@ -467,6 +468,19 @@ public class GenCfg {
 	 */
 	public GenCfg setOutFC(boolean isOutFC) {
 		this.isOutFC = isOutFC;
+		return this;
+	}
+	/**
+	 * @return defaultMeunIcon
+	 */
+	public String getDefaultMeunIcon() {
+		return defaultMeunIcon;
+	}
+	/**
+	 * @param defaultMeunIcon 要设置的 defaultMeunIcon
+	 */
+	public GenCfg setDefaultMeunIcon(String defaultMeunIcon) {
+		this.defaultMeunIcon = defaultMeunIcon;
 		return this;
 	}
 	

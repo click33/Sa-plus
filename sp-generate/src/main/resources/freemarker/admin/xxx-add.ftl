@@ -261,9 +261,9 @@
 							
 					<#list t.t1List as c>
 						<#if c.isFoType('no', 'date-create', 'date-update')>
-							// sa.checkNull(m.${c.fieldName}, '请输入${c.columnComment3}');
+							// sa.checkNull(m.${c.fieldName}, '请输入 [${c.columnComment3}]');
 						<#else>
-							sa.checkNull(m.${c.fieldName}, '请输入${c.columnComment3}');
+							sa.checkNull(m.${c.fieldName}, '请输入 [${c.columnComment3}]');
 						</#if>
 					</#list>
 							return 'ok';	// 全部通过验证，返回ok 表示正确 
@@ -337,6 +337,9 @@
 						</#if>
 					</#list>
 							this.m = res.data;
+							if(res.data == null) {
+								sa.alert('未能查找到 id=' + this.id + " 详细数据");
+							}
 					<#list t.t1List as c>
 						<#if c.foType == 'richtext'>
 							this.$nextTick(function() {

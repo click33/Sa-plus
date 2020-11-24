@@ -336,6 +336,20 @@ public class DbTable {
 		}
 		return list;
 	}
+	// 返回所有列中 - 需要加入排序字段的 
+	public List<DbColumn> getTallListBySort() {
+		List<DbColumn> list = new ArrayList<DbColumn>();
+		for (DbColumn c : getTallList()) {
+			if(c.istx("no-sort") || c.isFoType("img", "audio", "video", "file", "img-list", "audio-list", "video-list", "file-list", "img-video-list", 
+					"richtext", "textarea", "textarea", "fk-s")) {
+				// 不添加 
+			} else {
+				list.add(c);
+			}
+		}
+		return list;
+	}
+		
 	// 返回列集合 - 指定foType的 
 	public List<DbColumn> getTallListByFoType(String ...foType) {
 		List<DbColumn> list = new ArrayList<DbColumn>();
@@ -506,24 +520,24 @@ public class DbTable {
 			String columnName = c.getColumnName();	// 列名 
 			String fieldName = c.getFieldName();	// 字段名
 			String tj = "=";	// 条件 
-			String tjV = " #{" + fieldName + "}";
+			String tjV = "#{" + fieldName + "}";
 			// 一些特殊情况
 			if(c.tx.getString("j", "").equals("like")) {
 				tj = "like"; 
 				tjV = "concat('%', #{" + c.getFieldName() + "}, '%')"; 
 			}
 			// 拼接 
-			str += "\t\t\t<if test=' this.isNotNull(\"" + fieldName + "\") '> and `" + columnName + "` " + tj + tjV + " </if>\r\n"; 
+			str += "\t\t\t<if test=' this.has(\"" + fieldName + "\") '> and `" + columnName + "` " + tj + " " + tjV + " </if>\r\n"; 
 		}
 //		str = "\t\t<where>\r\n" + str + "\t\t</where>\r\n";
 		return str;
 	}
 	// 在mapper.xml的getList时，组织所有查询条件，形如：<when test='sortType == 1'> id desc </when> 
 	public String getT1List_ByMapperGetListSort() {
-		List<DbColumn> t1 = getT1List();
+		List<DbColumn> list = getTallListBySort();
 		String str = "";
-		for (int i = 0; i < t1.size(); i++) {
-			DbColumn c = t1.get(i);
+		for (int i = 0; i < list.size(); i++) {
+			DbColumn c = list.get(i);
 			// 拼接 
 			str += "\t\t\t<when test='sortType == " + (i + 1) + "'> `" + c.getColumnName() + "` desc </when>\r\n"; 
 		}
@@ -547,7 +561,7 @@ public class DbTable {
 				fieldName = c.getFieldName();	// 字段名
 			}
 			// 拼接字符串 
-			str2 += "\t\tAjaxError.throwByIsNull(" + getVarNameSimple() + "." + fieldName + ", \"" + columnComment + "不能为空\");"; 
+			str2 += "\t\tAjaxError.throwByIsNull(" + getVarNameSimple() + "." + fieldName + ", \"[" + columnComment + "] 不能为空\");"; 
 			// 拼接注释 
 			if(GenCfgManager.cfg.utilDocWay == 1) {
 				str2 += "\t\t// 验证: " + c.getColumnComment() + " ";
@@ -621,7 +635,7 @@ public class DbTable {
 	}
 	// 返回后台管理的菜单icon
 	public String getIcon() {
-		return getDefFt().getString("icon", "el-icon-folder-opened");
+		return getDefFt().getString("icon", GenCfgManager.cfg.getDefaultMeunIcon());
 	}
 	
 	
