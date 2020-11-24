@@ -15,7 +15,7 @@
 - 新增：新增智能判断，当检测到后台设置取消了关键权限的时候，给出危险警告，防止系统崩溃 
 - 新增：`PublicMapper`类新增`columnAddByIds`和`getColumnListToLongByWhere`方法
 - 新增：`SoMap`新增`has`方法,更语义化的判断非空 
-- 新增：枚举型字段增加对`String`类型的支持，只需声明时标注：`[j dt=string]`
+- 新增：枚举型字段增加对`String`类型的支持，只需声明时标注：`[enum dt=string]`
 
 
 --- 

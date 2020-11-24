@@ -79,11 +79,11 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 ##### - enmu 枚举字段
 - enum指定一个字段为枚举类型，且其取值必须以 `(1=xxx, 2=xxx, 3=xxx)` 的形式声明，例如: 
 ``` js
-	`status` int(11) COMMENT '商品状态 (1=上架, 2=下架) [j]',
+	`status` int(11) COMMENT '商品状态 (1=上架, 2=下架) [enum]',
 ```
-- 如果你的枚举取值为`String`类型，你需要指定dt属性：`[j dt=string]`, 如下示例：
+- 如果你的枚举取值为`String`类型，你需要指定dt属性：`[enum dt=string]`, 如下示例：
 ``` js
-	`status` varchar(20) COMMENT '商品状态 (on=上架, off=下架) [j dt=string]',
+	`status` varchar(20) COMMENT '商品状态 (on=上架, off=下架) [enum dt=string]',
 ```
 - 其还有两个附加属性，决定表单样式
 	- `s-type`：标注列表查询页生成的样式, 取值：1=普通单选, 2=单选文字, 3=单选按钮, 4=下拉选择，`默认值=2`
