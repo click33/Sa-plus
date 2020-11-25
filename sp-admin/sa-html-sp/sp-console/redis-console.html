@@ -129,7 +129,7 @@
 						:current-page.sync="p.pageNo" 
 						:page-size.sync="p.pageSize" 
 						:total="dataCount" 
-						:page-sizes="[100000]" 
+						:page-sizes="[1000]" 
 						@current-change="f5()" 
 						@size-change="f5()">
 					</el-pagination>
@@ -146,7 +146,7 @@
 					p: { // 查询参数 
 						k: '',
 						pageNo: 1,		// 当前页 
-						pageSize: 10000,	// 页大小 
+						pageSize: 1000,	// 页大小 
 						sortType: 0	// 排序方式 
 					},
 					isLike: true,	// 是否为模糊匹配
@@ -177,6 +177,10 @@
 									is_show: false,	// 是否已经显示详情 
 									ttl: '未加载',			// 过期时间 
 								})
+								if(i > 1000) {
+									sa.msg('key值总数：' + res.data.length + '，为避免卡顿，列表最大显示数目为1000条');
+									break;
+								}
 							}
 							this.dataList = dataList;
 							this.dataCount = this.dataList.length;
