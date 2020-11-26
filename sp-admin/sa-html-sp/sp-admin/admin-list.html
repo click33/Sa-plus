@@ -34,7 +34,7 @@
 					<div class="c-item">
 						<label class="c-label">角色：</label>
 						<el-select size="mini" v-model="p.role_id">
-							<el-option label="全部" :value="0"></el-option>
+							<el-option label="全部" value=""></el-option>
 							<el-option v-for="role in roleList" :key="role.id" :label="role.role_name" :value="role.id"></el-option>
 						</el-select>
 					</div>
@@ -159,7 +159,7 @@
 					p: {		// 查询参数
 						id: '',
 						name: '',
-						role_id: 0,
+						role_id: '',
 						sort_type: 0,
 						pageNo: 1,
 						pageSize: 10,
