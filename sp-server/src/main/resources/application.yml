@@ -54,8 +54,7 @@ mybatis-plus:
     # 一些配置
     configuration: 
         # 控制打印sql 
-#        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-        log-impl: com.pj.current.mybatis.MybatisStdOutImpl
+        # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
         # 是否开启下划线转驼峰 
         map-underscore-to-camel-case: false
         # 即使属性为null, 也要映射 
