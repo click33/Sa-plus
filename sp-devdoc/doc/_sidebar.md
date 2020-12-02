@@ -30,7 +30,7 @@
 
 
 - **其它**
-	- [缘起](/more/origin)
+	<!-- - [缘起](/more/origin) -->
 	- [常见问题](/more/common-questions)
 	- [友情链接](/more/link)
 	- [更新日志](/more/update-log)
