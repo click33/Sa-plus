@@ -40,7 +40,8 @@ public class GenCfg {
 	public Boolean is_lomock = false; 	// 是否使用 lomock 【无用配置】
 	public int fileUploadWay = 1; 	// 文件上传方式 (1=普通文件上传, 2=阿里云oss文件服务器)
 	public int modelVisitWay = 1; 	// 实体类的访问权限修饰符 (1=private, 2=public) 
-	public int modelDocWay = 1; 	// 实体类的注释形式 (1=行尾注释, 2=双星文档注释)
+	public int modelDocWay = 1; 	// 实体类的注释形式 (1=行尾注释, 2=单行双星文档注释, 3=标准双星文档注释)  
+	public int modelAddLine = 1; 	// 实体类的每个字段之间是否隔一个空行(1=是, 2=否)
 	public int utilDocWay = 1; 	// util类的注释风格 (1=行尾位注释, 2=行上注释, 3=无注释)
 	public int modelStyle = 1;		// 实体类字段风格 (1=保留下划线, 2=下划线转驼峰)  （如果打开下划线转驼峰，需采用resultMap手动映射模式[推荐]，或打开yml配置文件的 map-underscore-to-camel-case=true 选项 ）
 	public int resultMapWay = 1; 	// resultMap映射模式  (1=自动模式, 2=手动模式)
@@ -50,6 +51,7 @@ public class GenCfg {
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
 	public boolean mybatisPlus = false; // 是否使用mybatisPlus
 	public boolean isOutFC = true; // 是否输出FC.java工厂类 
+	public int webLibImportWay = 1; // 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 	
 	
 	public String packageUnderlineTo = "_"; 	// 将包名中的下划线转换成指定内容，比如：$、2、4 或者空字符串"" 
@@ -66,7 +68,16 @@ public class GenCfg {
 	}
 	// 获取双星文档注释 
 	public String getStarDoc(String str) {
-		return "\t/**\r\n\t * " + str + " \r\n\t */";
+		if(modelDocWay == 1) {
+			return "\t// " + str + " ";
+		}
+		if(modelDocWay == 2) {
+			return "\t/** " + str + " */";
+		}
+		if(modelDocWay == 3) {
+			return "\t/**\r\n\t * " + str + " \r\n\t */";
+		}
+		return "";
 	}
 		
 
@@ -481,6 +492,32 @@ public class GenCfg {
 	 */
 	public GenCfg setDefaultMeunIcon(String defaultMeunIcon) {
 		this.defaultMeunIcon = defaultMeunIcon;
+		return this;
+	}
+	/**
+	 * @return webLibImportWay
+	 */
+	public int getWebLibImportWay() {
+		return webLibImportWay;
+	}
+	/**
+	 * @param webLibImportWay 要设置的 webLibImportWay
+	 */
+	public GenCfg setWebLibImportWay(int webLibImportWay) {
+		this.webLibImportWay = webLibImportWay;
+		return this;
+	}
+	/**
+	 * @return modelAddLine
+	 */
+	public int getModelAddLine() {
+		return modelAddLine;
+	}
+	/**
+	 * @param modelAddLine 要设置的 modelAddLine
+	 */
+	public GenCfg setModelAddLine(int modelAddLine) {
+		this.modelAddLine = modelAddLine;
 		return this;
 	}
 	

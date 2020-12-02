@@ -5,6 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!-- 所有的 css & js 资源 -->
+<#if cfg.webLibImportWay == 1 >
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
 		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
@@ -12,6 +13,16 @@
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
+</#if>
+<#if cfg.webLibImportWay == 2 >
+		<link rel="stylesheet" href="../../static/kj/element-ui/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="../../static/kj/vue.min.js"></script>
+		<script src="../../static/kj/element-ui/index.js"></script>
+		<script src="../../static/kj/jquery.min.js"></script>
+		<script src="../../static/kj/layer/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+</#if>
 	</head>
 	<body>
 		<div class="vue-box" style="display: none;" :style="'display: block;'">
@@ -23,9 +34,11 @@
 <#list t.getTallList() as c>
 	<#if c.type == 3>
 	<#elseif c.istx('no-s')>
+	<#elseif c.istx('logic-delete')>
 	<#elseif c.isFoType('img', 'audio', 'video', 'file')>
 	<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
+	<#elseif c.isFoType('time')>
 	<#elseif c.isFoType('text', 'textarea', 'richtext', 'no')>
 					<div class="c-item">
 						<label class="c-label">${c.columnComment3}：</label>
@@ -100,10 +113,11 @@
 					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
 				</div>
 				<!-- ------------- 数据列表 ------------- -->
-				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
+				<el-table class="data-table" ref="data-table" :data="dataList" size="small"<#if t.hasFt('tree')> row-key="${t.primaryKey.fieldName}" border @expand-change="sa.f5TableHeight()"</#if><#if t.hasFt('tree-lazy')> row-key="${t.primaryKey.fieldName}" border lazy :load="loadChildren" @expand-change="sa.f5TableHeight()"</#if>>
 					<el-table-column type="selection" width="45px"></el-table-column>
 <#list t.tallList as c>
 	<#if c.istx('no-show')>
+	<#elseif c.foType == 'logic-delete'>
 	<#elseif c.istx('click')>
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
@@ -112,16 +126,35 @@
 							</el-link>
 						</template>
 					</el-table-column>
-	<#elseif c.isFoType('text', 'textarea', 'num', 'fk-s', 'fk-p')>
+	<#elseif c.istx('switch')>
+					<el-table-column label="${c.columnComment3}">
+						<template slot-scope="s">
+							<el-switch v-model="s.row.${c.fieldName}" :active-value="${c.jvKeyList[0]}" :inactive-value="${c.jvKeyList[1]}" @change="update${c.fieldNameFnCat}(s.row)" inactive-color="#ff4949" style="vertical-align: top;"></el-switch>
+							<span style="color: #999;" v-if="s.row.status == ${c.jvKeyList[0]}">${c.jvList[c.jvKeyList[0]]}</span>
+							<span style="color: #999;" v-if="s.row.status == ${c.jvKeyList[1]}">${c.jvList[c.jvKeyList[1]]}</span>
+						</template>
+					</el-table-column>
+	<#elseif c.istx('fast-update')>
+					<el-table-column label="${c.columnComment3}">
+						<template slot-scope="s">
+							<span>{{s.row.${c.fieldName}}}</span>
+							<el-button type="text" size="small" @click="update${c.fieldNameFnCat}(s.row)">改</el-button>
+						</template>
+					</el-table-column>
+	<#elseif c.isFoType('text', 'textarea', 'fk-s', 'fk-p')>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
+	<#elseif c.isFoType('num')>
+					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" class-name="tc-num"></el-table-column>
 	<#elseif c.foType == 'richtext'>
-					<el-table-column label="${c.columnComment3}" min-width="150px">
+					<el-table-column label="${c.columnComment3}" show-overflow-tooltip>
 						<template slot-scope="s"><span>{{sa.maxLength(sa.text(s.row.${c.fieldName}), 100)}}</span></template>
 					</el-table-column>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s"><p style="min-width: 120px;">{{sa.forDate(s.row.${c.fieldName}, 2)}}</p></template>
+					<el-table-column label="${c.columnComment3}" class-name="tc-date">
+						<template slot-scope="s">{{sa.forDate(s.row.${c.fieldName}, 2)}}</template>
 					</el-table-column>
+	<#elseif c.isFoType('time')>
+					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" class-name="tc-date"></el-table-column>
 	<#elseif c.foType == 'img'>
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
@@ -154,6 +187,12 @@
 							<span v-else>无</span>
 						</template>
 					</el-table-column>
+	<#elseif c.foType == 'link'>
+					<el-table-column label="${c.columnComment3}">
+						<template slot-scope="s">
+							<el-link type="primary" :href="s.row.${c.fieldName}" target="_blank">{{s.row.${c.fieldName}}}</el-link>
+						</template>
+					</el-table-column>
 	<#elseif c.foType == 'enum'>
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
@@ -166,10 +205,13 @@
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
 	</#if>
 </#list>
-					<el-table-column label="操作" width="240px">
+					<el-table-column label="操作" fixed="right" <#if t.hasFt('tree', 'tree-lazy')> width="320px"<#else> width="240px"</#if>>
 						<template slot-scope="s">
 							<el-button class="c-btn" type="success" icon="el-icon-view" @click="get(s.row)">查看</el-button>
 							<el-button class="c-btn" type="primary" icon="el-icon-edit" @click="update(s.row)">修改</el-button>
+<#if t.hasFt('tree', 'tree-lazy')>
+							<el-button class="c-btn" type="primary" icon="el-icon-plus" @click="addChildren(s.row)">添加子级</el-button>
+</#if>
 							<el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
 						</template>
 					</el-table-column>
@@ -181,7 +223,11 @@
 						:current-page.sync="p.pageNo" 
 						:page-size.sync="p.pageSize" 
 						:total="dataCount" 
+<#if t.hasFt('tree')>
+						:page-sizes="[1000]" 
+<#else>
 						:page-sizes="[1, 10, 20, 30, 40, 50, 100, 1000]" 
+</#if>
 						@current-change="f5()" 
 						@size-change="f5()">
 					</el-pagination>
@@ -194,7 +240,12 @@
 				data: {
 					p: { // 查询参数  
 				<#list t.getT1List() as c>
+					<#if c.getFlag() == 'tree-parent-id' && t.hasFt('tree-lazy')>
+						${c.fieldName}: sa.p('${c.fieldName}', ${t.getFt('tree-lazy').top}),		// ${c.columnComment} 
+					<#elseif c.isFoType("date", "date-create", "date-update", "time", "img", "img-list", "audio", "audio-list", "video", "video-list", "file", "file-list", "logic-delete")>
+					<#else>
 						${c.fieldName}: '',		// ${c.columnComment} 
+					</#if>
 				</#list>
 						pageNo: 1,		// 当前页 
 						pageSize: 10,	// 页大小 
@@ -209,12 +260,32 @@
 				methods: {
 					// 刷新
 					f5: function() {
+<#if t.hasFt('tree')>
+						sa.ajax('/${t.mkNameBig}/getTree', sa.removeNull(this.p), function(res) {
+							this.dataList = res.data; // 数据
+							this.dataCount = res.dataCount; // 数据总数 
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
+<#else>
 						sa.ajax('/${t.mkNameBig}/getList', sa.removeNull(this.p), function(res) {
 							this.dataList = res.data; // 数据
 							this.dataCount = res.dataCount; // 数据总数 
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this));
+</#if>
 					},
+<#if t.hasFt('tree-lazy')>
+					// 加载子节点 
+					loadChildren: function(tree, treeNode, resolve) {
+						var p2 = sa.copyJSON(sa.removeNull(this.p));
+						p2.pageSize = 100;
+						p2.${t.getTreeFkey()} = tree.${t.getTreeIdkey()};
+						sa.ajax('/${t.mkNameBig}/getList', p2, function(res) {
+							resolve(res.data);
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
+					},
+</#if>
 					// 查看
 					get: function(data) {
 						sa.showIframe('数据详情', '${t.kebabName}-info.html?id=' + data.id, '950px', '90%');
@@ -235,13 +306,28 @@
 					add: function(data) {
 						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1', '900px', '90%');
 					},
+<#if t.hasFt('tree', 'tree-lazy')>
+					// 新增子级
+					addChildren: function(data) {
+						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1&${t.getTreeFkey()}=' + data.${t.getTreeIdkey()}, '900px', '90%');
+	<#if t.hasFt('tree-lazy')>
+	</#if>
+					},
+</#if>
 					// 删除
 					del: function(data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
 							sa.ajax('/${t.mkNameBig}/delete?id=' + data.${t.primaryKey.fieldName}, function(res) {
+<#if t.hasFt('tree')>
+								this.f5();
+<#elseif t.hasFt('tree-lazy')>
+								this.dataList = [];
+								this.f5();
+<#else>
 								sa.arrayDelete(this.dataList, data);
 								sa.ok('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
+</#if>
 							}.bind(this))
 						}.bind(this));
 					},
@@ -256,12 +342,48 @@
 						// 提交删除 
 						sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
 							sa.ajax('/${t.mkNameBig}/deleteByIds', {ids: ids.join(',')}, function(res) {
+<#if t.hasFt('tree')>
+								this.f5();
+<#elseif t.hasFt('tree-lazy')>
+								this.dataList = [];
+								this.f5();
+<#else>
 								sa.arrayDelete(this.dataList, selection);
 								sa.ok('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
+</#if>
 							}.bind(this))
 						}.bind(this));
 					},
+			<#list t.getTallListByTxKey('switch') as c>
+					// 改 - ${c.columnComment}
+					update${c.fieldNameFnCat}: function(data) {
+						// 声明变量记录是否成功 
+						var isOk = false;	
+						var oldValue = data.${c.fieldName};
+						var ajax = sa.ajax('/${t.mkNameBig}/update${c.fieldNameFnCat}', {id: data.${t.primaryKey.fieldName}, value: data.${c.fieldName}}, function(res) {
+							isOk = true;
+							sa.msg('修改成功');
+						}.bind(this));
+						// 如果未能修改成功, 则回滚 
+						$.when(ajax).done(function() {
+							if(isOk == false) {
+								data.status = oldValue; 
+							}
+						})
+					},
+			</#list>
+			<#list t.getTallListByTxKey('fast-update') as c>
+					// 改 - ${c.columnComment}
+					update${c.fieldNameFnCat}: function(data) {
+						sa.prompt('请输入${c.columnComment}', function(value, index){
+							sa.ajax('/${t.mkNameBig}/update${c.fieldNameFnCat}', {id: data.${t.primaryKey.fieldName}, value: value}, function(res){
+								data.${c.fieldName} = value;
+								sa.ok2('修改成功');
+							})
+						});
+					},
+			</#list>
 				},
 				created: function() {
 					this.f5();

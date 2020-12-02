@@ -185,4 +185,8 @@ input::-webkit-inner-spin-button {
 .del-rr{color: red !important; cursor: pointer; margin-left: 0.5em; vertical-align: middle;}
 /* .del-rr:hover{text-decoration: underline;} */
 
-
+/* ---- 你可以在此处定制全局的字段风格 ---- */
+/* .tc-num{font-weight: bold;} */
+.tc-num{color: blue;}
+/* .tc-date{color: blue;} */
+.data-table .el-link--inner{font-weight: bold;}

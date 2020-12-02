@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pj.current.satoken.AuthConst;
 import com.pj.project4sp.SP;
 import com.pj.utils.sg.AjaxJson;
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.stp.StpUtil;
 
@@ -61,16 +61,18 @@ public class SpApilogControlle {
 		List<SpApilog> list = spApilogMapper.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
 	}
-	
-	// 测试  
-	@RequestMapping("tt")
-	AjaxJson tt(int a) { 
-		System.out.println("controller");
-		if(a == 1) {
-			throw new RuntimeException("自定义异常");
-		}
-		return AjaxJson.getSuccess();
+
+
+
+	// 统计 
+	@RequestMapping("staBy")
+	AjaxJson staBy() { 
+		StpUtil.checkPermission(AuthConst.p_apilog_list);	// 鉴权 
+		SoMap so = SoMap.getRequestSoMap();
+		SoMap data = spApilogMapper.staBy(so);
+		return AjaxJson.getSuccessData(data);
 	}
+	
 
 	
 	

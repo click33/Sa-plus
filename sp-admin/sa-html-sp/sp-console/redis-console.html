@@ -99,7 +99,7 @@
 					</el-button>
 				</div>
 				<div style="height: 10px;"></div>
-				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
+				<el-table class="data-table" ref="data-table" :data="dataListShow" size="small">
 					<!-- <el-table-column label="键"></el-table-column> -->
 					<el-table-column type="selection" width="45px"></el-table-column>
 					<el-table-column label="键">
@@ -129,9 +129,9 @@
 						:current-page.sync="p.pageNo" 
 						:page-size.sync="p.pageSize" 
 						:total="dataCount" 
-						:page-sizes="[1000]" 
-						@current-change="f5()" 
-						@size-change="f5()">
+						:page-sizes="[1, 10, 20, 50, 100, 1000]" 
+						@current-change="f5ByPage()" 
+						@size-change="f5ByPage()">
 					</el-pagination>
 				</div>
 			</div>
@@ -146,7 +146,7 @@
 					p: { // 查询参数 
 						k: '',
 						pageNo: 1,		// 当前页 
-						pageSize: 1000,	// 页大小 
+						pageSize: 10,	// 页大小 
 						sortType: 0	// 排序方式 
 					},
 					isLike: true,	// 是否为模糊匹配
@@ -160,12 +160,27 @@
 						uptime_in_seconds_str: '0', // redis 已经启动的时间 
 					},
 					dataList: [],
+					dataListShow: [],
 				},
 				methods: {
+					// 根据分页信息显示出来
+					f5ByPage: function() {
+						var dataListShow = [];
+						var start = (this.p.pageNo - 1) * this.p.pageSize;
+						var end = this.p.pageNo * this.p.pageSize;
+						for (var i = start; i < end; i++) {
+							if(i >= this.dataList.length) {
+								break;
+							}
+							dataListShow.push(this.dataList[i]);
+						}
+						this.dataListShow  = dataListShow;
+						sa.f5TableHeight();		// 刷新表格高度 
+					},
 					// 查询key列表 
 					f5: function() {
 						let k = this.p.k;
-						if(this.isLike) {
+						if(this.isLike && k != '') {
 							k = '*' + k + '*';
 						}
 						sa.ajax('/RedisConsole/getKeys', {k: k}, function(res) {
@@ -177,20 +192,16 @@
 									is_show: false,	// 是否已经显示详情 
 									ttl: '未加载',			// 过期时间 
 								})
-								if(i > 1000) {
-									sa.msg('key值总数：' + res.data.length + '，为避免卡顿，列表最大显示数目为1000条');
-									break;
-								}
 							}
 							this.dataList = dataList;
+							this.f5ByPage();
 							this.dataCount = this.dataList.length;
-							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this), {
 							success501: function(res) {
 								sa.msg(res.msg);
 								this.dataList = [];
+								this.f5ByPage();
 								this.dataCount = 0;
-								sa.f5TableHeight();	// 刷新表格高度
 							}.bind(this)
 						}); 
 					},
@@ -204,15 +215,13 @@
 							if(is_f5_keys === false) {
 								return;
 							}
-							// 小于等于1000直接查询，否则提示一下 
-							if(this.preData.keys_count <= 1000) {
-								this.f5();
-							} else {
-								var tipStr = 'key值数量已达' + this.preData.keys_count + '，继续检索可能会严重影响系统性能，是否继续加载？(您可以增加筛选条件缩短记录总数)';
+							// 如果超过了最大值，则提示一下
+							if(res.data.isGtMax) {
+								var tipStr = 'key值数量已达' + this.preData.keys_count + '，为了避免卡顿已取消返回结果列表(您可以增加筛选条件缩短记录总数)';
 								tipStr = '<b style="color: red;">' + tipStr + '</b>';
-								sa.confirm(tipStr, function(res) {
-									this.f5();
-								}.bind(this))
+								sa.alert(tipStr);
+							} else {
+								this.f5();
 							}
 						}.bind(this)); 
 					},
@@ -318,11 +327,11 @@
 				// console.log('转换时间:', daysRound + '天', hoursRound + '时', minutesRound + '分', seconds + '秒');
 				// var time = hoursRound + ':' + minutesRound + ':' + seconds
 				// return time;
-				if(daysRound > 1) {
+				if(daysRound >= 1) {
 					return daysRound + '天' + hoursRound + '小时';
-				} else if(hoursRound > 1) {
+				} else if(hoursRound >= 1) {
 					return hoursRound + '小时' + hoursRound + '分';
-				} else if(minutesRound > 1) {
+				} else if(minutesRound >= 1) {
 					return minutesRound + '分' + seconds + '秒';
 				} else {
 					return seconds + '秒';

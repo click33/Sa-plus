@@ -16,7 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.sg.AjaxError;
+import com.pj.utils.so.SoMap;
 
 
 /**
@@ -28,9 +29,11 @@ public class RedisConsoleUtil {
 	
 	static String db_n;
 
+	//默认超时时间，单位周,此为一周
+	public static long ttl = 24* 7;	
 
-	public static long ttl = 24* 7;	//默认超时时间，单位周,此为一周
-
+	// 最大加载数量
+	static long loadMax = 10000;
 
 //	// 对象专用
 //	public static RedisTemplate<String, Object> redisTemplate;
@@ -68,6 +71,7 @@ public class RedisConsoleUtil {
 		so.set("used_memory_human", map.get("used_memory_human"));	// 已经占用内存数量 
 		so.set("used_memory_peak_human", map.get("used_memory_peak_human"));	// 内存消耗峰值 
 		so.set("uptime_in_seconds", map.get("uptime_in_seconds"));	// redis 已经启动的秒数 
+		so.set("isGtMax", so.getLong("keys_count") > loadMax);	// 是否已经超过了最大值 
 		
 		return so;
 	}
@@ -82,9 +86,11 @@ public class RedisConsoleUtil {
 			k = "*";
 		}
 		
-		// 如果小于1万，直接返回 
-		long max = 10000;
+		// 检查是否超过上限 
 		Set<String> keys_set = stringRedisTemplate.keys(k);
+		AjaxError.throwBy(keys_set.size() > loadMax, 501, "key值数量超" + loadMax + "<br/>为性能考虑无法返回数据，请更换筛选条件");
+		
+		// 排序
 		List<String> keys = new ArrayList<String>();
 		keys.addAll(keys_set);
 		
@@ -97,24 +103,8 @@ public class RedisConsoleUtil {
   
             }  
         });
-		
-		//  如果小于一万，则只返回一万 
-		if(keys.size() <= max) {
-			return keys;
-		}
-		
-		//  如果大于一万，则只返回一万 
-		int i = 0;
-		List<String> keys2 = new ArrayList<String>();
-		for (String key : keys) {
-			keys2.add(key);
-			i++;
-			if(i >= max) {
-				break;
-			}
-		}
-		
-		return keys2;
+
+		return keys;
 	}
 
 

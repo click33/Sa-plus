@@ -13,6 +13,8 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.regex.Pattern;
 
+import cn.hutool.core.util.IdUtil;
+
 /**
  * 最nb的工具类
  * @author kong
@@ -269,6 +271,13 @@ public class NbUtil {
 		return Double.toString(((Math.random()*9+1)*100000)).substring(0, 6);
 	}
     
+	
+	// 返回雪花算法id
+	public static String getSnowflakeId() {
+		return IdUtil.getSnowflake(1, 1).nextIdStr();
+	}
     
+	
+	
 	
 }

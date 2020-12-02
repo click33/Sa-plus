@@ -2,12 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pj.project4sp.public4mapper.PublicMapper">
 
-
-
+	<!-- ======================== 一些工具方法 ======================== -->
+	
 	<!-- 返回上一句SQL插入的自增主键值 -->
 	<select id="getPrimarykey" resultType="long">
 		SELECT @@identity 
 	</select>
+	
+	
+	<!-- ======================== 新增SQL相关 ======================== -->
+	
+	
+	
+	<!-- ======================== 删除SQL相关 ======================== -->
 	
 	<!-- 删除一条记录，指定表名，id -->
 	<delete id="deleteById">
@@ -38,6 +45,8 @@
 	</delete>
 	
 	
+	<!-- ======================== 修改SQL相关 ======================== -->
+	
 	<!-- 指定表的指定字段加num（可以小于0 ）,根据指定id -->
 	<update id="columnAdd">
 		update ${tableName} set 
@@ -60,6 +69,16 @@
 		update ${tableName} set 
 		${columnName} = #{value} 
 		where id = #{id} 
+	</update>
+
+	<!-- 指定表的指定字段更新为指定值,根据指定id列表 -->
+	<update id="updateColumnByIds">
+		update ${tableName} set 
+		${columnName} = #{value} 
+		where id in 
+		<foreach collection="ids" item="id" open="(" separator="," close=")">
+			#{id}
+		</foreach>
 	</update>
 
 	<!-- 指定表的指定字段更新为指定值, 根据指定列的指定值 -->
@@ -88,7 +107,8 @@
 	</update>
 	
 	
-	
+	<!-- ======================== 查询SQL相关 ======================== -->
+
 	<!-- 获取指定表的指定字段值,根据id值 -->
 	<select id="getColumnById" resultType="String">
 		select ${columnName} from ${tableName} 
@@ -107,13 +127,31 @@
 		where ${whereName} = #{whereValue} 
 	</select>
 
-
 	<!-- 获取指定表的指定字段值列表,并转化为long, 根据指定条件(whereName=whereValue) -->
 	<select id="getColumnListToLongByWhere" resultType="long">
 		select ${columnName} from ${tableName} 
 		where ${whereName} = #{whereValue} 
 	</select>
 
+
+	<!-- ======================== 查询集合SQL相关 ======================== -->
+
+	<!-- 获取指定表的全部字段全部数据 -->
+	<select id="getListMap" resultType="somap">
+		select * from ${tableName} 
+	</select>
+
+	<!-- 获取指定表的全部字段全部数据转化为Map, 根据指定条件(whereName=whereValue) -->
+	<select id="getListMapByWhere" resultType="somap">
+		select * from ${tableName} 
+		where ${whereName} = #{whereValue} 
+	</select>
+
+	<!-- 获取指定表的全部字段全部数据转化为Map, 根据指定条件(id=id) -->
+	<select id="getListMapById" resultType="somap">
+		select * from ${tableName} 
+		where id = #{id} 
+	</select>
 
 	
 

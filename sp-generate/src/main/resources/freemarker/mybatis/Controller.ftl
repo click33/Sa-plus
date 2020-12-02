@@ -54,7 +54,11 @@ public class ${t.mkNameBig}Controller {
 	public AjaxJson deleteByIds(){
 <#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
 		List<Long> ids = SoMap.getRequestSoMap().getListByComma("ids", long.class); 
-		int line = SP.publicMapper.deleteByIds("${t.tableName}", ids);
+<#if t.hasFo("logic-delete")>
+		int line = SP.publicMapper.updateColumnByIds(${t.modelName}.TABLE_NAME, "${t.getDbColumnByFoType('logic-delete').columnName}", ${t.getDbColumnByFoType('logic-delete').tx.no}, ids);
+<#else>
+		int line = SP.publicMapper.deleteByIds(${t.modelName}.TABLE_NAME, ids);
+</#if>
 		return AjaxJson.getByLine(line);
 	}
 	
@@ -78,10 +82,39 @@ public class ${t.mkNameBig}Controller {
 	@${cfg.apiMappingWayString}("getList")
 	public AjaxJson getList() { 
 		SoMap so = SoMap.getRequestSoMap();
+<#if t.hasFo("logic-delete")>		so.set("${t.getDbColumnByFoType('logic-delete').fieldName}", ${t.getDbColumnByFoType('logic-delete').tx.yes});
+</#if>
 		List<${t.modelName}> list = ${t.varName}Mapper.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
 	}
 	
+<#if t.hasFt('tree') >
+	/** 查集合 (整个表数据转化为tree结构返回) */  
+	@${cfg.apiMappingWayString}("getTree")
+	public AjaxJson getTree() { 
+		// 获取记录 
+		SoMap so = SoMap.getRequestSoMap();
+<#if t.hasFo("logic-delete")>		so.set("${t.getDbColumnByFoType('logic-delete').fieldName}", ${t.getDbColumnByFoType('logic-delete').tx.yes});
+</#if>
+		List<${t.modelName}> list = ${t.varName}Mapper.getList(so);
+		// 转为tree结构，并返回 
+		List<SoMap> listMap = SoMap.getSoMapByList(list);
+		List<SoMap> listTree = SoMap.listToTree(listMap, "${t.getTreeIdkey()}", "${t.getTreeFkey()}", "${t.getTreeCkey()}");
+		return AjaxJson.getPageData(Long.valueOf(listMap.size()), listTree);
+	}
+</#if>
+	
+<#list t.getTallListByTxKey('switch', 'fast-update') as c>
+	/** 改 - ${c.columnComment} */  
+	@${cfg.apiMappingWayString}("update${c.fieldNameFnCat}")
+<#if cfg.saTokenAuthWay == 2 >	@SaCheckPermission(${t.modelName}.PERMISSION_CODE)${cfg.line}</#if><#rt>
+	public AjaxJson update${c.fieldNameFnCat}(${t.primaryKey.fieldType} id, ${c.fieldType} value){
+<#if cfg.saTokenAuthWay == 1 >		StpUtil.checkPermission(${t.modelName}.PERMISSION_CODE);${cfg.line}</#if><#rt>
+		int line = SP.publicMapper.updateColumnById(${t.modelName}.TABLE_NAME, "${c.columnName}", value, id);
+		return AjaxJson.getByLine(line);
+	}
+	
+</#list>
 	
 	// ------------------------- 前端接口 -------------------------
 	

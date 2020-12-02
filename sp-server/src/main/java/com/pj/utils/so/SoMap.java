@@ -1,6 +1,7 @@
 package com.pj.utils.so;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-11-23 新增has方法
+ * <p>最新：2020-12-1 新增部分构造方法
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -295,13 +296,17 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	    for (Field field : fields) {
 	        try{
 	            field.setAccessible(true);
-	            this.set(field.getName(), field.get(field));
+	            boolean isStatic = Modifier.isStatic(field.getModifiers());
+	            if(!isStatic) {
+		            this.set(field.getName(), field.get(model));
+	            }
 	        }catch (Exception e){
 	        	throw new RuntimeException(e);
 	        }
 	    }
 		return this;
 	}
+
 
 	
 	// ============================= 删值 =============================
@@ -374,6 +379,20 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return new SoMap().setMap(map);
 	}
 
+	/** 将一个对象集合解析成为SoMap */
+	public static SoMap getSoMapByModel(Object model) {
+		return SoMap.getSoMap().setModel(model);
+	}
+	
+	/** 将一个对象集合解析成为SoMap集合 */
+	public static List<SoMap> getSoMapByList(List<?> list) {
+		List<SoMap> listMap = new ArrayList<SoMap>();
+		for (Object model : list) {
+			listMap.add(getSoMapByModel(model));
+		}
+		return listMap;
+	}
+	
 	/** 克隆指定key，返回一个新的SoMap */
 	public SoMap cloneKeys(String... keys) {
 		SoMap so = new SoMap();
@@ -619,6 +638,51 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	
 
 	// ============================= 工具方法 =============================
+	
+
+	/**
+	 * 将一个一维集合转换为树形集合 
+	 * @param list         集合
+	 * @param idKey        id标识key
+	 * @param parentIdKey  父id标识key
+	 * @param childListKey 子节点标识key
+	 * @return 转换后的tree集合 
+	 */
+	public static List<SoMap> listToTree(List<SoMap> list, String idKey, String parentIdKey, String childListKey) {
+		// 声明新的集合，存储tree形数据 
+		List<SoMap> newTreeList = new ArrayList<SoMap>();
+		// 声明hash-Map，方便查找数据 
+		SoMap hash = new SoMap();
+		// 将数组转为Object的形式，key为数组中的id 
+		for (int i = 0; i < list.size(); i++) {
+			SoMap json = (SoMap) list.get(i);
+			hash.put(json.getString(idKey), json);
+		}
+		// 遍历结果集
+		for (int j = 0; j < list.size(); j++) {
+			// 单条记录
+			SoMap aVal = (SoMap) list.get(j);
+			// 在hash中取出key为单条记录中pid的值
+			SoMap hashVP = (SoMap) hash.get(aVal.get(parentIdKey, "").toString());
+			// 如果记录的pid存在，则说明它有父节点，将她添加到孩子节点的集合中
+			if (hashVP != null) {
+				// 检查是否有child属性，有则添加，没有则新建 
+				if (hashVP.get(childListKey) != null) {
+					@SuppressWarnings("unchecked")
+					List<SoMap> ch = (List<SoMap>) hashVP.get(childListKey);
+					ch.add(aVal);
+					hashVP.put(childListKey, ch);
+				} else {
+					List<SoMap> ch = new ArrayList<SoMap>();
+					ch.add(aVal);
+					hashVP.put(childListKey, ch);
+				}
+			} else {
+				newTreeList.add(aVal);
+			}
+		}
+		return newTreeList;
+	}
 	
 	
 

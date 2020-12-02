@@ -101,8 +101,7 @@ INSERT INTO `sp_cfg`(`id`, `cfg_name`, `cfg_value`, `remarks`) VALUES (2, 'serve
 -- 如果此段脚本执行报错，请将 datetime(3) 改为 datetime 再次执行
 drop table if exists sp_apilog; 
 CREATE TABLE `sp_apilog` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '记录id',
-  `req_id` varchar(50) NOT NULL COMMENT '请求id',
+  `id` bigint(50) NOT NULL AUTO_INCREMENT COMMENT '请求id',
   `req_ip` varchar(100) DEFAULT NULL COMMENT '客户端ip',
   `req_api` varchar(512) DEFAULT NULL COMMENT '请求api',
   `req_parame` text COMMENT '请求参数',
@@ -117,8 +116,7 @@ CREATE TABLE `sp_apilog` (
   `start_time` datetime(3) DEFAULT NULL COMMENT '请求开始时间',
   `end_time` datetime(3) DEFAULT NULL COMMENT '请求结束时间',
   `cost_time` bigint(20) DEFAULT NULL COMMENT '花费时间，单位ms',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `req_id` (`req_id`) USING BTREE
+  PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='api请求记录表';
 
 

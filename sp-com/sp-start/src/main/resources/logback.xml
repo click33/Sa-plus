@@ -4,13 +4,13 @@
 	xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd">
 	
 	<!-- 定义日志打印的根目录，不同的项目之间一般只用改这个属性值就够了 -->
-	<property name="LOG_HOME" value="/log/sp-com-start" />
+	<property name="LOG_HOME" value="/log/sp-server" />
 	
 	<!-- 输出到控制台 -->
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<!-- 输出的格式 -->
 		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-			<pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level --> : %msg%n</pattern>
+			<pattern>%-25d{yyyy-MM-dd HH:mm:ss.SSS} %green(%-5level) %boldBlue(-->)  %msg%n</pattern>
 			<!-- <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%thread] --> <!-- %logger{50}: %msg%n</pattern> -->
 		</encoder>
 	</appender>

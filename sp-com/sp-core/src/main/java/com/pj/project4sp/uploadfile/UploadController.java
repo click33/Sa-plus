@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.pj.utils.sg.AjaxJson;
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
+
+import cn.dev33.satoken.util.SpringMvcUtil;
 
 /**
  * 文件上传控制器 (基于应用服务器的文件上传)
@@ -21,6 +23,7 @@ public class UploadController {
 	@RequestMapping("test")
 	public AjaxJson test(){
 		System.out.println(SoMap.getRequestSoMap());
+		System.out.println(SpringMvcUtil.getRequest().getHeader("name2"));
 		return AjaxJson.getSuccess();
 	}
 	

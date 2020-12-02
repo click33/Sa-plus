@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pj.gen.cfg.GenCfgManager;
 import com.pj.gen.model.TheString;
 import com.pj.gen.utils.SoMap;
 
@@ -33,7 +34,7 @@ public class SUtil {
 	
 	
 	// 将指定单词首字母大写;
-	static String wordFirstBig(String str) {
+	public static String wordFirstBig(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
 	}
 
@@ -320,6 +321,14 @@ public class SUtil {
 	
 	// =====================  业务方法  =========================   
 
+	// 指定字符串，根据驼峰是否下划线转驼峰 
+	public static String getHumpByCfg(String str) {
+		if(GenCfgManager.cfg.modelStyle == 2) {
+			return SUtil.wordEachBig_fs(str);
+		}
+		return str;
+	}
+	
 	// 输出指定字符串
 	static void print(String str){
 		System.out.print(str);

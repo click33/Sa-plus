@@ -15,10 +15,15 @@ import org.springframework.stereotype.Component;
 
 /**
  * 跨域过滤器
+ * @author kong
+ *
  */
 @Component
 public class CorsFilter implements Filter {
+	
+	static final String OPTIONS = "OPTIONS";
 
+	@Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
@@ -35,7 +40,7 @@ public class CorsFilter implements Filter {
 //        response.setHeader("Access-Control-Allow-Headers", "*");  // 允许的header参数 
         
         // 如果是预检请求，直接返回 
-		if(request.getMethod().equals("OPTIONS")) {	
+		if(OPTIONS.equals(request.getMethod())) {	
 			System.out.println("=======================浏览器发来了OPTIONS预检请求==========");
 			response.getWriter().print("");
 			return;	
@@ -44,8 +49,11 @@ public class CorsFilter implements Filter {
         //System.out.println("*********************************过滤器被使用**************************2233");
         chain.doFilter(req, res);
     }
+	@Override
     public void init(FilterConfig filterConfig) {}
-    public void destroy() {}
+
+	@Override
+	public void destroy() {}
 
 
 }

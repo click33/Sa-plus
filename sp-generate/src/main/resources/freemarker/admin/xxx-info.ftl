@@ -5,13 +5,24 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!-- 所有的 css js 资源 -->
+<#if cfg.webLibImportWay == 1 >
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
-		<link rel="stylesheet" href="../../static/sa.css"> 
+		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
+</#if>
+<#if cfg.webLibImportWay == 2 >
+		<link rel="stylesheet" href="../../static/kj/element-ui/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="../../static/kj/vue.min.js"></script>
+		<script src="../../static/kj/element-ui/index.js"></script>
+		<script src="../../static/kj/jquery.min.js"></script>
+		<script src="../../static/kj/layer/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+</#if>
 		<style type="text/css">
 			.c-panel .c-label{width: 8em;}
 		<#if t.hasFo('richtext') >
@@ -33,10 +44,16 @@
 					<el-form size="mini" v-if="m">
 <#list t.tallList as c>
 	<#if c.istx('no-show')>
+	<#elseif c.foType == 'logic-delete'>	
 	<#elseif c.foType == 'text'>	
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
 							<span>{{m.${c.fieldName}}}</span>
+						</div>
+	<#elseif c.foType == 'num'>	
+						<div class="c-item br">
+							<label class="c-label">${c.columnComment3}：</label>
+							<span class="tc-num">{{m.${c.fieldName}}}</span>
 						</div>
 	<#elseif c.foType == 'richtext'>
 						<div class="c-item br">
@@ -89,7 +106,12 @@
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
-							<span>{{sa.forDate(m.${c.fieldName}, 2)}}</span>
+							<span class="tc-date">{{sa.forDate(m.${c.fieldName}, 2)}}</span>
+						</div>
+	<#elseif c.isFoType('time')>
+						<div class="c-item br">
+							<label class="c-label">${c.columnComment3}：</label>
+							<span class="tc-num" class="tc-date">{{m.${c.fieldName}}}</span>
 						</div>
 	<#elseif c.foType == 'fk-1' || c.foType == 'fk-2'>
 					<#if c.isTx('showfk')>

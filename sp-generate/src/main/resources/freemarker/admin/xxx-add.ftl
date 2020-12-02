@@ -5,13 +5,24 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<!-- 所有的 css js 资源 -->
+<#if cfg.webLibImportWay == 1 >
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
-		<link rel="stylesheet" href="../../static/sa.css"> 
+		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
+</#if>
+<#if cfg.webLibImportWay == 2 >
+		<link rel="stylesheet" href="../../static/kj/element-ui/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="../../static/kj/vue.min.js"></script>
+		<script src="../../static/kj/element-ui/index.js"></script>
+		<script src="../../static/kj/jquery.min.js"></script>
+		<script src="../../static/kj/layer/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+</#if>
 <#if t.hasFo('img', 'audio', 'video', 'file', 'img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list', 'richtext') >
 	<#if cfg.fileUploadWay == 1 >
 		<script src="../../static/kj/upload-util.js"></script>
@@ -42,6 +53,12 @@
 					<el-form size="mini" v-if="m">
 <#list t.t12List as c>
 	<#if c.istx('no-add')>	
+	<#elseif c.foType == 'logic-delete'>	
+	<#elseif c.getFlag() == 'tree-parent-id'>	
+						<div class="c-item br" v-if="sa.p('${t.getTreeFkey()}', 'nof') == 'nof'">
+							<label class="c-label">${c.columnComment3}：</label>
+							<el-input size="mini" v-model="m.${c.fieldName}"></el-input>
+						</div>
 	<#elseif c.foType == 'text'>	
 						<div class="c-item br">
 							<label class="c-label">${c.columnComment3}：</label>
@@ -163,6 +180,11 @@
 						</div>
 	<#elseif c.isFoType('date-create', 'date-update')>
 						<!-- ${c.foType}字段： m.${c.fieldName} - ${c.columnComment3} -->
+	<#elseif c.foType == 'time'>
+						<div class="c-item br">
+							<label class="c-label">${c.columnComment3}：</label>
+							<el-time-picker v-model="m.${c.fieldName}" size="mini" value-format="HH:mm:ss"></el-time-picker>
+						</div>
 	<#elseif c.foType == 'fk-s'>
 				<#if c.istx('drop')>
 						<div class="c-item">
@@ -243,7 +265,9 @@
 					createModel: function() {
 						return {
 					<#list t.t1List as c>
-						<#if c.isFoType('no', 'date-create', 'date-update')>
+						<#if c.getFlag() == 'tree-parent-id'>
+							${c.fieldName}: sa.p('${c.fieldName}', '${t.getFt('tree', 'tree-lazy').top}'),		// ${c.columnComment} 
+						<#elseif c.isFoType('no', 'logic-delete', 'date-create', 'date-update')>
 							// ${c.fieldName}: '',		// ${c.columnComment} 
 						<#elseif c.isFoType('img-list', 'audio-list', 'video-list', 'file-list', 'img-video-list')>
 							${c.fieldName}: '',		// ${c.columnComment} 
@@ -260,7 +284,7 @@
 							var m = this.m;		// 获取 m对象 
 							
 					<#list t.t1List as c>
-						<#if c.isFoType('no', 'date-create', 'date-update')>
+						<#if c.istx('no-add') || c.isFoType('no', 'logic-delete', 'date-create', 'date-update')>
 							// sa.checkNull(m.${c.fieldName}, '请输入 [${c.columnComment3}]');
 						<#else>
 							sa.checkNull(m.${c.fieldName}, '请输入 [${c.columnComment3}]');
@@ -314,6 +338,9 @@
 						} else {
 							parent.app.f5();		// 刷新父页面列表
 							sa.closeCurrIframe();	// 关闭本页 
+<#if t.hasFt('tree-lazy')>
+							parent.sa.f5();		// 刷新父页面
+</#if>
 						}
 					}
 				},

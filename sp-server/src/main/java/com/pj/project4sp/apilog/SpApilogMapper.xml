@@ -7,10 +7,10 @@
 	<insert id="saveObj">
 		insert into 
 		sp_apilog (
-			req_id, req_ip, req_api, req_parame, req_type, req_token, req_header, user_id, admin_id, start_time,
+			id, req_ip, req_api, req_parame, req_type, req_token, req_header, user_id, admin_id, start_time,
 			res_code, res_msg, res_string, end_time, cost_time) 
 		values (
-			#{req_id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_type}, #{req_token}, #{req_header}, #{user_id}, #{admin_id}, #{start_time},
+			#{id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_type}, #{req_token}, #{req_header}, #{user_id}, #{admin_id}, #{start_time},
 			#{res_code}, #{res_msg}, #{res_string}, #{end_time}, #{cost_time}) 
 	</insert>
 	
@@ -18,8 +18,8 @@
 	<!-- 增 -->
 	<insert id="add">
 		insert into 
-		sp_apilog (req_id, req_ip, req_api, req_parame, req_token, user_id, admin_id, start_time) 
-		values (#{req_id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_token}, #{user_id}, #{admin_id}, now(3)) 
+		sp_apilog (id, req_ip, req_api, req_parame, req_token, user_id, admin_id, start_time) 
+		values (#{id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_token}, #{user_id}, #{admin_id}, now(3)) 
 	</insert>
 
 	<!-- 删 -->
@@ -42,7 +42,7 @@
 		res_string = #{res_string}, 
 		end_time = now(3), 
 		cost_time = #{cost_time} 
-		where req_id = #{req_id}
+		where id = #{id}
 	</update>
 	
 	<!-- ================================== 查询相关 ================================== -->
@@ -50,7 +50,6 @@
 	<!-- 通用映射 -->
 	<resultMap id="model" type="com.pj.project4sp.apilog.SpApilog">
 		<result property="id" column="id" />
-		<result property="req_id" column="req_id" />
 		<result property="req_ip" column="req_ip" />
 		<result property="req_api" column="req_api" />
 		<result property="req_parame" column="req_parame" />
@@ -76,36 +75,15 @@
 	<select id="getList" resultMap="model" >
 		<include refid="select_sql"></include>
 		where 1 = 1 
-		<if test=' this.isNotNull("id")  '>
-			and id = #{id} 
-		</if>
-		<if test=' this.isNotNull("req_id")  '>
-			and req_id = #{req_id} 
-		</if>
-		<if test=' this.isNotNull("req_token")  '>
-			and req_token = #{req_token} 
-		</if>
-		<if test=' this.isNotNull("req_ip")  '>
-			and req_ip = #{req_ip} 
-		</if>
-		<if test=' this.isNotNull("req_api")  '>
-			and req_api = #{req_api} 
-		</if>
-		<if test=' this.isNotNull("res_code")  '>
-			and res_code = #{res_code} 
-		</if>
-		<if test=' this.isNotNull("user_id")  '>
-			and user_id = #{user_id} 
-		</if>
-		<if test=' this.isNotNull("admin_id")  '>
-			and admin_id = #{admin_id} 
-		</if>
-		<if test=' this.isNotNull("s_time")  '>
-			and start_time &gt;= #{s_time} 
-		</if>
-		<if test=' this.isNotNull("e_time")  '>
-			and start_time &lt;= #{e_time} 
-		</if>
+		<if test=' this.isNotNull("id")  '>and id = #{id} </if>
+		<if test=' this.isNotNull("req_token") '>and req_token = #{req_token} </if>
+		<if test=' this.isNotNull("req_ip") '> and req_ip = #{req_ip} </if>
+		<if test=' this.isNotNull("req_api") '>and req_api = #{req_api} </if>
+		<if test=' this.isNotNull("res_code") '>and res_code = #{res_code} </if>
+		<if test=' this.isNotNull("user_id") '>and user_id = #{user_id} </if>
+		<if test=' this.isNotNull("admin_id") '>and admin_id = #{admin_id} </if>
+		<if test=' this.isNotNull("s_time") '>and start_time &gt;= #{s_time} </if>
+		<if test=' this.isNotNull("e_time") '>and start_time &lt;= #{e_time} </if>
 		order by 
 		<choose>
 			<when test='sort_type == 0'>id desc</when> 
@@ -113,6 +91,23 @@
 			<when test='sort_type == 2'>cost_time desc, id desc</when> 
 		 	<otherwise>id desc</otherwise>
 		 </choose>
+	</select>
+	
+	
+	
+	<!-- 统计 -->
+	<select id="staBy" resultType="somap">
+		select sum(cost_time) as cost_time_count from sp_apilog 
+		where 1 = 1 
+		<if test=' this.isNotNull("id")  '>and id = #{id} </if>
+		<if test=' this.isNotNull("req_token") '>and req_token = #{req_token} </if>
+		<if test=' this.isNotNull("req_ip") '> and req_ip = #{req_ip} </if>
+		<if test=' this.isNotNull("req_api") '>and req_api = #{req_api} </if>
+		<if test=' this.isNotNull("res_code") '>and res_code = #{res_code} </if>
+		<if test=' this.isNotNull("user_id") '>and user_id = #{user_id} </if>
+		<if test=' this.isNotNull("admin_id") '>and admin_id = #{admin_id} </if>
+		<if test=' this.isNotNull("s_time") '>and start_time &gt;= #{s_time} </if>
+		<if test=' this.isNotNull("e_time") '>and start_time &lt;= #{e_time} </if>
 	</select>
 
 

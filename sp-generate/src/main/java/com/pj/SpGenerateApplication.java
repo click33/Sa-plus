@@ -39,6 +39,7 @@ public class SpGenerateApplication {
 		GenCfgManager.cfg
 			.setProjectPath("E:/work/project-yun/sa-plus/")	// 总项目地址 (生成代码的路径) 
 	        .setServerProjectName("sp-server")				// 服务端 - 项目名称 
+//	        .setServerProjectName("sp-com/sp-core")			// 服务端 - 项目名称 (sp-com多模块版填此格式)
 	        .setCodePath("src/main/java/")					// 服务端代码 - 存放路径 
 	        .setPackagePath( "com.pj.project")				// 服务端代码 - 总包名 
 	        .setPackage_utils("com.pj.utils.sg.*")			// 服务端代码 - util类包地址 
@@ -48,10 +49,11 @@ public class SpGenerateApplication {
 	        .setApidocProjectName("sp-apidoc") 				// 接口文档 - 项目名称 
             .setApidocCodePath("project/")					// 接口文档 - 存放目录  
             .setFileUploadWay(1)			// 文件上传方式 (1=普通文件上传, 2=阿里云oss文件服务器[需要集成阿里云oss相关工具类]) 
-            .setModelVisitWay(2)			// 实体类的访问权限修饰符 (1=private, 2=public)  
-            .setModelDocWay(2)				// 实体类的注释形式 (1=行尾注释, 2=双星文档注释, 3=双星文档注释,并且追加空行)  
             .setModelStyle(2) 				// 实体类字段风格 (1=保留下划线, 2=下划线转驼峰 [如果打开下划线转驼峰，需采用resultMap手动映射模式，或打开yml配置文件的 map-underscore-to-camel-case=true 选项])
             .setResultMapWay(2) 			// resultMap映射模式  (1=自动模式, 2=手动模式)
+            .setModelVisitWay(2)			// 实体类的访问权限修饰符 (1=private, 2=public)  
+            .setModelDocWay(3)				// 实体类的注释形式 (1=行尾注释, 2=单行双星文档注释, 3=标准双星文档注释)  
+            .setModelAddLine(2) 			// 实体类的每个字段之间是否隔一个空行(1=是, 2=否)
             .setUtilDocWay(1) 				// util类的注释风格 (1=行尾位注释, 2=行上注释, 3=无注释) 
             .setPackageUnderlineTo("_")		// 将包名中的下划线强制转换成指定字符串，比如：$、2、4 或者空字符串""  
             .setApiMappingWay(1) 			// apiMapping模式  (1=@RequsetMapping, 2=@GetMapping, 3=@PostMapping) 
@@ -61,6 +63,7 @@ public class SpGenerateApplication {
 			.setMybatisPlus(false)			// 是否生成的代码遵循mybatis-plus风格(继承一些mp的特定父类)
 			.setOutFC(true)					// 是否输出FC.java工厂类 
 			.setDefaultMeunIcon("el-icon-folder-opened")	// 生成后台管理页面时，默认的菜单图标
+			.setWebLibImportWay(1) 			// 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)
 			.addTableAll()		// 添加要生成的表 (一次性添加所有表)
             .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
@@ -80,7 +83,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.22.0，更新于2020-11-25 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.23.0，更新于2020-12-2 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

@@ -11,8 +11,14 @@
 
 	<!-- 删 -->
 	<delete id="delete">
+<#if t.hasFo("logic-delete")>
+		update `${t.tableName}` 
+		set `${t.getDbColumnByFoType('logic-delete').columnName}` = ${t.getDbColumnByFoType('logic-delete').tx.no} 
+		where `${t.primaryKey.columnName}` = <#noparse>#</#noparse>{${t.primaryKey.fieldName}} 
+<#else>
 		delete from `${t.tableName}` 
 		where `${t.primaryKey.columnName}` = <#noparse>#</#noparse>{${t.primaryKey.fieldName}}
+</#if>
 	</delete>
 
 	<!-- 改 [G] -->

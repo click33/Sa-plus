@@ -16,8 +16,7 @@ public class SpApilog implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	private long id;		// 记录id 
-	private String req_id;		// 请求id 
+	private String id;		// 记录id 
 	private String req_ip;		// 客户端ip 
 	private String req_api;		// 请求api 
 	private String req_parame;		// 请求参数 
@@ -43,10 +42,10 @@ public class SpApilog implements Serializable {
 	public SpApilog() {}
 	
 	// 构造一个 save 实体类 
-	public SpApilog(String req_id, String req_ip, String req_api, String req_parame, String req_token, long user_id,
+	public SpApilog(String id, String req_ip, String req_api, String req_parame, String req_token, long user_id,
 			long admin_id) {
 		super();
-		this.req_id = req_id;
+		this.id = id;
 		this.req_ip = req_ip;
 		this.req_api = req_api;
 		this.req_parame = req_parame;
@@ -56,9 +55,9 @@ public class SpApilog implements Serializable {
 	}
 
 	// 构造一个 update 实体类 
-	public SpApilog(String req_id, int res_code, String res_msg, String res_string, int cost_time) {
+	public SpApilog(String id, int res_code, String res_msg, String res_string, int cost_time) {
 		super();
-		this.req_id = req_id;
+		this.id = id;
 		this.res_code = res_code;
 		this.res_msg = res_msg;
 		this.res_string = res_string;

@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.pj.utils.sg.SoMap;
+import com.pj.utils.so.SoMap;
 
 /**
  * Mapper: 系统角色表

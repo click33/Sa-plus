@@ -1,4 +1,4 @@
-package com.pj.current.global;
+package com.pj.project4sp.global;
 
 import java.sql.SQLException;
 

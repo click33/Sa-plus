@@ -1,4 +1,4 @@
-package com.pj.current.global;
+package com.pj.project4sp.global;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;

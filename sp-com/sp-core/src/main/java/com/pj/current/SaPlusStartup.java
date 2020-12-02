@@ -26,7 +26,7 @@ public class SaPlusStartup implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
     	 String ip = InetAddress.getLocalHost().getHostAddress();
-         String str = "\n------------- sa-plus (" + active + ") 启动成功 --by " + getNow() + " -------------\n" + 
+         String str = "\n------------- sa-plus (" + active + ") 启动成功 [com] --by " + getNow() + " -------------\n" + 
                  "\t- Local:   http://localhost:" + port + path + "\n" +
                  "\t- Local2:  http://127.0.0.1:" + port + path + "\n" +
                  "\t- Network: http://" + ip + ":" + port + path + "\n";

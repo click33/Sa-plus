@@ -1,7 +1,9 @@
 package com.pj.gen.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.pj.gen.SUtil;
@@ -54,7 +56,12 @@ public class DbColumn {
 	public String getGetset() { // 在get和set时应该是什么样子 [getset] 
 		return SUtil.getGetSet(getFieldName()) ;
 	}
-	
+	public String getFieldNameFnCat() {	// 在方法拼接时的字段名(首字母大写或者拼接下划线) [fieldNameFnCat] 
+		if(GenCfgManager.cfg.getModelStyle() == 2) {
+			return SUtil.wordFirstBig(this.getFieldName());	// 首字母大写
+		}
+		return "_" + this.getFieldName();		// 拼接下划线 
+	}
 
 		
 	
@@ -84,6 +91,9 @@ public class DbColumn {
 			else if(foType.equals("textarea") || foType.equals("d")) {	// 多行文本域 
 				this.foType = "textarea";
 			}
+			else if(foType.equals("richtext") || foType.equals("f")) {	// 富文本 
+				this.foType = "richtext";
+			}
 			else if(foType.equals("img")) {	// 单图片
 				this.foType = "img";
 			}
@@ -95,6 +105,9 @@ public class DbColumn {
 			}
 			else if(foType.equals("file")) {	// 单文件(任意类型)
 				this.foType = "file";
+			}
+			else if(foType.equals("link")) {	// 连接类型 
+				this.foType = "link";
 			}
 			else if(foType.equals("img-list") || foType.equals("imgList") || foType.equals("img_list")) {	// 多图片 
 				this.foType = "img-list";
@@ -123,8 +136,11 @@ public class DbColumn {
 				this.foType = "date-update";
 				this.fieldType = "Date";
 			}
-			else if(foType.equals("richtext") || foType.equals("f")) {	// 富文本
-				this.foType = "richtext";
+			else if(foType.equals("file-list") || foType.equals("fileList") || foType.equals("file_list")) {	// 多文件(任意类型)
+				this.foType = "file-list";
+			}
+			else if(foType.equals("time")) {	// 时间 - [时:分:秒]
+				this.foType = "time";
 			}
 			else if(foType.equals("enum") || foType.equals("j")) {	// 枚举 
 				this.foType = "enum";
@@ -150,6 +166,7 @@ public class DbColumn {
 								key = "'" + key + "'";
 							}
 							this.jvList.put(key, value);
+							this.jvKeyList.add(key);
 						} catch (Exception e2) {
 							System.err.println("枚举字段(" + this.dt.getTableName() + "." + this.columnName + ")"+")解析可能出错：" + e2.getMessage());
 						}
@@ -157,7 +174,12 @@ public class DbColumn {
 				}
 //					System.out.println(e_str);
 			}
-			else if(foType.equals("no")) {	// no 添加修改时 不展示 
+			else if(foType.equals("logic-delete") || foType.equals("lc-del")) {	// 逻辑删除标识 
+				this.foType = "logic-delete";
+				this.tx.setDefaultValue("yes", "1");
+				this.tx.setDefaultValue("no", "0");
+			}
+			else if(foType.equals("no")) {	// no 添加修改时 不展示 [此特性已经遗弃，不建议使用]
 				this.foType = "no";
 			}
 			else {	// 什么都不是，还是默认吧 
@@ -253,6 +275,15 @@ public class DbColumn {
 		this.jvList = jvList;
 	}
 
+	// 枚举所有取值的key 
+	private List<String> jvKeyList = new ArrayList<String>();	
+	public List<String> getJvKeyList() {
+		return jvKeyList;
+	}
+	public void setJvKeyList(List<String> jvKeyList) {
+		this.jvKeyList = jvKeyList;
+	}
+
 
 	// ---------- 当此列是一个fk-s-t时，此字段代表其对应外键的数量，
 	public int showCount = 0;
@@ -300,6 +331,7 @@ public class DbColumn {
 
 	// 特性Map 
 	/**
+	 * flag 	标记 
 	 * 在fk-s 连接外键时：
 	 * 		js=配置连接信息，或拆分为：
 	 * 			curr=这边的字段
@@ -352,6 +384,16 @@ public class DbColumn {
 		}
 		return true;
 	}
+
+	// key: 表示字段的标记 
+	public static final String key_flag = "fo_type";		
+	public String getFlag() {
+		return gtx(key_flag);
+	}
+	public void setFlag(String value) {
+		tx.set(key_flag, value);
+	}
+
 	
 	
 	// 写入link信息 
@@ -480,7 +522,11 @@ public class DbColumn {
 		if(tx.isNotNull("sql")) {
 			sql += tx.getString("sql");
 		} else {
-			sql += "select " + getFoType2() + "(" + tx.getString("ac", "*") + ") from " + tx.getString("jt") + " where ";
+			sql += "select " + getFoType2() + "(" + tx.getString("ac", "*") + ") from " + tx.getString("jt");
+			if(tx.getString("jt").equals(dt.getTableName())) {
+				sql += " temp_t";	// 如果里外表为同一张表，则追加别名 
+			}
+			sql += " where ";
 			// 如果声明了where 
 			if(tx.isNotNull("where")) {
 				sql += tx.getString("where");

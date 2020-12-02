@@ -40,5 +40,10 @@ public interface SpApilogMapper {
 	/** 查 - 集合（参数为null或0时默认忽略此条件） */
 	List<SpApilog> getList(SoMap so);
 
+	
+
+	/** 查 - 集合（参数为null或0时默认忽略此条件） */
+	SoMap staBy(SoMap so);
+
 
 }

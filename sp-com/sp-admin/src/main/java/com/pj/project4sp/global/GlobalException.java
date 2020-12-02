@@ -2,6 +2,7 @@ package com.pj.project4sp.global;
 
 import java.sql.SQLException;
 
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,13 +27,15 @@ public class GlobalException {
 	@ExceptionHandler
 	public AjaxJson handlerException(Exception e) {
 
-//    	System.out.println("全局异常");
-    	
 		// 打印堆栈，以供调试
 		e.printStackTrace(); 
 
     	// 记录日志信息
     	AjaxJson aj = null;
+		Throwable e2 = e.getCause();
+		
+		// ------------- 判断异常类型，提供个性化提示信息 
+		
     	// 如果是未登录异常 
 		if(e instanceof NotLoginException){	
 			aj = AjaxJson.getNotLogin();
@@ -47,25 +50,29 @@ public class GlobalException {
 			AjaxError ee = (AjaxError) e;
 			aj = AjaxJson.get(ee.getCode(), ee.getMessage());
 		}  
+		// 如果是SQLException，并且指定了hideSql，则只返回sql error 
+		else if((e instanceof SQLException || e2 instanceof SQLException) && SpCfgUtil.get_throw_out_sql() == false) {	
+			aj = AjaxJson.getError(e2.getMessage());
+			SpApilogUtil.endRequest(aj);	// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
+			return AjaxJson.getError("Sql Error").set("reqId", SpApilogUtil.getCurrReqId());
+		}
+		// 如果是redis连接异常 ( 由于redis连接异常，系统已经无法正常工作，所以此处需要立即返回 )
+		else if(e instanceof RedisConnectionFailureException) {	
+			aj = AjaxJson.getError("Redis异常，请检查连接信息");
+			aj.set("reqId", SpApilogUtil.getCurrReqId());
+			return aj;
+		}
 		// 普通异常输出：500 + 异常信息 
-		else {	
-			// 如果是SQLException，并且指定了hideSql，则只返回sql error 
-			Throwable e2 = e.getCause();
-			if((e instanceof SQLException || (e2 != null && e2 instanceof SQLException)) && SpCfgUtil.get_throw_out_sql() == false) {
-				aj = AjaxJson.getError(e2.getMessage());
-				SpApilogUtil.endRequest(aj);	// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
-				return AjaxJson.getError("sql error").set("req_id", SpApilogUtil.getCurrReqId());
-			} 
+		else {
 			aj = AjaxJson.getError(e.getMessage());
 		}
+		
 		// 插入到日志表 
 		SpApilogUtil.endRequest(aj);
 		
 		// 返回到前台 
-		aj.set("req_id", SpApilogUtil.getCurrReqId());
+		aj.set("reqId", SpApilogUtil.getCurrReqId());
 		return aj;
 	}
-	
-
 
 }

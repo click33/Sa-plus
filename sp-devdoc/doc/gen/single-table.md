@@ -51,7 +51,9 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 | 声明				 | 说明															| 详见		|
 | :--------			| :--------														| :--------	|
 | [text]			| 声明一个普通输入框，这是默认值，还可以写成 `[t]`、`[input]`   （`[text j=like]代表模糊查询`）			| 无		|
-| [no]			| 代表生成表单时忽略此字段										| 无		|
+| [textarea]		| 声明一个多行文本域											| 无		|
+| [richtext]		| 声明一个富文本字段，会生成富文本插件，还可以写成 `[f]`, 详情见下			| 无		|
+| [num]			| 声明数值输入字段												| 无		|
 | [img]			| 声明一个图片字段，会生成图片上传								| 无		|
 | [audio]			| 声明一个音频字段，会生成音频上传								| 无		|
 | [video]			| 声明一个视频字段，会生成视频上传								| 无		|
@@ -61,15 +63,16 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 | [video-list]		| 声明一个视频集合字段，会生成多视频上传，还可以写成 `[videoList]`、`[video_list]`	| 无		|
 | [file-list]		| 声明一个文件集合字段，会生成多文件上传，还可以写成 `[fileList]`、`[file_list]`	| 无		|
 | [img-video-list]		| 声明一个图片与视频混合的集合字段，还可以写成 `[imgVideoList]`、`[img_video_list]`	| 无		|
-| [richtext]		| 声明一个富文本字段，会生成富文本插件，还可以写成 `[f]`, 详情见下			| 无		|
-| [textarea]		| 声明一个多行文本域											| 无		|
-| [num]			| 声明数值输入字段												| 无		|
-| [enum]			| 声明一个枚举字段，具体语法请查看下方示例，还可以写成 `[j]`		| [enum](#-enmu-枚举字段)		|
+| [link]		| 声明一个超链接字段								| 无		|
 | [date]			| 声明一个日期字段												| 无		|
 | [date-create]	| 声明一个日期字段（数据创建日期）								| 无		|
 | [date-update]	| 声明一个日期字段（数据更新日期）								| 无		|
+| [time]		| 声明一个时间字段（时:分:秒）								| 无		|
+| [enum]			| 声明一个枚举字段，具体语法请查看下方示例，还可以写成 `[j]`		| [enum](#-enmu-枚举字段)		|
+| [logic-delete]		| 声明此表的逻辑删除字段，还可以简写成`[lc-del]`					| [logic-delete](#-logic-delete-逻辑删除)		|
 | ~~[fk-1]~~ 			| ~~声明一个外键~~ (已移除此特性，请查看表注释`fk-s`连接外键) 		| 无 |
 | ~~[fk-2]~~ 			| ~~声明一个外键~~ (已移除此特性，请查看表注释`fk-s`连接外键) 		| 无 |
+| ~~[no]~~			| ~~代表生成表单时忽略此字段~~	(已移除此特性，使用`[xxx not-add]`达到同样目的) 									| 无		|
 | --notp			| 此字段取消解析								| 无		|
 
 
@@ -81,19 +84,34 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 ``` js
 	`status` int(11) COMMENT '商品状态 (1=上架, 2=下架) [enum]',
 ```
+
 - 如果你的枚举取值为`String`类型，你需要指定dt属性：`[enum dt=string]`, 如下示例：
 ``` js
 	`status` varchar(20) COMMENT '商品状态 (on=上架, off=下架) [enum dt=string]',
 ```
+
 - 其还有两个附加属性，决定表单样式
 	- `s-type`：标注列表查询页生成的样式, 取值：1=普通单选, 2=单选文字, 3=单选按钮, 4=下拉选择，`默认值=2`
 	- `a-type`：标注添加修改页生成的样式, 取值同上，`默认值=3`
+	
 - 例如：
 ``` js
 	`sex` int(11) COMMENT '用户性别 (1=男, 2=女, 3=未知)[enum s-type=4, a-type=1]';
 ```
 表示：在列表页以下拉框显示,添加页以普通单选显示
 
+- 如果这个枚举字段只有两个值，你可以将其声明为开关字段 (会在列表中生成开关字段来修改值)
+``` js
+	`status` int(11) COMMENT '商品状态 (1=上架, 2=下架) [enum switch=true]',
+```
+
+
+##### - logic-delete 逻辑删除
+- 当一个表中含有`[logic-delete]`字段时，本表自动打开逻辑删除模式，其取值默认为 `(1=存在, 0=已被删除)`
+- 如需自定义数据取值，可用如下方式:
+``` js
+	`is_eff` int(11) COMMENT '是否有效 [logic-delete yes=1, no=0]',
+```
 
 
 

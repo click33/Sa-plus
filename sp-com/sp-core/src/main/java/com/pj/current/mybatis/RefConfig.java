@@ -1,5 +1,7 @@
 package com.pj.current.mybatis;
 
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,5 +21,11 @@ public class RefConfig {
 		return new MybatisMapperDynamicLoader(autof5);
 	}
 	
+
+	// 注入日志组件 （从yml文件中配置的方式，打包后有概率无法启动项目且无法解决，故用此方法注入自定义日志组件）
+	@Autowired
+	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
+		sqlSessionFactory.getConfiguration().setLogImpl(MybatisStdOutImpl.class);
+	}
 	
 }

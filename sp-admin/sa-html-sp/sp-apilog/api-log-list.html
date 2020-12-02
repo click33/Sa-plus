@@ -39,15 +39,12 @@
 					<el-form-item label="请求api：">
 						<el-input v-model="p.req_api" placeholder="API接口筛选"></el-input>
 					</el-form-item>
-					<el-form-item label="res状态：">
-						<el-input v-model="p.res_code" placeholder="状态码筛选"></el-input>
-					</el-form-item>
 					<el-form-item style="min-width: 0px;">
 						<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
 					</el-form-item>
 					<br>
-					<el-form-item label="请求id：">
-						<el-input v-model="p.req_id" placeholder="精确定位"></el-input>
+					<el-form-item label="请求token：">
+						<el-input v-model="p.req_token" placeholder="定向跟踪token"></el-input>
 					</el-form-item>
 					<el-form-item label="user_id：">
 						<el-input v-model="p.user_id" placeholder="定向跟踪用户"></el-input>
@@ -55,10 +52,10 @@
 					<el-form-item label="admin_id：">
 						<el-input v-model="p.admin_id" placeholder="定向跟踪用户"></el-input>
 					</el-form-item>
-					<el-form-item label="请求token：">
-						<el-input v-model="p.req_token" placeholder="定向跟踪token"></el-input>
-					</el-form-item>
 					<br>
+					<el-form-item label="res状态码：">
+						<el-input v-model="p.res_code" placeholder="状态码筛选"></el-input>
+					</el-form-item>
 					<el-form-item label="请求时间：">
 						<el-date-picker v-model="p.s_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始日期"></el-date-picker>
 						-
@@ -82,14 +79,15 @@
 					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
 					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
 					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByStartEnd()">范围删除</el-button>
+					<el-button size="mini" type="success" icon="el-icon-view" @click="f5StaData()">统计数据</el-button>
 				</div>
 				<!-- ------------- 数据列表 ------------- -->
 				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
 					<el-table-column type="selection" width="45px"></el-table-column>
-					<el-table-column label="记录id" prop="id" width="80px"></el-table-column>
-					<el-table-column label="请求id" width="150px" v-if="!sa.isNull(p.req_id) ">
+					
+					<el-table-column label="请求id" width="110px">
 						<template slot-scope="s">
-							<div style="width: 130px;">{{s.row.req_id}}</div>
+							<div style="font-weight: bold;">{{s.row.id}}</div>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求ip" width="130px">
@@ -121,7 +119,7 @@
 								<b style="color: blue;" v-else>{{s.row.res_code}} - {{s.row.res_msg}}</b>
 							</p>
 							<p class="req-string" @click="see_res_string(s.row)">
-								{{sa.maxLength(s.row.res_string, 80)}}
+								{{sa.maxLength(s.row.res_string, 70)}}
 							</p>
 						</template>
 					</el-table-column>
@@ -183,7 +181,6 @@
 						pageNo: 1,
 						pageSize: 10,
 						id: '',
-						req_id: '',
 						req_token: '',
 						req_ip: '',
 						req_api: '',
@@ -197,6 +194,10 @@
 					way: sa.p('way', 1),
 					dataCount: 0,
 					dataList: [], // 数据集合
+					isNewestSta: false,	// 当前是否为最新统计数据 
+					staData: {
+						cost_time_count: 0,		// 总计耗时 
+					}
 				},
 				methods: {
 					// 刷新
@@ -205,7 +206,26 @@
 							this.dataList = res.data; // 数据
 							this.dataCount = res.dataCount; // 数据总数 
 							sa.f5TableHeight();		// 刷新表格高度 
+							this.isNewestSta = false;
 						}.bind(this));
+					},
+					// 统计数据
+					f5StaData: function() {
+						var fn = function() {
+							var str = '<b>总计请求：' + this.dataCount + ' 次</b><br/>'
+								+ '<b>总计耗时：' + getDuration(this.staData.cost_time_count) + ' </b>';
+							str = '<big>' + str + '</big>'
+							layer.alert(str, {title: '统计数据'});
+						}.bind(this);
+						if(this.isNewestSta) {
+							fn()
+						} else {
+							sa.ajax('/SgApilog/staBy', sa.removeNull(this.p), function(res) {
+								this.staData = res.data;
+								this.isNewestSta = true;
+								fn();
+							}.bind(this));
+						}
 					},
 					// 复制 
 					copy: function(data) {
@@ -288,6 +308,29 @@
 					sa.onInputEnter();	// 监听表单动作 
 				}
 			})
+			
+			function getDuration(my_time) {
+				var days = my_time / 1000 / 60 / 60 / 24;
+				var daysRound = Math.floor(days);
+				var hours = my_time / 1000 / 60 / 60 - (24 * daysRound);
+				var hoursRound = Math.floor(hours);
+				var minutes = my_time / 1000 / 60 - (24 * 60 * daysRound) - (60 * hoursRound);
+				var minutesRound = Math.floor(minutes);
+				var seconds = my_time / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
+				seconds = parseInt(seconds);
+				// console.log('转换时间:', daysRound + '天', hoursRound + '时', minutesRound + '分', seconds + '秒');
+				// var time = hoursRound + ':' + minutesRound + ':' + seconds
+				// return time;
+				if(daysRound >= 1) {
+					return daysRound + '天' + hoursRound + '小时';
+				} else if(hoursRound >= 1) {
+					return hoursRound + '小时' + hoursRound + '分';
+				} else if(minutesRound >= 1) {
+					return minutesRound + '分' + seconds + '秒';
+				} else {
+					return seconds + '秒';
+				}
+			}
 		</script>
 	</body>
 </html>

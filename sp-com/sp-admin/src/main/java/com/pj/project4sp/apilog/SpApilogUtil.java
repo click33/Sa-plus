@@ -11,6 +11,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pj.current.satoken.StpUserUtil;
 import com.pj.utils.LogUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.WebNbUtil;
@@ -53,16 +54,15 @@ public class SpApilogUtil {
 		// 1、开始时 
     	HttpServletRequest request = SpringMvcUtil.getRequest();
     	SpApilog a = new SpApilog();
-    	a.setReq_id(getCurrReqId());		// 随机一个请求id
+    	a.setId(getSnowflakeId());			// 随机一个请求id
     	a.setReq_ip(WebNbUtil.getIP(request));		// 请求ip 
     	a.setReq_api(request.getRequestURI());;		// 请求接口 
     	a.setReq_parame(JSON.toJSONString(WebNbUtil.getParamsMap2(request)));	// 请求参数 
     	a.setReq_token(StpUtil.getTokenValue());			// 请求token 
     	a.setReq_header(JSON.toJSONString(WebNbUtil.getHeaderMap(request)));			// 请求header 
     	a.setReq_type(request.getMethod());			// 请求类型 
-    	a.setUser_id(0);		// 本次请求user_id 
     	a.setAdmin_id(StpUtil.getLoginId(0L));	// 本次请求admin_id 
-//    	a.setUser_id(StpUserUtil.getLoginId(0L));		// 本次请求user_id 
+    	a.setUser_id(StpUserUtil.getLoginId(0L));		// 本次请求user_id 
     	a.setStart_time(new Date());				// 请求开始时间 
     	request.setAttribute(apilog_obj_save_key, a);
     	
@@ -96,6 +96,11 @@ public class SpApilogUtil {
 			a.setRes_string(new ObjectMapper().writeValueAsString(aj));		// res 字符串形式
 			a.setEnd_time(new Date());			// 请求结束时间 
 			a.setCost_time((int)(a.getEnd_time().getTime() - a.getStart_time().getTime()));	// 请求消耗时长，单位ms 
+			
+			// res 字符串过长时禁止写入
+			if(a.getRes_string().length() > 50000) {
+				a.setRes_string("{\"msg\": \"数据过长，无法写入 (length=" + a.getRes_string().length() + ")\"}");		
+			}
 		
         	LogUtil.info("本次请求耗时：" + ((a.getCost_time() + 0.0) / 1000) + "s, 返回：" + a.getRes_string());
         	spApilogMapper.saveObj(a);
@@ -120,18 +125,25 @@ public class SpApilogUtil {
 	}
 
 
-	/** 获取当前请求的req_id */
+	/** 获取当前请求的id */
 	public static String getCurrReqId() {
 		HttpServletRequest request = SpringMvcUtil.getRequest();
-		String req_id = (String)request.getAttribute(apilog_obj_save_id_key);
-		if(req_id == null) {
-			req_id = IdUtil.simpleUUID();
-			request.setAttribute(apilog_obj_save_id_key, req_id);
+		String id = (String)request.getAttribute(apilog_obj_save_id_key);
+		if(id == null) {
+			id = IdUtil.simpleUUID();
+			request.setAttribute(apilog_obj_save_id_key, id);
 		}
-		return req_id;
+		return id;
 	}
 
 
-
+	/**
+	 * 根据雪花算法，返回唯一id 
+	 * (此地方将workerId写死为1，如果你在分布式场景中应用此方法，你需要对workerId生成策略进行改造)
+	 * @return
+	 */
+	public static String getSnowflakeId() {
+		return IdUtil.getSnowflake(1, 1).nextIdStr();
+	}
 	
 }

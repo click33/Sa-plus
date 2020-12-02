@@ -24,6 +24,8 @@ import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
  * mapper.xml热刷新
+ * @author kong
+ *
  */
 public class MybatisMapperDynamicLoader implements InitializingBean, ApplicationContextAware {
 
@@ -50,13 +52,14 @@ public class MybatisMapperDynamicLoader implements InitializingBean, Application
         try {
             scanner = new Scanner();
             new Timer(true).schedule(new TimerTask() {
+            	@Override
                 public void run() {
                     try {
                         if (scanner.isChanged()) {
                             // System.out.println("load mapper.xml");
-                        	String now = new SimpleDateFormat("YYYY-MM-dd HH:mm:ss").format(new Date());
+                        	String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
                         	System.out.println("mapper.xml热刷新成功，当前时间：" + now);
-                            scanner.reloadXML();
+                            scanner.reloadXml();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -68,6 +71,9 @@ public class MybatisMapperDynamicLoader implements InitializingBean, Application
         }
     }
 
+    /**
+     * @author kong
+     */
     class Scanner {
         private static final String XML_RESOURCE_PATTERN = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "**/*Mapper.xml";
         private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
@@ -81,7 +87,7 @@ public class MybatisMapperDynamicLoader implements InitializingBean, Application
                 }
             }
         }
-        public void reloadXML() throws Exception {
+        public void reloadXml() throws Exception {
             SqlSessionFactory factory = context.getBean(SqlSessionFactory.class);
             Configuration configuration = factory.getConfiguration();
             

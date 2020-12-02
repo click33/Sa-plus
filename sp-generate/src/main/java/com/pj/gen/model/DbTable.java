@@ -186,8 +186,37 @@ public class DbTable {
 				this.columnList.add(dc);
 			}
 			// tree树表
-			else if(ft.getFoType().equals("tree")) {
+			else if(ft.getFoType().equals("tree") || ft.getFoType().equals("tree-lazy")) {
 				this.tableType = "tree";
+				DbColumn parentIdColumn = this.getDbColumnByName(ft.getString("fkey", "parent_id"));
+				// 找到fkey列做上标记 
+				if(parentIdColumn == null) {
+					AjaxError.getAndThrow("表[" + this.tableName + "]的tree请声明，必须指定一个存在的parent_id列");
+				}
+				parentIdColumn.setFlag("tree-parent-id");
+				
+				// 如果是懒加载的tree，继续追加逻辑 
+				if(ft.getFoType().equals("tree-lazy")) {
+					this.tableType = "tree-lazy";
+					// 追加一个fk-count列, 用于计算[是否包含子级]列 
+					// 构建对象 
+					DbColumn dc = DbModelManager.manager.getDbColumn();
+					dc.setDt(this);	// 表
+					dc.setType(3);	// 类型：3 
+					dc.setFoType("fk-p"); 	// fo类型 
+					dc.setFoType2("count"); 	// 聚合外键类型 
+					
+					dc.setColumnComment("子级数量");	// 注释
+					dc.tx.setDefaultValue("jt", this.getTableName());
+					dc.tx.setDefaultValue("jc", ft.getString("fkey", "parent_id"));
+					dc.tx.setDefaultValue("comment", "子级数量");
+					dc.tx.setDefaultValue("java-type", "Long"); 	// 默认的java类型
+					dc.setFlag("tree-lazy-children-count");	// 标记：懒加载树形表格的count计数列 
+					ft.setDefaultValue("top", "-1");	// 标记：懒加载树形表格的count计数列 
+					
+					// 加入到列列表
+					this.columnList.add(dc);
+				}
 			}
 			// 默认, 普通 
 			else {
@@ -340,8 +369,8 @@ public class DbTable {
 	public List<DbColumn> getTallListBySort() {
 		List<DbColumn> list = new ArrayList<DbColumn>();
 		for (DbColumn c : getTallList()) {
-			if(c.istx("no-sort") || c.isFoType("img", "audio", "video", "file", "img-list", "audio-list", "video-list", "file-list", "img-video-list", 
-					"richtext", "textarea", "textarea", "fk-s")) {
+			if(c.istx("no-sort") || c.isFoType("time", "img", "audio", "video", "file", "img-list", "audio-list", "video-list", "file-list", "img-video-list", 
+					"link", "richtext", "textarea", "textarea", "fk-s", "logic-delete")) {
 				// 不添加 
 			} else {
 				list.add(c);
@@ -356,6 +385,19 @@ public class DbTable {
 		for (DbColumn c : getTallList()) {
 			for (String f : foType) {
 				if(c.getFoType().equals(f)) {
+					list.add(c);
+				}
+			}
+		}
+		return list;
+	}
+
+	// 返回列集合 - 含有指定特性的 
+	public List<DbColumn> getTallListByTxKey(String ...txKeys) {
+		List<DbColumn> list = new ArrayList<DbColumn>();
+		for (DbColumn c : getTallList()) {
+			for (String txKey : txKeys) {
+				if(c.istx(txKey)) {
 					list.add(c);
 				}
 			}
@@ -466,6 +508,10 @@ public class DbTable {
 			if(t1.get(i).isFoType("date-create", "date-update")) {
 				value = "now()";
 			}
+			// 如果是逻辑删除标识
+			if(t1.get(i).isFoType("logic-delete")) {
+				value = dc.tx.getString("yes");
+			}
 			str += value;	
 			if(i != t1.size() - 1) {
 				str += ", ";
@@ -513,7 +559,7 @@ public class DbTable {
 		String str = "";
 		for (int i = 0; i < t1.size(); i++) {
 			DbColumn c = t1.get(i);
-			if(c.isFoType("date", "date-create", "date-update", "img", "img-list", "audio", "audio-list", "video", "video-list", "file", "file-list")) {
+			if(c.isFoType("date", "date-create", "date-update", "time", "img", "img-list", "audio", "audio-list", "video", "video-list", "file", "file-list")) {
 				continue;
 			}
 			// 声明字段
@@ -541,7 +587,12 @@ public class DbTable {
 			// 拼接 
 			str += "\t\t\t<when test='sortType == " + (i + 1) + "'> `" + c.getColumnName() + "` desc </when>\r\n"; 
 		}
-		str = str + "\t\t\t<otherwise> `" + this.primaryKey.getAsColumnName() + "` desc </otherwise>\r\n";
+		// 默认的
+		String otherwise = " `" + this.primaryKey.getAsColumnName() + "` desc ";
+		if(this.hasFt("tree")) {
+			otherwise = " `" + this.primaryKey.getAsColumnName() + "` asc ";
+		}
+		str = str + "\t\t\t<otherwise>" + otherwise + "`</otherwise>\r\n";
 		return str;
 	}
 	
@@ -555,6 +606,9 @@ public class DbTable {
 			// 声明字段
 			String fieldName = "get" + c.getGetset() + "()";	// 字段名
 			String columnComment = c.getColumnComment3();	// 字段名
+			if(c.isFoType("logic-delete")) {
+				continue;
+			}
 			// 一些特殊情况
 			// 如果是public 
 			if(GenCfgManager.cfg.modelVisitWay == 2) {
@@ -583,6 +637,9 @@ public class DbTable {
 //			if(Arrays.asList("String", "long", "int").contains(c.getFieldType()) == false) {
 //				continue;
 //			}
+			if(c.isFoType("logic-delete")) {
+				continue;
+			}
 			// 如果是priavate 
 			if(GenCfgManager.cfg.modelVisitWay == 1) {
 				str2 += "\t\ts.set" + c.getGetset() + "(" + c.getDefaultValue() + ");";
@@ -638,6 +695,44 @@ public class DbTable {
 		return getDefFt().getString("icon", GenCfgManager.cfg.getDefaultMeunIcon());
 	}
 	
+	// 是否含有指定ft
+	public boolean hasFt(String... foType) {
+		for (SoMap ft : ftList) {
+			for (String fType : foType) {
+				if(ft.getFoType().equals(fType)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	// 获取指定ft
+	public SoMap getFt(String... foType) {
+		for (SoMap ft : ftList) {
+			for (String fType : foType) {
+				if(ft.getFoType().equals(fType)) {
+					return ft;
+				}
+			}
+		}
+		return null;
+	}
+	
+	// 是个tree时，其idkey 
+	public String getTreeIdkey() {
+		String value = getFt("tree", "tree-lazy").getString("idkey", this.primaryKey.getFieldName());
+		return SUtil.getHumpByCfg(value);
+	}
+	// 是个tree时，其fkey 
+	public String getTreeFkey() {
+		String value = getFt("tree", "tree-lazy").getString("fkey", "parent_id");
+		return SUtil.getHumpByCfg(value);
+	}
+	// 是个tree时，其ckey 
+	public String getTreeCkey() {
+		String value = getFt("tree", "tree-lazy").getString("ckey", "children");
+		return SUtil.getHumpByCfg(value);
+	}
 	
 
 	// 返回指定列，根据列名字
@@ -649,7 +744,27 @@ public class DbTable {
 		}
 		return null;
 	}
-	
+
+	// 返回指定列，根据列标记
+	public DbColumn getDbColumnByFalg(String falg) {
+		for (DbColumn dbColumn : columnList) {
+			if(dbColumn.getFlag().equals(falg)) {
+				return dbColumn;
+			}
+		}
+		return null;
+	}
+	// 返回指定列，根据foType的 
+	public DbColumn getDbColumnByFoType(String foType) {
+		for (DbColumn dbColumn : columnList) {
+			if(dbColumn.getFoType().equals(foType)) {
+				return dbColumn;
+			}
+		}
+		return null;
+	}
+
+
 	
 	
 	
