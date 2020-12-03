@@ -83,7 +83,7 @@ public interface PublicMapper {
 	public int columnAdd(
 			@Param("tableName") String tableName, 
 			@Param("columnName") String columnName, 
-			@Param("num") int num,  
+			@Param("num") long num,  
 			@Param("id") Object id 
 			);
 
@@ -207,7 +207,17 @@ public interface PublicMapper {
 			@Param("whereName") String whereName, 
 			@Param("whereValue") Object whereValue
 			);
-	
+
+	/**
+	 * 获取指定表的count数据,根据指定条件(whereName=whereValue)
+	 * <p>
+	 * 参数：表名、where条件、where值
+	 */
+	public long getCountBy(
+			@Param("tableName") String tableName,
+			@Param("whereName") String whereName,
+			@Param("whereValue") Object whereValue
+	);
 
 	// ------------------------ 查询集合SQL相关 ------------------------
 	/**
