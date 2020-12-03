@@ -18,7 +18,7 @@ var sa_admin = new Vue({
 		title: '',//'SA-后台模板',				// 页面标题  
 		logo_url: '',	// logo地址 
 		icon_url: '',	// icon地址 
-		github_url: 'https://github.com/click33/sa-admin',	// github地址 
+		github_url: 'https://github.com/click33/sa-plus',	// github地址 
 		default_active: '0',	// 默认的高亮菜单id
 		default_openeds: [],	// 默认的打开数组 
 		unique_opened: true,		// 是否保持只打开一个

@@ -13,7 +13,10 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SaPlusStartup implements CommandLineRunner {
-    
+
+	@Value("${spring.application.name:sa-plus}")
+    private String applicationName;
+	
 	@Value("${server.port:8080}")
     private String port;
 
@@ -26,7 +29,7 @@ public class SaPlusStartup implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
     	 String ip = InetAddress.getLocalHost().getHostAddress();
-         String str = "\n------------- sa-plus (" + active + ") 启动成功 [com] --by " + getNow() + " -------------\n" + 
+         String str = "\n------------- " + applicationName + " (" + active + ") [com] 启动成功 --by " + getNow() + " -------------\n" + 
                  "\t- Local:   http://localhost:" + port + path + "\n" +
                  "\t- Local2:  http://127.0.0.1:" + port + path + "\n" +
                  "\t- Network: http://" + ip + ":" + port + path + "\n";
