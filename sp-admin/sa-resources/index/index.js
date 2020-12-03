@@ -924,7 +924,7 @@ var sa_admin = new Vue({
 			var str = ('\n欢迎使用sa-plus，当前版本：' + this.plusVersion + "，更新于：" + this.plus_update_time + "，GitHub地址：" + this.github_url);
 			str += ('\n如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
 			str += "\n";
-			console.log('%c%s', 'color: green; font-size: 16px; font-weight: 700;', str)
+			console.log('%c%s', 'color: green; font-size: 13px; font-weight: 400;', str)
 		},
 		// 获取指定tab栏的window对象, 用于多窗口通信 
 		getTabWindow: function(tab_id) {
