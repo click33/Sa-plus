@@ -135,7 +135,7 @@ public class SpAdminController {
 	// 改角色 
 	@RequestMapping("updateRole")
 	AjaxJson updateRole(long id, String role_id){
-//		StpUtil.checkPermission(AuthConst.J_1023);	// 鉴权
+		StpUtil.checkPermission(AuthConst.r1);	// 鉴权
 		int line = SP.publicMapper.updateColumnById("sp_admin", "role_id", role_id, id);
 		return AjaxJson.getByLine(line);
 	}
