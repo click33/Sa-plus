@@ -921,10 +921,10 @@ var sa_admin = new Vue({
 		// 打印版本
 		printVesion: function() {
 			// console.log('欢迎使用sa-admin(iframe版)，当前版本：' + this.version + "，更新于：" + this.update_time + "，GitHub地址：" + this.github_url);
-			var str = ('\n欢迎使用sa-plus，当前版本：' + this.plusVersion + "，更新于：" + this.plus_update_time + "，GitHub地址：" + this.github_url);
-			str += ('\n如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
-			str += "\n";
-			console.log('%c%s', 'color: green; font-size: 13px; font-weight: 400;', str)
+			var str = ('欢迎使用sa-plus，当前版本：' + this.plusVersion + "，更新于：" + this.plus_update_time + "，GitHub地址：" + this.github_url);
+			console.log('%c%s', 'color: green; font-size: 14px; font-weight: 400; margin-top: 10px; margin-bottom: 2px;', str);
+			var str2 = ('如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
+			console.log('%c%s', 'color: #999; font-size: 12px; margin-top: 2px; margin-bottom: 10px;', str2);
 		},
 		// 获取指定tab栏的window对象, 用于多窗口通信 
 		getTabWindow: function(tab_id) {
