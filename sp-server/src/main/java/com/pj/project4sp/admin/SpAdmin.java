@@ -17,29 +17,57 @@ public class SpAdmin implements Serializable  {
 	private static final long serialVersionUID = 1L;
 
 
-	private long id;		// id，--主键、自增 
-	private String name;		// admin名称 
-	private String avatar;		// 头像  
-	private String password;		// 密码 
-	private String pw;		// 明文密码 
-	private String phone;		// 手机号 
-	private int role_id;		// 角色id
-	private int status;		// 状态 （1=是，2=否） 
-	private long create_by_aid;		// 创建自哪个管理员 
-	private Date create_time;		// 创建时间 
-	private Date login_time;		// 上次登陆时间 
-	private String login_ip;		// 上次登陆IP 
-	private int login_count;		// 登陆次数 
+	/** id，--主键、自增 */
+	public Long id;	
 	
-	// 额外字段 
-	private String role_name;		// 所属角色名称  
+	/** admin名称 */
+	public String name;	
+	
+	/** 头像地址 */
+	public String avatar;	
+	
+	/** 密码 */
+	public String password;	
+	
+	/** 明文密码 */
+	public String pw;	
+	
+	/** 手机号 */
+	public String phone;	
+	
+	/** 所属角色id */
+	public Integer roleId;	
+	
+	/** 账号状态(1=正常, 2=禁用) */
+	public Integer status;	
+	
+	/** 创建自哪个管理员 */
+	public Long createByAid;	
+	
+	/** 创建时间 */
+	public Date createTime;	
+	
+	/** 上次登陆时间 */
+	public Date loginTime;	
+	
+	/** 上次登陆IP */
+	public String loginIp;	
+	
+	/** 登陆次数 */
+	public Integer loginCount;	
+	
+	
+	// -------- 额外字段 
+	
+	/** 所属角色名称   */
+	private String roleName;	
 
 
-	// 防止密码被传递到前台 
+	/** 防止密码被传递到前台  */
     public String getPassword(){
     	return "********";
     }
-    // 获取真实密码 
+    /** 获取真实密码   */
     @JsonIgnore()
     public String getPassword2(){
     	return this.password;

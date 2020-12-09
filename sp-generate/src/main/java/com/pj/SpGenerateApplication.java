@@ -23,7 +23,7 @@ public class SpGenerateApplication {
 		// ===================================  设置连接信息  =================================== 
         FlyConfig config = new FlyConfig();
         config.setDriverClassName("com.mysql.jdbc.Driver");
-        config.setUrl("jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC");
+        config.setUrl("jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC");
         config.setUsername("root");
         config.setPassword("root123456");
         config.setPrintSql(true);		// 是否打印sql  
@@ -53,8 +53,8 @@ public class SpGenerateApplication {
             .setResultMapWay(2) 			// resultMap映射模式  (1=自动模式, 2=手动模式)
             .setModelVisitWay(2)			// 实体类的访问权限修饰符 (1=private, 2=public)  
             .setModelDocWay(3)				// 实体类的注释形式 (1=行尾注释, 2=单行双星文档注释, 3=标准双星文档注释)  
-            .setModelAddLine(2) 			// 实体类的每个字段之间是否隔一个空行(1=是, 2=否)
-            .setUtilDocWay(1) 				// util类的注释风格 (1=行尾位注释, 2=行上注释, 3=无注释) 
+            .setModelAddLine(1) 			// 实体类的每个字段之间是否隔一个空行(1=是, 2=否)
+            .setUtilDocWay(1) 				// util类的注释风格 (1=行尾注释, 2=行上注释, 3=无注释) 
             .setPackageUnderlineTo("_")		// 将包名中的下划线强制转换成指定字符串，比如：$、2、4 或者空字符串""  
             .setApiMappingWay(1) 			// apiMapping模式  (1=@RequsetMapping, 2=@GetMapping, 3=@PostMapping) 
             .setSqlSelectColumnWay(1) 		// mapper.xml中的通用查询，是select * 还是所有列 (1=select *, 2=select 所有列) 
@@ -83,7 +83,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.23.0，更新于2020-12-2 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.24.0，更新于2020-12-10 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

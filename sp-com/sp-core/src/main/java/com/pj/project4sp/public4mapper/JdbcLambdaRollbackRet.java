@@ -5,7 +5,7 @@ package com.pj.project4sp.public4mapper;
  * @author kong
  *
  */
-public interface JdbcLambdaRollbackRT {
+public interface JdbcLambdaRollbackRet {
 	
 	/**
 	 * 事务发生异常的方法 

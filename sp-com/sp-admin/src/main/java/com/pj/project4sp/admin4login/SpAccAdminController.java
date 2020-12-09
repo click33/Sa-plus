@@ -1,8 +1,5 @@
 package com.pj.project4sp.admin4login;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pj.project4sp.admin.SpAdmin;
 import com.pj.project4sp.admin.SpAdminUtil;
 import com.pj.project4sp.role4permission.SpRolePermissionService;
+import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.NbUtil;
+import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.stp.StpUtil;
 
@@ -34,7 +33,7 @@ public class SpAccAdminController {
 	SpRolePermissionService spRolePermissionService;
 	
 	
-	// 账号、密码登录 
+	/** 账号、密码登录  */
 	@RequestMapping("doLogin")
 	AjaxJson doLogin(String key, String password) {
 		// 1、验证参数 
@@ -45,7 +44,7 @@ public class SpAccAdminController {
 	}
 	
 	
-	// 退出登录 
+	/** 退出登录  */
 	@RequestMapping("doExit")
 	AjaxJson doExit() {
 		StpUtil.logout();
@@ -53,27 +52,18 @@ public class SpAccAdminController {
 	}
 	
 
-	// 管理员登录后台时需要返回的信息 
-	// admin=当前登录admin信息，menu_list=当前admin权限集合 
+	/** 管理员登录后台时需要返回的信息 */
 	@RequestMapping("fristOpenAdmin")
 	AjaxJson fristOpenAdmin(HttpServletRequest request) {
 		// 当前admin
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		
-		// 组织参数 
-		Map<String, Object> map = new HashMap<>();
-		map.put("admin", SpAdminUtil.getCurrAdmin());	// 当前登录admin
-		map.put("per_list", spRolePermissionService.getPcodeByRid2(admin.getRole_id()));								// 当前拥有的权限集合 
-//		map.put("app_cfg", SysCfgUtil.getAppCfg());								// 当前系统的配置  
+		// 组织参数 (admin信息，权限信息，配置信息)
+		SoMap map = new SoMap();
+		map.set("admin", SpAdminUtil.getCurrAdmin());	
+		map.set("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));				
+		map.set("app_cfg", SpCfgUtil.getAppCfg());	
 		return AjaxJson.getSuccessData(map); 
-	}
-	
-	
-	// 测试
-	@RequestMapping("test")
-	AjaxJson test() {
-		System.out.println("接口测试"); 
-		return AjaxJson.getSuccess();
 	}
 	
 	

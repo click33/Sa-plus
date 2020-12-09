@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * springboot启动之后 
+ * @author kong
+ *
  */
 @Component
 public class SaPlusStartup implements CommandLineRunner {

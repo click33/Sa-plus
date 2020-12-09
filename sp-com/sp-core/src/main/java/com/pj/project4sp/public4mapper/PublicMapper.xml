@@ -133,6 +133,12 @@
 		where ${whereName} = #{whereValue} 
 	</select>
 
+	<!-- 获取指定表的count数据,根据指定条件(whereName=whereValue) -->
+	<select id="getCountBy" resultType="long">
+		select count(*) from ${tableName}
+		where ${whereName} = #{whereValue}
+	</select>
+
 
 	<!-- ======================== 查询集合SQL相关 ======================== -->
 

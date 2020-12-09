@@ -16,13 +16,16 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 
 /**
- * 全局异常拦截
+ * 全局异常拦截 
+ * <p> @ControllerAdvice 可指定包前缀，例如：(basePackages = "com.pj.controller.admin")
+ * @author kong
+ *
  */
-@ControllerAdvice // 可指定包前缀，例如：(basePackages = "com.pj.controller.admin")
+@ControllerAdvice
 public class GlobalException {
 
 	
-	// 全局异常拦截
+	/** 全局异常拦截  */
 	@ResponseBody
 	@ExceptionHandler
 	public AjaxJson handlerException(Exception e) {
@@ -51,9 +54,10 @@ public class GlobalException {
 			aj = AjaxJson.get(ee.getCode(), ee.getMessage());
 		}  
 		// 如果是SQLException，并且指定了hideSql，则只返回sql error 
-		else if((e instanceof SQLException || e2 instanceof SQLException) && SpCfgUtil.get_throw_out_sql() == false) {	
+		else if((e instanceof SQLException || e2 instanceof SQLException) && SpCfgUtil.throwOutSql() == false) {	
+			// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
 			aj = AjaxJson.getError(e2.getMessage());
-			SpApilogUtil.endRequest(aj);	// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
+			SpApilogUtil.endRequest(aj);	
 			return AjaxJson.getError("Sql Error").set("reqId", SpApilogUtil.getCurrReqId());
 		}
 		// 如果是redis连接异常 ( 由于redis连接异常，系统已经无法正常工作，所以此处需要立即返回 )

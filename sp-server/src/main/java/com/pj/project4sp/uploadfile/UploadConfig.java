@@ -12,11 +12,9 @@ import lombok.Data;
  */
 @Data
 @Component
-@ConfigurationProperties(prefix = "spring.upload-config")	// 配置前缀 
+@ConfigurationProperties(prefix = "spring.upload-config")
 public class UploadConfig {
 
-	
-	
 	public String rootFolder = "/upload-file";			// 文件保存的根目录，所有文件都保存在这个目录下  
 	public String httpPrefix = "/upload";						// http路由前缀，用于向前台暴露文件url  
 	
@@ -34,8 +32,4 @@ public class UploadConfig {
 	
 	public long maxSize = 1024 * 1024 * 1024 ;	// 文件最大大小,单位/B , 此为1G 
 	
-	
-	
-	
-
 }

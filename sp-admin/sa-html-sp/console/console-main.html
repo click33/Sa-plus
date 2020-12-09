@@ -138,6 +138,22 @@
 						<!-- 更新日志 -->
 						<el-card shadow="never" header="更新日志">
 							<el-timeline>
+								<!-- ---------- 一个版本 第39个----------- -->
+								<el-timeline-item timestamp="v2.4.4 &emsp; 2020-11-14" placement="top" type="primary">
+									<li>修复：当最后一个tab卡片有滑动条时，其它tab滚动条失效的bug</li>
+									<li>修复：sa.js增加部分判断，使之在不引入jquery时放弃执行部分代码</li>
+									<li>修复: layer弹窗回车事件影响到首页便签的bug</li>
+									<li>优化：页面初始打开时，按钮高亮，更鲜艳的颜色 </li>
+								</el-timeline-item>
+								<!-- ---------- 一个版本 第38个----------- -->
+								<el-timeline-item timestamp="v2.4.3 &emsp; 2020-10-02" placement="top" type="primary">
+									<li>修复：修复在没有成功初始化的情况下，调整窗口大小控制台报错的bug</li>
+									<li>修复：修复单窗口显示时，面包屑显示位置异常的bug</li>
+									<li>修复：修复main.html页一直显示loading图标的bug</li>
+									<li>新增：离线包新增swiper相关文件</li>
+									<li>优化：优化菜单id为number类型时不能显示的缺点</li>
+									<li>优化：layer的弹窗，双击可以全屏，再次双击缩小 </li>
+								</el-timeline-item>
 								<!-- ---------- 一个版本 第37个----------- -->
 								<el-timeline-item timestamp="v2.4.2 &emsp; 2020-09-3" placement="top" type="primary">
 									<li>新增：新增弹窗回车事件，可方便的关闭弹窗</li>
@@ -428,6 +444,7 @@
 							<el-alert type="warning" :closable="false" title="tabbar栏">	
 								卡片堆积：多卡片自动堆积，与菜单双向关联，切换tab卡时自动显示左侧菜单 <br/>
 								拖动手势：tab卡支持拖拽手势，上拖新窗口打开、下拽悬浮打开、左拽快速关闭 <br/>
+								双击全屏：当卡片属于悬浮状态时，双击标题区域可以快速全屏，再次双击取消全屏 <br/>
 								右键菜单：在tab上右击，可以：刷新、复制、关闭、关闭其它、关闭所有、悬浮打开、新窗口打开、取消 <br/>
 								双击菜单：双击tabbar空白处，可以显示添加新tab窗口 <br/>
 								保留高度：切换卡片时，可自动保留上个卡片的滚动条高度 <br/>

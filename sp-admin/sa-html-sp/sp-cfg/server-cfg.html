@@ -44,8 +44,8 @@
 						</div> -->
 						<div class="c-item">
 							<label class="c-label">抛出SQL：</label>
-							<el-switch v-model="m.throw_out_sql" :active-value="1" :inactive-value="2"></el-switch>
-							<span class="c-remark" v-if="m.throw_out_sql==1">开启</span>
+							<el-switch v-model="m.throwOutSql" :active-value="1" :inactive-value="2"></el-switch>
+							<span class="c-remark" v-if="m.throwOutSql==1">开启</span>
 							<span class="c-remark" v-else>关闭</span>
 							<span class="c-remark" style="color: red;">( 抛出sql只为方便调试，建议只在开发环境下打开此选项，生产环境请务必关闭 )</span>
 						</div>
@@ -74,7 +74,7 @@
 			function create_m() {
 				return {
 					reserve_info: '预留信息', // 预留信息 
-					throw_out_sql: 2,	// 是否隐藏sql，
+					throwOutSql: 2,	// 是否隐藏sql，
 				}
 			}
 		</script>
@@ -104,7 +104,7 @@
 					// 刷新
 					f5: function() {
 						sa.ajax('/SpCfg/getCfg', {
-							cfg_name: 'server_cfg'
+							cfgName: 'server_cfg'
 						}, function(res) {
 							this.init(res.data);
 						}.bind(this));
@@ -112,8 +112,8 @@
 					// 提交 
 					ok: function() {
 						sa.ajax('/SpCfg/updateCfg', {
-							cfg_name: 'server_cfg',
-							cfg_value: JSON.stringify(this.m)
+							cfgName: 'server_cfg',
+							cfgValue: JSON.stringify(this.m)
 						}, function(res) {
 							sa.ok2('保存成功');
 						}.bind(this));

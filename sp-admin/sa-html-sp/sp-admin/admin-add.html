@@ -53,9 +53,9 @@
 					<br />
 					<div class="c-item">
 						<label class="c-label">角色：</label>
-						<el-select size="mini" v-model="m.role_id">
+						<el-select size="mini" v-model="m.roleId">
 							<el-option label="请选择" :value="0" disabled></el-option>
-							<el-option v-for="role in roleList" :key="role.id" :label="role.role_name" :value="role.id"></el-option>
+							<el-option v-for="role in roleList" :key="role.id" :label="role.name" :value="role.id"></el-option>
 						</el-select>
 					</div>
 					
@@ -75,7 +75,7 @@
 					name: '',
 					avatar: '',
 					password: '',
-					role_id: 0
+					roleId: 0
 				}
 			}
 		</script>
@@ -110,7 +110,7 @@
 						if(m.password == ''){
 							return sa.msg('请输入密码');
 						}
-						if(m.role_id == 0){
+						if(m.roleId == 0){
 							return sa.msg('请选择角色');
 						}
 						// 添加

@@ -48,35 +48,35 @@
 						<br>
 						<div class="c-item">
 							<label class="c-label">角色：</label>
-							<b>{{m.role_name}}</b>
+							<b>{{m.roleName}}</b>
 						</div>
 						<br>
 						<div class="c-item">
 							<label class="c-label">创建账号：</label>
-							<span v-if="m.create_by_aid == -1">无</span>
-							<a v-else :href=" 'admin-info.html?id=' +  m.create_by_aid">{{m.create_by_aid}}</a>
+							<span v-if="m.createByAid == -1">无</span>
+							<a v-else :href=" 'admin-info.html?id=' +  m.createByAid">{{m.createByAid}}</a>
 						</div>
 						<br>
 						<div class="c-item">
 							<label class="c-label">创建时间：</label>
-							<span>{{sa.forDate(m.create_time, 2)}}</span>
+							<span>{{sa.forDate(m.createTime, 2)}}</span>
 						</div>
 						<br>
 						<div class="c-item">
 							<label class="c-label">最后登录：</label>
-							<span>{{sa.forDate(m.login_time, 2)}}</span>
-							<span v-if="sa.isNull(m.login_time)">无</span>
+							<span>{{sa.forDate(m.loginTime, 2)}}</span>
+							<span v-if="sa.isNull(m.loginTime)">无</span>
 						</div>
 						<br>
 						<div class="c-item">
 							<label class="c-label">登录次数：</label>
-							<span>{{m.login_count}}</span>
+							<span>{{m.loginCount}}</span>
 						</div>
 						<br>
 						<div class="c-item">
 							<label class="c-label">最后登录IP：</label>
-							<span>{{m.login_ip}}</span>
-							<span v-if="sa.isNull(m.login_ip)">无</span>
+							<span>{{m.loginIp}}</span>
+							<span v-if="sa.isNull(m.loginIp)">无</span>
 						</div>
 					</el-form>
 				</div>

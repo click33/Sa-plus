@@ -26,21 +26,27 @@ public class SpAdminService {
 	SpAdminPasswordService spAdminPasswordService;
 	
 	
-	// 管理员添加一个管理员
-	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)	// REQUIRED=如果调用方有事务  就继续使用调用方的事务 
+	/**
+	 * 管理员添加一个管理员 
+	 * @param admin
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)	
 	public long add(SpAdmin admin) {
 		// 检查姓名是否合法
 		SpAdminUtil.checkAdmin(admin);
 		
+		// 创建人，为当前账号  
+		admin.setCreateByAid(StpUtil.getLoginIdAsLong());	
 		// 开始添加
-		admin.setCreate_by_aid(StpUtil.getLoginIdAsLong());	// 创建人，为当前账号  
-		spAdminMapper.add(admin);	// 添加
-		long id = SP.publicMapper.getPrimarykey();	// 获取主键
-		spAdminPasswordService.updatePassword(id, admin.getPassword2());	// 更改密码（md5与明文）
+		spAdminMapper.add(admin);	
+		// 获取主键
+		long id = SP.publicMapper.getPrimarykey();
+		// 更改密码（md5与明文）
+		spAdminPasswordService.updatePassword(id, admin.getPassword2());	
 		
 		// 返回主键 
 		return id;
-		// return AjaxJson.getSuccessData(id);
 	}
 	
 	

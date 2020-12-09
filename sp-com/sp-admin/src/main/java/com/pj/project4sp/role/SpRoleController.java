@@ -29,11 +29,11 @@ public class SpRoleController {
 	@Autowired
 	SpRoleMapper spRoleMapper;
 
-	// 增  
+	/** 增 */
 	@RequestMapping("add")
 	@Transactional(rollbackFor = Exception.class)
 	AjaxJson add(SpRole s, HttpServletRequest request){
-		StpUtil.checkPermission(AuthConst.p_role_list);	// 鉴权
+		StpUtil.checkPermission(AuthConst.ROLE_LIST);
 		// 检验
 		if(spRoleMapper.getById(s.getId()) != null) {
 			return AjaxJson.getError("此id已存在，请更换");
@@ -49,37 +49,37 @@ public class SpRoleController {
 		return AjaxJson.getSuccessData(spRoleMapper.getById(id));
 	}
 
-	// 删  
+	/** 删 */
 	@RequestMapping("delete")
 	AjaxJson delete(long id, HttpServletRequest request){
-		StpUtil.checkPermission(AuthConst.r1);	// 鉴权
-		StpUtil.checkPermission(AuthConst.p_role_list);	// 鉴权
+		StpUtil.checkPermission(AuthConst.R1);	
+		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
 		int line = spRoleMapper.delete(id);
 		return AjaxJson.getByLine(line);
 	}
 
-	// 改  
+	/** 改 */ 
 	@RequestMapping("update")
 	AjaxJson update(SpRole s){
-		StpUtil.checkPermission(AuthConst.r1);	// 鉴权
-		StpUtil.checkPermission(AuthConst.p_role_list);	// 鉴权
+		StpUtil.checkPermission(AuthConst.R1);	
+		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
 		SpRoleUtil.checkRoleThrow(s);
 		int line = spRoleMapper.update(s);
 		return AjaxJson.getByLine(line);
 	}
 
-	// 查  
+	/** 查 */ 
 	@RequestMapping("getById")
 	AjaxJson getById(long id){
-		StpUtil.checkPermission(AuthConst.r99);	// 鉴权
-		Object data = spRoleMapper.getById(id);
-		return AjaxJson.getSuccess("ok").setData(data);
+		StpUtil.checkPermission(AuthConst.R99);	
+		SpRole s = spRoleMapper.getById(id);
+		return AjaxJson.getSuccessData(s);
 	}
 
-	// 查 - 集合（参数为null或0时默认忽略此条件）  
+	/** 查 - 集合  */
 	@RequestMapping("getList")
 	AjaxJson getList(){
-		StpUtil.checkPermission(AuthConst.r99);	// 鉴权
+		StpUtil.checkPermission(AuthConst.R99);	
 		SoMap so = SoMap.getRequestSoMap();
 		List<SpRole> list = spRoleMapper.getList(so);
 		return AjaxJson.getSuccessData(list);

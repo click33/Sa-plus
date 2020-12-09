@@ -34,36 +34,36 @@
 						<el-input v-model="p.id" placeholder="精确定位"></el-input>
 					</el-form-item>
 					<el-form-item label="请求ip：">
-						<el-input v-model="p.req_ip" placeholder="IP筛选"></el-input>
+						<el-input v-model="p.reqIp" placeholder="IP筛选"></el-input>
 					</el-form-item>
 					<el-form-item label="请求api：">
-						<el-input v-model="p.req_api" placeholder="API接口筛选"></el-input>
+						<el-input v-model="p.reqApi" placeholder="API接口筛选"></el-input>
 					</el-form-item>
 					<el-form-item style="min-width: 0px;">
 						<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
 					</el-form-item>
 					<br>
 					<el-form-item label="请求token：">
-						<el-input v-model="p.req_token" placeholder="定向跟踪token"></el-input>
+						<el-input v-model="p.reqToken" placeholder="定向跟踪token"></el-input>
 					</el-form-item>
-					<el-form-item label="user_id：">
-						<el-input v-model="p.user_id" placeholder="定向跟踪用户"></el-input>
+					<el-form-item label="userId：">
+						<el-input v-model="p.userId" placeholder="定向跟踪用户"></el-input>
 					</el-form-item>
-					<el-form-item label="admin_id：">
-						<el-input v-model="p.admin_id" placeholder="定向跟踪用户"></el-input>
+					<el-form-item label="adminId：">
+						<el-input v-model="p.adminId" placeholder="定向跟踪用户"></el-input>
 					</el-form-item>
 					<br>
 					<el-form-item label="res状态码：">
-						<el-input v-model="p.res_code" placeholder="状态码筛选"></el-input>
+						<el-input v-model="p.resCode" placeholder="状态码筛选"></el-input>
 					</el-form-item>
 					<el-form-item label="请求时间：">
-						<el-date-picker v-model="p.s_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始日期"></el-date-picker>
+						<el-date-picker v-model="p.sTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始日期"></el-date-picker>
 						-
-						<el-date-picker v-model="p.e_time" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束日期"></el-date-picker>
+						<el-date-picker v-model="p.eTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束日期"></el-date-picker>
 					</el-form-item>
 					<br />
 					<el-form-item label="综合排序：" class="s-radio-text">
-						<el-radio-group v-model="p.sort_type">
+						<el-radio-group v-model="p.sortType">
 							<el-radio :label="0">默认</el-radio>
 							<el-radio :label="1">请求时间</el-radio>
 							<el-radio :label="2">请求耗时</el-radio>
@@ -92,61 +92,61 @@
 					</el-table-column>
 					<el-table-column label="请求ip" width="130px">
 						<template slot-scope="s">
-							<span class="req-ip">{{(s.row.req_ip)}}</span>
+							<span class="req-ip">{{(s.row.reqIp)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求方式" width="100px">
 						<template slot-scope="s">
 							<span class="req-type-box">
-								<b style="background-color: #00A65A;" v-if=" s.row.req_type == 'GET' ">GET</b>
-								<b style="background-color: #0073B7;" v-else-if=" s.row.req_type == 'POST' ">POST</b>
-								<b style="background-color: #FF6A00;" v-else>{{s.row.req_type}}</b>
+								<b style="background-color: #00A65A;" v-if=" s.row.reqType == 'GET' ">GET</b>
+								<b style="background-color: #0073B7;" v-else-if=" s.row.reqType == 'POST' ">POST</b>
+								<b style="background-color: #FF6A00;" v-else>{{s.row.reqType}}</b>
 							</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求接口" width="250px">
 						<template slot-scope="s">
-							<p class="req-api"><span>{{sa.maxLength(s.row.req_api)}}</bspan>
+							<p class="req-api"><span>{{sa.maxLength(s.row.reqApi)}}</bspan>
 							</p>
-							<span class="req-p" @click="see_req_parame(s.row)">{{sa.maxLength(s.row.req_parame, 70)}}</span>
+							<span class="req-p" @click="seeReqParame(s.row)">{{sa.maxLength(s.row.reqParame, 70)}}</span>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求返回" min-width="370px">
 						<template slot-scope="s">
 							<p style="padding-left: 3px;">
-								<b style="color: green;" v-if="s.row.res_code == 200">{{s.row.res_code}} - {{s.row.res_msg}}</b>
-								<b style="color: red;" v-else-if="s.row.res_code == 500 || s.row.res_code == 501">{{s.row.res_code}} - {{s.row.res_msg}}</b>
-								<b style="color: blue;" v-else>{{s.row.res_code}} - {{s.row.res_msg}}</b>
+								<b style="color: green;" v-if="s.row.resCode == 200">{{s.row.resCode}} - {{s.row.resMsg}}</b>
+								<b style="color: red;" v-else-if="s.row.resCode == 500 || s.row.resCode == 501">{{s.row.resCode}} - {{s.row.resMsg}}</b>
+								<b style="color: blue;" v-else>{{s.row.res_code}} - {{s.row.resMsg}}</b>
 							</p>
-							<p class="req-string" @click="see_res_string(s.row)">
-								{{sa.maxLength(s.row.res_string, 70)}}
+							<p class="req-string" @click="seeResString(s.row)">
+								{{sa.maxLength(s.row.resString, 70)}}
 							</p>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求账号" width="150px">
 						<template slot-scope="s">
-							<p v-if="s.row.user_id == 0">user_id：&nbsp;&nbsp;&nbsp;0</p>
-							<p v-else>user_id：&nbsp;&nbsp;&nbsp;<el-link @click="sa.alert(s.row.user_id)">{{s.row.user_id}}</el-link>
+							<p v-if="s.row.userId == 0">userId：&nbsp;&nbsp;&nbsp;0</p>
+							<p v-else>userId：&nbsp;&nbsp;&nbsp;<el-link @click="sa.alert(s.row.userId)">{{s.row.userId}}</el-link>
 							</p>
-							<p v-if="s.row.admin_id == 0">admin_id：0</p>
-							<p v-else>admin_id：<el-link @click="sa.$page.openAdminInfo(s.row.admin_id)">{{s.row.admin_id}}</el-link>
+							<p v-if="s.row.adminId == 0">adminId：0</p>
+							<p v-else>adminId：<el-link @click="sa.$page.openAdminInfo(s.row.adminId)">{{s.row.adminId}}</el-link>
 							</p>
 						</template>
 					</el-table-column>
-					<el-table-column label="请求token" width="150px" v-if="!sa.isNull(p.req_token) ">
+					<el-table-column label="请求token" width="150px" v-if="!sa.isNull(p.reqToken) ">
 						<template slot-scope="s">
-							<div style="width: 130px;">{{s.row.req_token}}</div>
+							<div style="width: 130px;">{{s.row.reqToken}}</div>
 						</template>
 					</el-table-column>
 					<el-table-column label="请求时间" width="280px">
 						<template slot-scope="s">
 							<p>
-								开始：{{sa.forDate(s.row.start_time, 'yyyy-MM-dd HH:mm:ss.ms')}} -
-								<b>{{sa.isNull(sa.forDate2(s.row.start_time), '无')}}</b>
+								开始：{{sa.forDate(s.row.startTime, 'yyyy-MM-dd HH:mm:ss.ms')}} -
+								<b>{{sa.isNull(sa.forDate2(s.row.startTime), '无')}}</b>
 							</p>
 							<p>
-								结束：{{sa.forDate(s.row.end_time, 'yyyy-MM-dd HH:mm:ss.ms')}} -
-								<b style="color: green;">耗时：{{(s.row.cost_time + 0.0) / 1000}}s</b>
+								结束：{{sa.forDate(s.row.endTime, 'yyyy-MM-dd HH:mm:ss.ms')}} -
+								<b style="color: green;">耗时：{{(s.row.costTime + 0.0) / 1000}}s</b>
 							</p>
 						</template>
 					</el-table-column>
@@ -181,15 +181,15 @@
 						pageNo: 1,
 						pageSize: 10,
 						id: '',
-						req_token: '',
-						req_ip: '',
-						req_api: '',
-						res_code: '',
-						user_id: '',
-						admin_id: '',
-						s_time: '',
-						e_time: '',
-						sort_type: 0
+						reqToken: '',
+						reqIp: '',
+						reqApi: '',
+						resCode: '',
+						userId: '',
+						adminId: '',
+						sTime: '',
+						eTime: '',
+						sortType: 0
 					},
 					way: sa.p('way', 1),
 					dataCount: 0,
@@ -240,7 +240,7 @@
 						sa.ok2('已成功复制到剪贴板');
 					},
 					// 查看：访问参数 
-					see_req_parame: function(data) {
+					seeReqParame: function(data) {
 						var jsonStr = data.req_parame;
 						jsonStr = JSON.stringify(JSON.parse(jsonStr), null, "\t");
 						layer.prompt({
@@ -256,7 +256,7 @@
 						})
 					},
 					// 查看：返回参数  
-					see_res_string: function(data) {
+					seeResString: function(data) {
 						var jsonStr = data.res_string;
 						jsonStr = JSON.stringify(JSON.parse(jsonStr), null, "\t");
 						layer.prompt({

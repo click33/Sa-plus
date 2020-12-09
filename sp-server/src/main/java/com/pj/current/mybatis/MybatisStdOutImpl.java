@@ -5,7 +5,7 @@ import org.apache.ibatis.logging.Log;
 import com.pj.current.config.SystemObject;
 
 /**
- * 优化mybatis日志输出，主要优化以下部分：
+ * 自定义mybatis日志层实现，优化mybatis日志输出，主要优化以下部分：
  * <p> 1、删除无用日志信息
  * <p> 2、SQL高亮显示
  * @author kong
@@ -38,8 +38,10 @@ public class MybatisStdOutImpl implements Log {
 		System.err.println(s);
 	}
 
-	// MyBatis动作 打印
-	// 执行Sql与参数 打印
+	/** 
+	 * MyBatis动作 打印 
+	 * 执行Sql与参数 打印
+	 */
 	@Override
 	public void debug(String s) {
 		// 以下日志，不再打印 
@@ -56,7 +58,9 @@ public class MybatisStdOutImpl implements Log {
 		System.out.println(s);
 	}
 
-	// Sql执行结果，打印
+	/** 
+	 * Sql执行结果，打印 
+	 */
 	@Override
 	public void trace(String s) {
 		System.out.println(s);

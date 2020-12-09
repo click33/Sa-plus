@@ -28,9 +28,6 @@ import cn.hutool.core.util.IdUtil;
 @Component
 public class SpApilogUtil {
 
-//	req_id, req_ip, req_api, req_parame, req_token, user_id, admin_id, start_time,
-//	res_code, res_msg, res_string, end_time, cost_time)
-	
 	/** 底层 Mapper 对象 */
 	static SpApilogMapper spApilogMapper;
 	@Autowired
@@ -38,14 +35,12 @@ public class SpApilogUtil {
 		SpApilogUtil.spApilogMapper = spApilogMapper;
 	}
 	
+	static final String APILOG_OBJ_SAVE_KEY = "APILOG_OBJ_SAVE_KEY";
+	static final String APILOG_OBJ_SAVE_ID_KEY = "APILOG_OBJ_SAVE_ID_KEY";
 	
-	
-	static final String apilog_obj_save_key = "apilog_obj_save_key";
-	static final String apilog_obj_save_id_key = "apilog_obj_save_id_key";
-	
-	
-	
-	// 请求开始时调用，开始计时 
+	/**
+	 * 请求开始时调用，开始计时 
+	 */
 	public static void startRequest() {
 		if(isWeb() == false)  {
 			return;
@@ -54,25 +49,28 @@ public class SpApilogUtil {
 		// 1、开始时 
     	HttpServletRequest request = SpringMvcUtil.getRequest();
     	SpApilog a = new SpApilog();
-    	a.setId(getSnowflakeId());			// 随机一个请求id
-    	a.setReq_ip(WebNbUtil.getIP(request));		// 请求ip 
-    	a.setReq_api(request.getRequestURI());;		// 请求接口 
-    	a.setReq_parame(JSON.toJSONString(WebNbUtil.getParamsMap2(request)));	// 请求参数 
-    	a.setReq_token(StpUtil.getTokenValue());			// 请求token 
-    	a.setReq_header(JSON.toJSONString(WebNbUtil.getHeaderMap(request)));			// 请求header 
-    	a.setReq_type(request.getMethod());			// 请求类型 
-    	a.setAdmin_id(StpUtil.getLoginId(0L));	// 本次请求admin_id 
-    	a.setUser_id(StpUserUtil.getLoginId(0L));		// 本次请求user_id 
-    	a.setStart_time(new Date());				// 请求开始时间 
-    	request.setAttribute(apilog_obj_save_key, a);
+    	a.setId(getSnowflakeId());		
+    	a.setReqIp(WebNbUtil.getIP(request));	
+    	a.setReqApi(request.getRequestURI());;		
+    	a.setReqParame(JSON.toJSONString(WebNbUtil.getParamsMap2(request)));	
+    	a.setReqToken(StpUtil.getTokenValue());			
+    	a.setReqHeader(JSON.toJSONString(WebNbUtil.getHeaderMap(request)));		
+    	a.setReqType(request.getMethod());		
+    	a.setAdminId(StpUtil.getLoginId(0L));	
+    	a.setUserId(StpUserUtil.getLoginId(0L));		
+    	a.setStartTime(new Date());			
+    	request.setAttribute(APILOG_OBJ_SAVE_KEY, a);
     	
     	// 控制台日志 
-    	LogUtil.info("===============================================================");
-		LogUtil.info("IP: " + a.getReq_ip() + "\tr-> " + a.getReq_api()+ "\tp-> " + a.getReq_parame());
+    	LogUtil.info("----------------------------------------------------------------");
+		LogUtil.info("IP: " + a.getReqIp() + "\tr-> " + a.getReqApi()+ "\tp-> " + a.getReqParame());
 	}
 	
 
-	// 请求结束时调用，结束计时 
+	/**
+	 * 请求结束时调用，结束计时 
+	 * @param aj
+	 */
 	public static void endRequest(AjaxJson aj) {
 		if(isWeb() == false)  {
 			return;
@@ -80,29 +78,28 @@ public class SpApilogUtil {
 		
 		// 读取本次请求的 ApiLog 对象 
 		HttpServletRequest request = SpringMvcUtil.getRequest();
-		SpApilog a = (SpApilog)request.getAttribute(apilog_obj_save_key);
+		SpApilog a = (SpApilog)request.getAttribute(APILOG_OBJ_SAVE_KEY);
 		if(a == null) {
 //	    	LogUtil.info("未找到相应ApiLog对象（可能原因：全局异常），aj=" + aj);
 	    	SpApilogUtil.startRequest();	
-	    	a = (SpApilog)request.getAttribute(apilog_obj_save_key);
+	    	a = (SpApilog)request.getAttribute(APILOG_OBJ_SAVE_KEY);
 		}
 
 		// 保存数据库
 		try {
 			// 开始结束计时 
-			a.setRes_code(aj.getCode()); 	// res 状态码
-			a.setRes_msg(aj.getMsg());		// res 描述信息 
-			// a.setRes_string(JSON.toJSONString(aj));		// res 字符串形式
-			a.setRes_string(new ObjectMapper().writeValueAsString(aj));		// res 字符串形式
-			a.setEnd_time(new Date());			// 请求结束时间 
-			a.setCost_time((int)(a.getEnd_time().getTime() - a.getStart_time().getTime()));	// 请求消耗时长，单位ms 
+			a.setResCode(aj.getCode()); 	
+			a.setResMsg(aj.getMsg());	
+			a.setResString(new ObjectMapper().writeValueAsString(aj));		
+			a.setEndTime(new Date());		
+			a.setCostTime((int)(a.getEndTime().getTime() - a.getStartTime().getTime()));
 			
-			// res 字符串过长时禁止写入
-			if(a.getRes_string().length() > 50000) {
-				a.setRes_string("{\"msg\": \"数据过长，无法写入 (length=" + a.getRes_string().length() + ")\"}");		
+			// res 字符串过长时禁止写入  
+			if(a.getResString().length() > 50000) {
+				a.setResString("{\"msg\": \"数据过长，无法写入 (length=" + a.getResString().length() + ")\"}");		
 			}
 		
-        	LogUtil.info("本次请求耗时：" + ((a.getCost_time() + 0.0) / 1000) + "s, 返回：" + a.getRes_string());
+        	LogUtil.info("本次请求耗时：" + ((a.getCostTime() + 0.0) / 1000) + "s, 返回：" + a.getResString());
         	spApilogMapper.saveObj(a);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,7 +114,8 @@ public class SpApilogUtil {
 	 * 当前是否为web环境 
 	 */
 	public static boolean isWeb() {
-		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();// 大善人SpringMVC提供的封装 
+		// 大善人SpringMVC提供的封装 
+		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if(servletRequestAttributes != null) {
 			return true;
 		}
@@ -128,10 +126,10 @@ public class SpApilogUtil {
 	/** 获取当前请求的id */
 	public static String getCurrReqId() {
 		HttpServletRequest request = SpringMvcUtil.getRequest();
-		String id = (String)request.getAttribute(apilog_obj_save_id_key);
+		String id = (String)request.getAttribute(APILOG_OBJ_SAVE_ID_KEY);
 		if(id == null) {
 			id = IdUtil.simpleUUID();
-			request.setAttribute(apilog_obj_save_id_key, id);
+			request.setAttribute(APILOG_OBJ_SAVE_ID_KEY, id);
 		}
 		return id;
 	}

@@ -15,39 +15,51 @@ public interface SpAdminMapper {
 
 
 	/**
-	 * 增 #{name}, #{password}, #{role_id}
+	 * 增 #{name}, #{password}, #{roleId} 
+	 * @param obj
+	 * @return
 	 */
 	int add(SpAdmin obj);
 
 	/**
 	 * 删 
+	 * @param id
+	 * @return
 	 */
 	int delete(long id);
 
 	/**
 	 * 改 
+	 * @param obj
+	 * @return
 	 */
 	int update(SpAdmin obj);
 
 	/**
 	 * 查 
+	 * @param id
+	 * @return
 	 */
 	SpAdmin getById(long id);
 
 	/**
-	 * 查 - 集合（参数为null或0时默认忽略此条件） 
+	 * 查  
+	 * @param so
+	 * @return
 	 */
 	List<SpAdmin> getList(SoMap so);
 
-
 	/**
-	 * 查询，根据name
+	 * 查询，根据name 
+	 * @param name
+	 * @return
 	 */
 	SpAdmin getByName(String name);
 	
-	
 	/**
-	 * 查询，根据 phone 
+	 * 查询，根据 phone  
+	 * @param phone
+	 * @return
 	 */
 	SpAdmin getByPhone(String phone);
 

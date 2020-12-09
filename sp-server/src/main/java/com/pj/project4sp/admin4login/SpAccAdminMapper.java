@@ -11,7 +11,12 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface SpAccAdminMapper {
 
-	// 指定id的账号成功登录一次 
-	public int successLogin(@Param("id")long id, @Param("login_ip")String login_ip);
+	/**
+	 * 指定id的账号成功登录一次 
+	 * @param id
+	 * @param loginIp
+	 * @return
+	 */
+	public int successLogin(@Param("id")long id, @Param("loginIp")String loginIp);
 	
 }

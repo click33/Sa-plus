@@ -62,7 +62,7 @@
 		<script src="../../sa-resources/menu-list-sp.js"></script> 
 		<script src="../../sa-resources/index/admin-util.js"></script>
         <script>
-			var role_id = sa.p('role_id');
+			var roleId = sa.p('roleId');
 			var app = new Vue({
 				el: '.vue-box',
 				data: {
@@ -114,13 +114,13 @@
 						keys.forEach(function(ts){
 							str += 'code=' + ts + '&';
 						})
-						var url = '/SpRolePermission/updatePcodeByRid?role_id=' + role_id;
+						var url = '/SpRolePermission/updatePcodeByRid?roleId=' + roleId;
 						sa.ajax(url, str,function (res) {
 							sa.alert('设置成功', function(){
 								sa.closeCurrIframe();
 							});
 							// 如果设置的角色与当前登录者的角色一致，则立即显示出来							
-							if(role_id == sa.$sys.getCurrUser().role_id) {
+							if(roleId == sa.$sys.getCurrUser().roleId) {
 								top.sa_admin.initMenu(keys);
 							}
 						}.bind(this))
@@ -156,8 +156,8 @@
 					this.dataList = menuList;	// 数据  
 					this.ywList = sa_admin_code_util.treeToArray(this.dataList);
 						
-					// 拉取此 role_id 的
-					sa.ajax('/SpRolePermission/getPcodeByRid?role_id=' + role_id, function(res) {
+					// 拉取此 roleId 的
+					sa.ajax('/SpRolePermission/getPcodeByRid?roleId=' + roleId, function(res) {
 						this.selectList = res.data;		// 选中的列表 
 						this.haveList = [].concat(this.selectList);
 					}.bind(this))

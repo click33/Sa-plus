@@ -1,6 +1,7 @@
 package com.pj.project4sp.public4mapper;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
@@ -18,7 +19,7 @@ public class PublicService {
 	 * 以lambda方式开始事务
 	 * @param code args
 	 */
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
 	public void begin(JdbcLambdaBegin code) {
 		code.run();
 	}
@@ -28,7 +29,7 @@ public class PublicService {
 	 * @param begin begin
 	 * @param rollback rollback
 	 */
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
 	public void begin(JdbcLambdaBegin begin, JdbcLambdaRollback rollback) {
 		try {
 			begin.run();
@@ -47,11 +48,11 @@ public class PublicService {
 	 * @param begin begin
 	 * @return v
 	 */
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
 	@SuppressWarnings("unchecked")
-	public <T> T beginRT(JdbcLambdaBeginRT begin) {
-		Object return_obj =  begin.run();
-		return (T)return_obj;
+	public <T> T beginRet(JdbcLambdaBeginRet begin) {
+		Object returnObj =  begin.run();
+		return (T)returnObj;
 	}
 
 	/**
@@ -60,20 +61,20 @@ public class PublicService {
 	 * @param rollback rollback
 	 * @return v
 	 */
-	@Transactional(rollbackFor = Exception.class)
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
 	@SuppressWarnings("unchecked")
-	public <T> T beginRT(JdbcLambdaBeginRT begin, JdbcLambdaRollbackRT rollback) {
-		Object return_obj = null;
+	public <T> T beginRet(JdbcLambdaBeginRet begin, JdbcLambdaRollbackRet rollback) {
+		Object returnObj = null;
 		try {
-			return_obj = begin.run();
+			returnObj = begin.run();
 		} catch (Exception e) {
 			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			if(rollback == null) {
 				throw e;
 			}
-			return_obj = rollback.run(e);
+			returnObj = rollback.run(e);
 		}
-		return (T)return_obj;
+		return (T)returnObj;
 	}
 	
 	

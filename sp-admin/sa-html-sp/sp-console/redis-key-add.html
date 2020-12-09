@@ -89,7 +89,7 @@
 						m.ttl = parseInt(m.ttl);
 						sa.ajax('/RedisConsole/set', m, function(res){
 							sa.closeCurrIframe();
-							parent.app.dataList.unshift(m);
+							parent.app.dataListShow.unshift(m);
 							parent.sa.msg('添加成功');
 							parent.sa.f5TableHeight();	// 刷新表格高度
 						}.bind(this));

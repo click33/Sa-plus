@@ -7,19 +7,19 @@
 	<insert id="add" >
 		insert into 
 		sp_role_permission(role_id, permission_code, create_time) 
-		values (#{role_id}, #{pcode}, now())
+		values (#{roleId}, #{pcode}, now())
 	</insert>
 	
 	<!-- 删除指定角色的所有权限 -->
 	<delete id="deleteByRoleId">
 		delete from sp_role_permission
-		where role_id = #{role_id} 
+		where role_id = #{roleId} 
 	</delete>
 
-	<!-- 指定role_id的所有权限码   -->
+	<!-- 指定roleId的所有权限码   -->
 	<select id="getPcodeByRoleId" resultType="String">
 		select permission_code from sp_role_permission
-		where role_id = #{role_id}
+		where role_id = #{roleId}
 	</select>
 
 

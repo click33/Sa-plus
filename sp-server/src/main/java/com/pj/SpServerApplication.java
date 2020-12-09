@@ -10,7 +10,7 @@ import cn.dev33.satoken.spring.SaTokenSetup;
 
 /**
  * 启动 
- * @author kong
+ * @author kong 
  */
 @SaTokenSetup	// sa-token权限验证 
 @EnableCaching // 启用缓存

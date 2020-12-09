@@ -20,9 +20,11 @@ public class SpAdminPasswordService {
 	/** 修改一个admin的密码为  */
 	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)	
 	public int updatePassword(long adminId, String password) {
-		SP.publicMapper.updateColumnById("sp_admin", "password", SystemObject.getPasswordMd5(adminId, password), adminId);	// 更改密码 
+		// 更改密码 
+		SP.publicMapper.updateColumnById("sp_admin", "password", SystemObject.getPasswordMd5(adminId, password), adminId);
 		if(SystemObject.config.getIsPw()) {
-			SP.publicMapper.updateColumnById("sp_admin", "pw", password, adminId);		// 明文密码 
+			// 明文密码 
+			SP.publicMapper.updateColumnById("sp_admin", "pw", password, adminId);		
 			return 2;
 		}
 		return 1;

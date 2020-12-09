@@ -33,6 +33,8 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 	sa_admin.initMenu(res.data.per_list);    // 初始化菜单   
 	sa.setAuth(res.data.per_list);		// 当前用户权限码集合  
 	
+	// 配置信息 
+	sa.$sys.setAppCfg(res.app_cfg);
 	
 	// 初始化模板(必须调用) 
 	sa_admin.init();	

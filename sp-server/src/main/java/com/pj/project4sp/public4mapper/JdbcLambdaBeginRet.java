@@ -5,7 +5,7 @@ package com.pj.project4sp.public4mapper;
  * @author kong
  *
  */
-public interface JdbcLambdaBeginRT {
+public interface JdbcLambdaBeginRet {
 	
 
 	/**

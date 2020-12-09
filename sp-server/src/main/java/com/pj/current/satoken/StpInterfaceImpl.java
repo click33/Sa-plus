@@ -30,8 +30,8 @@ public class StpInterfaceImpl implements StpInterface {
 	@Override
 	public List<Object> getPermissionCodeList(Object loginId, String loginKey) {
 		if(loginKey.equals("login")) {
-			long roleId = spAdminMapper.getById(Long.valueOf(loginId.toString())).getRole_id();	// 获取role_id  
-			return spRolePermissionService.getPcodeByRid2(roleId);								// 所有权限id  
+			long roleId = spAdminMapper.getById(Long.valueOf(loginId.toString())).getRoleId();
+			return spRolePermissionService.getPcodeByRid2(roleId);								
 		}
 		return null;
 	}

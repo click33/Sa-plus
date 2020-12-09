@@ -41,9 +41,9 @@ spring:
     # 项目自定义配置 
     myconfig: 
         # md5的盐
-        md5_salt: whatclickme
+        md5-salt: whatclickme
         # 是否明文存储密码 
-        is_pw: true
+        is-pw: true
         # 是否彩色SQl日志
         color-sql: true
     

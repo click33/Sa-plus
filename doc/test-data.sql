@@ -131,7 +131,7 @@ CREATE TABLE `sys_dept` (
 	`create_time` datetime COMMENT '创建日期 [date-create]',
 	PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=101 DEFAULT CHARSET=gbk ROW_FORMAT=COMPACT 
-COMMENT='部门表 [tree fkey=parent_id, top=-1][table icon=el-icon-crop]';
+COMMENT='部门表 [tree fkey=parent_id][table icon=el-icon-crop]';
 -- COMMENT='部门表 [tree-lazy fkey=parent_id][table icon=el-icon-crop]';
 
 INSERT INTO `sys_dept`(`id`, `name`, `intro`, `parent_id`, `create_time`) VALUES (1001, '研发部', '负责研发的部门', -1, now()); 

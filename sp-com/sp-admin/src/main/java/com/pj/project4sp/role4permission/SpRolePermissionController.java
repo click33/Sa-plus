@@ -14,7 +14,9 @@ import com.pj.utils.sg.AjaxJson;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
- * Controller: 角色与权限的中间表
+ * Controller: 角色与权限的中间表 
+ * @author kong
+ *
  */
 @RestController
 @RequestMapping("/SpRolePermission/")
@@ -27,34 +29,44 @@ public class SpRolePermissionController {
 	
 	
 	
-	// 拉取权限id列表  根据指定role_id 
+	/**
+	 * 拉取权限id列表  根据指定roleId 
+	 * @param roleId
+	 * @return
+	 */
 	@RequestMapping("getPcodeByRid")
-    public AjaxJson getPcodeByRid(@RequestParam(defaultValue="0") long role_id){
-		StpUtil.checkPermission(AuthConst.r1);	// 鉴权
-		StpUtil.checkPermission(AuthConst.p_role_list);	// 鉴权 
-		if(role_id == 0){
-			return AjaxJson.getError("role_id不能为null或0");		// 防止拉出全部 	
+    public AjaxJson getPcodeByRid(@RequestParam(defaultValue="0") long roleId){
+		// 鉴权  
+		StpUtil.checkPermission(AuthConst.R1);	
+		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
+		// 防止拉出全部 	
+		if(roleId == 0){
+			return AjaxJson.getError("roleId不能为null或0");		
 		}
-		return AjaxJson.getSuccessData(spRolePermissionService.getPcodeByRid2(role_id));
+		return AjaxJson.getSuccessData(spRolePermissionService.getPcodeByRid2(roleId));
 	}
 	
 	
-	// 拉取菜单id列表  根据当前用户role_id 
+	/** 拉取菜单id列表  根据当前用户roleId  */
 	@RequestMapping("getPcodeByCurrRid")
 	public AjaxJson getPcodeByCurrRid(){
-		long role_id = SpRoleUtil.getCurrRoleId();
-		List<Object> list = spRolePermissionService.getPcodeByRid2(role_id);
+		long roleId = SpRoleUtil.getCurrRoleId();
+		List<Object> list = spRolePermissionService.getPcodeByRid2(roleId);
 		return AjaxJson.getSuccessData(list);
 	}
 	
 
-	// 修改指定角色的拥有的权限 
-	// role_id=角色id, code=拥有的权限码集合 
+	/**
+	 * 修改指定角色的拥有的权限 
+	 * @param roleId 角色id
+	 * @param code 拥有的权限码集合 
+	 * @return
+	 */
 	@RequestMapping("updatePcodeByRid")
-	public AjaxJson updatePcodeByRid(long role_id, String[] code){
-		StpUtil.checkPermission(AuthConst.r1);	// 鉴权
-		StpUtil.checkPermission(AuthConst.p_role_list);	// 鉴权 
-		return AjaxJson.getSuccessData(spRolePermissionService.updateRoleMenu(role_id, code));
+	public AjaxJson updatePcodeByRid(long roleId, String[] code){
+		StpUtil.checkPermission(AuthConst.R1);	
+		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
+		return AjaxJson.getSuccessData(spRolePermissionService.updateRoleMenu(roleId, code));
 	}
 	
 

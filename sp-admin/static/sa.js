@@ -989,6 +989,7 @@ var sa = {
 			}
 			
 			// 判断是否首次加载 
+			sa.loading('正在导出...');
 			if(window.XLSX) {
 				return exportExcel_fn(select, fileName);
 			} else {

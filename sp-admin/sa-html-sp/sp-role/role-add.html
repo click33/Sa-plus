@@ -31,11 +31,11 @@
 						</div>
 						<div class="c-item br">
 							<label class="c-label">角色昵称：</label>
-							<el-input size="mini" v-model="m.role_name"></el-input>
+							<el-input size="mini" v-model="m.name"></el-input>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">责任描述：</label>
-							<el-input size="mini" v-model="m.role_info"></el-input>
+							<el-input size="mini" v-model="m.info"></el-input>
 						</div>
 						<div class="c-item br s-ok">
 							<label class="c-label"></label>
@@ -63,10 +63,10 @@
 					createModel: function() {
 						return {
 							id: 0, 
-							role_name: '',
-							role_info: '',
-							is_lock: 2,
-							// create_time: new Date(),
+							name: '',
+							info: '',
+							isLock: 2,
+							// createTime: new Date(),
 							is_update: false,
 						}
 					},
@@ -74,8 +74,8 @@
 					submitCheck: function() {
 						try{
 							var m = this.m;		// 获取 m对象 
-							sa.checkNull(m.role_name, '请输入角色名字');
-							sa.checkNull(m.role_info, '请输入责任描述');
+							sa.checkNull(m.name, '请输入角色名字');
+							sa.checkNull(m.info, '请输入责任描述');
 							return 'ok';	// 全部通过验证，返回ok 表示正确 
 						} catch(e) {
 							sa.error(e);

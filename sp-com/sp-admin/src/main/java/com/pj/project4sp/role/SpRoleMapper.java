@@ -16,36 +16,45 @@ public interface SpRoleMapper {
 
 	/**
 	 * 增 
+	 * @param obj
+	 * @return
 	 */
 	int add(SpRole obj);
 
 	/**
-	 * 删 
+	 * 删
+	 * @param id
+	 * @return
 	 */
 	int delete(long id);
 
 	/**
 	 * 改 
+	 * @param obj
+	 * @return
 	 */
 	int update(SpRole obj);
 
 	/**
-	 * 查 
+	 *  查 
+	 * @param id
+	 * @return
 	 */
 	SpRole getById(long id);
 
 	/**
-	 * 查 - 集合（参数为null或0时默认忽略此条件） 
+	 * 查 
+	 * @param soMap
+	 * @return
 	 */
 	List<SpRole> getList(SoMap soMap);
 
 
 	/**
 	 * 查，根据角色名字
+	 * @param name
+	 * @return
 	 */
-	SpRole getByRoleName(String role_name);
+	SpRole getByRoleName(String name);
 
-	
-	int add2(String role_name);
-	
 }

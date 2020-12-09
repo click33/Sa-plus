@@ -26,15 +26,22 @@ public class SpAdminUtil {
 	}
 	
 	
-	// 当前admin
+	/**
+	 * 当前admin
+	 * @return
+	 */
 	public static SpAdmin getCurrAdmin() {
-		long admin_id = StpUtil.getLoginIdAsLong();
-		return spAdminMapper.getById(admin_id);
+		long adminId = StpUtil.getLoginIdAsLong();
+		return spAdminMapper.getById(adminId);
 	}
 	
-	
-	// 检查指定姓名是否合法 ,如果不合法，则抛出异常 
-	public static boolean checkName(long admin_id, String name) {
+	/**
+	 * 检查指定姓名是否合法 ,如果不合法，则抛出异常 
+	 * @param adminId
+	 * @param name
+	 * @return
+	 */
+	public static boolean checkName(long adminId, String name) {
 		if(NbUtil.isNull(name)) {
 			throw AjaxError.get("账号名称不能为空");
 		}
@@ -44,14 +51,19 @@ public class SpAdminUtil {
 //		if(name.startsWith("a")) {
 //			throw AjaxException.get("账号名称不能以字母a开头");
 //		}
+		// 如果能查出来数据，而且不是本人，则代表与已有数据重复
 		SpAdmin a2 = spAdminMapper.getByName(name);
-		if(a2 != null && a2.getId() != admin_id) {	// 能查出来数据，而且不是本人，则代表与已有数据重复
+		if(a2 != null && a2.getId() != adminId) {	
 			throw AjaxError.get("账号名称已有账号使用，请更换");
 		} 
 		return true;
 	}
 	
-	// 检查整个admin是否合格 
+	/**
+	 * 检查整个admin是否合格 
+	 * @param a
+	 * @return
+	 */
 	public static boolean checkAdmin(SpAdmin a) {
 		// 检查姓名 
 		checkName(a.getId(), a.getName());
@@ -64,7 +76,11 @@ public class SpAdminUtil {
 	
 	
 	
-	// 指定的name是否可用 
+	/**
+	 * 指定的name是否可用 
+	 * @param name
+	 * @return
+	 */
 	public static boolean nameIsOk(String name) {
 		SpAdmin a2 = spAdminMapper.getByName(name);
 		if(a2 == null) {
@@ -74,13 +90,17 @@ public class SpAdminUtil {
 	}
 	
 	
-	// 获取指定token对应的admin_id 
+	/**
+	 * 获取指定token对应的adminId 
+	 * @param token
+	 * @return
+	 */
 	public static long getAdminIdByToken(String token) {
-		Object login_id = SaTokenManager.getDao().getValue(StpUtil.stpLogic.getKeyTokenValue(token));
-		if(login_id == null) {
+		Object loginId = SaTokenManager.getDao().getValue(StpUtil.stpLogic.getKeyTokenValue(token));
+		if(loginId == null) {
 			throw new NotLoginException();
 		}
-		return Long.parseLong(login_id.toString());
+		return Long.parseLong(loginId.toString());
 	}
 
 

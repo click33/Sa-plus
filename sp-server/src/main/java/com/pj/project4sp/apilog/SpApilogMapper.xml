@@ -10,8 +10,8 @@
 			id, req_ip, req_api, req_parame, req_type, req_token, req_header, user_id, admin_id, start_time,
 			res_code, res_msg, res_string, end_time, cost_time) 
 		values (
-			#{id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_type}, #{req_token}, #{req_header}, #{user_id}, #{admin_id}, #{start_time},
-			#{res_code}, #{res_msg}, #{res_string}, #{end_time}, #{cost_time}) 
+			#{id}, #{reqIp}, #{reqApi}, #{reqParame}, #{reqType}, #{reqToken}, #{reqHeader}, #{userId}, #{adminId}, #{startTime},
+			#{resCode}, #{resMsg}, #{resString}, #{endTime}, #{costTime}) 
 	</insert>
 	
 	
@@ -19,7 +19,7 @@
 	<insert id="add">
 		insert into 
 		sp_apilog (id, req_ip, req_api, req_parame, req_token, user_id, admin_id, start_time) 
-		values (#{id}, #{req_ip}, #{req_api}, #{req_parame}, #{req_token}, #{user_id}, #{admin_id}, now(3)) 
+		values (#{id}, #{reqIp}, #{reqApi}, #{reqParame}, #{reqToken}, #{userId}, #{adminId}, now(3)) 
 	</insert>
 
 	<!-- 删 -->
@@ -37,11 +37,11 @@
 	<!-- 改 -->
 	<update id="update">
 		update sp_apilog set
-		res_code = #{res_code}, 
-		res_msg = #{res_msg}, 
-		res_string = #{res_string}, 
+		res_code = #{resCode}, 
+		res_msg = #{resMsg}, 
+		res_string = #{resString}, 
 		end_time = now(3), 
-		cost_time = #{cost_time} 
+		cost_time = #{costTime} 
 		where id = #{id}
 	</update>
 	
@@ -50,20 +50,20 @@
 	<!-- 通用映射 -->
 	<resultMap id="model" type="com.pj.project4sp.apilog.SpApilog">
 		<result property="id" column="id" />
-		<result property="req_ip" column="req_ip" />
-		<result property="req_api" column="req_api" />
-		<result property="req_parame" column="req_parame" />
-		<result property="req_type" column="req_type" />
-		<result property="req_token" column="req_token" />
-		<result property="req_header" column="req_header" />
-		<result property="res_code" column="res_code" />
-		<result property="res_msg" column="res_msg" />
-		<result property="res_string" column="res_string" />
-		<result property="user_id" column="user_id" />
-		<result property="admin_id" column="admin_id" />
-		<result property="start_time" column="start_time" />
-		<result property="end_time" column="end_time" />
-		<result property="cost_time" column="cost_time" />
+		<result property="reqIp" column="req_ip" />
+		<result property="reqApi" column="req_api" />
+		<result property="reqParame" column="req_parame" />
+		<result property="reqType" column="req_type" />
+		<result property="reqToken" column="req_token" />
+		<result property="reqHeader" column="req_header" />
+		<result property="resCode" column="res_code" />
+		<result property="resMsg" column="res_msg" />
+		<result property="resString" column="res_string" />
+		<result property="userId" column="user_id" />
+		<result property="adminId" column="admin_id" />
+		<result property="startTime" column="start_time" />
+		<result property="endTime" column="end_time" />
+		<result property="costTime" column="cost_time" />
 	</resultMap>
 	
 	<!-- 公共查询sql片段 -->
@@ -75,20 +75,20 @@
 	<select id="getList" resultMap="model" >
 		<include refid="select_sql"></include>
 		where 1 = 1 
-		<if test=' this.isNotNull("id")  '>and id = #{id} </if>
-		<if test=' this.isNotNull("req_token") '>and req_token = #{req_token} </if>
-		<if test=' this.isNotNull("req_ip") '> and req_ip = #{req_ip} </if>
-		<if test=' this.isNotNull("req_api") '>and req_api = #{req_api} </if>
-		<if test=' this.isNotNull("res_code") '>and res_code = #{res_code} </if>
-		<if test=' this.isNotNull("user_id") '>and user_id = #{user_id} </if>
-		<if test=' this.isNotNull("admin_id") '>and admin_id = #{admin_id} </if>
-		<if test=' this.isNotNull("s_time") '>and start_time &gt;= #{s_time} </if>
-		<if test=' this.isNotNull("e_time") '>and start_time &lt;= #{e_time} </if>
+		<if test=' this.has("id")  '>and id = #{id} </if>
+		<if test=' this.has("reqToken") '>and req_token = #{reqToken} </if>
+		<if test=' this.has("reqIp") '> and req_ip = #{reqIp} </if>
+		<if test=' this.has("reqApi") '>and req_api = #{reqApi} </if>
+		<if test=' this.has("resCode") '>and res_code = #{resCode} </if>
+		<if test=' this.has("userId") '>and user_id = #{userId} </if>
+		<if test=' this.has("adminId") '>and admin_id = #{adminId} </if>
+		<if test=' this.has("sTime") '>and start_time &gt;= #{sTime} </if>
+		<if test=' this.has("eTime") '>and start_time &lt;= #{eTime} </if>
 		order by 
 		<choose>
-			<when test='sort_type == 0'>id desc</when> 
-			<when test='sort_type == 1'>start_time desc, id desc</when> 
-			<when test='sort_type == 2'>cost_time desc, id desc</when> 
+			<when test='sortType == 0'>id desc</when> 
+			<when test='sortType == 1'>start_time desc, id desc</when> 
+			<when test='sortType == 2'>cost_time desc, id desc</when> 
 		 	<otherwise>id desc</otherwise>
 		 </choose>
 	</select>
@@ -99,15 +99,15 @@
 	<select id="staBy" resultType="somap">
 		select sum(cost_time) as cost_time_count from sp_apilog 
 		where 1 = 1 
-		<if test=' this.isNotNull("id")  '>and id = #{id} </if>
-		<if test=' this.isNotNull("req_token") '>and req_token = #{req_token} </if>
-		<if test=' this.isNotNull("req_ip") '> and req_ip = #{req_ip} </if>
-		<if test=' this.isNotNull("req_api") '>and req_api = #{req_api} </if>
-		<if test=' this.isNotNull("res_code") '>and res_code = #{res_code} </if>
-		<if test=' this.isNotNull("user_id") '>and user_id = #{user_id} </if>
-		<if test=' this.isNotNull("admin_id") '>and admin_id = #{admin_id} </if>
-		<if test=' this.isNotNull("s_time") '>and start_time &gt;= #{s_time} </if>
-		<if test=' this.isNotNull("e_time") '>and start_time &lt;= #{e_time} </if>
+		<if test=' this.has("id")  '>and id = #{id} </if>
+		<if test=' this.has("reqToken") '>and req_token = #{reqToken} </if>
+		<if test=' this.has("reqIp") '> and req_ip = #{reqIp} </if>
+		<if test=' this.has("reqApi") '>and req_api = #{reqApi} </if>
+		<if test=' this.has("resCode") '>and res_code = #{resCode} </if>
+		<if test=' this.has("userId") '>and user_id = #{userId} </if>
+		<if test=' this.has("adminId") '>and admin_id = #{adminId} </if>
+		<if test=' this.has("sTime") '>and start_time &gt;= #{sTime} </if>
+		<if test=' this.has("eTime") '>and start_time &lt;= #{eTime} </if>
 	</select>
 
 

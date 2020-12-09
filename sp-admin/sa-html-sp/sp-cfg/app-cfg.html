@@ -40,20 +40,20 @@
 				    <el-tab-pane label="系统参数" name="tab1">
 						<div class="c-item br">
 							<label class="c-label">系统logo：</label>
-							<img :src="m.logo_url" class="logo-img" v-if="sa.isNull(m.logo_url) == false" @click="sa.showImage(m.logo_url, '400px', '400px')">
-							<el-link type="primary" @click="sa.uploadImage(src => {m.logo_url = src; sa.ok2('上传成功');})">选择上传</el-link>
+							<img :src="m.logoUrl" class="logo-img" v-if="sa.isNull(m.logoUrl) == false" @click="sa.showImage(m.logoUrl, '400px', '400px')">
+							<el-link type="primary" @click="sa.uploadImage(src => {m.logoUrl = src; sa.ok2('上传成功');})">选择上传</el-link>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">系统名称：</label>
-							<el-input size="mini" v-model="m.app_name"></el-input>
+							<el-input size="mini" v-model="m.appName"></el-input>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">版本编号：</label>
-							<el-input size="mini" v-model="m.app_version_no"></el-input>
+							<el-input size="mini" v-model="m.appVersionNo"></el-input>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">更新描述：</label>
-							<el-input size="mini" v-model="m.app_version_log"></el-input>
+							<el-input size="mini" v-model="m.appVersionLog"></el-input>
 						</div>
 					</el-tab-pane>
 					
@@ -80,10 +80,10 @@
 			// 创建一个默认的配置对象
 			function create_m() {
 				return {
-					logo_url: '',	// 系统logo地址 
-					app_name: 'sa-plus快速开发框架'	,// 系统名称
-					app_version_no: 'v1.0.0',	// 系统版本
-					app_version_log: '更新于2099-10-1',	// 更新日志 
+					logoUrl: '',	// 系统logo地址 
+					appName: 'sa-plus快速开发框架'	,// 系统名称
+					appVersionNo: 'v1.0.0',	// 系统版本
+					appVersionLog: '更新于2099-10-1',	// 更新日志 
 				}
 			}
 		</script>
@@ -113,13 +113,13 @@
 					},
 					// 刷新
 					f5: function(){
-						sa.ajax('/SpCfg/getCfg', {cfg_name: 'app_cfg'}, function(res){
+						sa.ajax('/SpCfg/getCfg', {cfgName: 'app_cfg'}, function(res){
 							this.init(res.data);
 						}.bind(this));
 					},
 					// 提交 
 					ok: function(){
-						sa.ajax('/SpCfg/updateCfg', {cfg_name: 'app_cfg', cfg_value: JSON.stringify(this.m)}, function(res){
+						sa.ajax('/SpCfg/updateCfg', {cfgName: 'app_cfg', cfgValue: JSON.stringify(this.m)}, function(res){
 							sa.ok2('保存成功');
 						}.bind(this));
 					},

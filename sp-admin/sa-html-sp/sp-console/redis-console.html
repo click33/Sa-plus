@@ -238,7 +238,7 @@
 					del: function(data) {
 						sa.confirm('是否删除，此操作不可撤销', function() {
 							sa.ajax('/RedisConsole/del?key=' + data.key, function(res) {
-								sa.arrayDelete(app.dataList, data);
+								sa.arrayDelete(app.dataListShow, data);
 								sa.ok('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
 							})
@@ -267,7 +267,7 @@
 							if(isNaN(pass)) {
 								return sa.error('请输入一个数值');
 							}
-							sa.ajax('/RedisConsole/updateTTL', {key: data.key, ttl: pass}, function(res){
+							sa.ajax('/RedisConsole/updateTtl', {key: data.key, ttl: pass}, function(res){
 								data.ttl = pass;
 								sa.ok('修改成功');
 							})
@@ -290,7 +290,7 @@
 						// 删除 
 						sa.confirm('是否删除选中记录，此操作不可撤销', function() {
 							sa.ajax('/RedisConsole/deleteByKeys', {key: keys}, function(res) {
-								sa.arrayDelete(this.dataList, selection);
+								sa.arrayDelete(this.dataListShow, selection);
 								sa.ok2('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 
 							}.bind(this))

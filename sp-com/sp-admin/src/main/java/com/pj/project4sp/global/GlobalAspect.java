@@ -9,7 +9,7 @@ import com.pj.project4sp.apilog.SpApilogUtil;
 import com.pj.utils.sg.AjaxJson;
 
 /**
- *  全局日志切面, 拦截所有controller请求，写入日志
+ *  全局日志切面, 拦截所有controller请求，写入日志 
  * @author kong
  *
  */
@@ -17,7 +17,9 @@ import com.pj.utils.sg.AjaxJson;
 @Component
 public class GlobalAspect {
     
-	/** AOP签名 --> 项目代码 */
+	/**
+	 * 定义AOP签名 --> 项目代码(所有class名成带有Controller字符的)
+	 */
 	@Pointcut("execution(* com.pj..*Controller*.*(..))")
     public void webLogProject(){}
 
@@ -29,22 +31,27 @@ public class GlobalAspect {
      * @throws Throwable
      */
     @Around("webLogProject()")
-    public Object arround(ProceedingJoinPoint pjp) throws Throwable {
+    public Object surround(ProceedingJoinPoint pjp) throws Throwable {
     	// 1、开始时  移入 
     	SpApilogUtil.startRequest();
         try {
         	// 2、执行时 
             Object obj =  pjp.proceed();
-            if(obj instanceof AjaxJson){	// 如果是 AjaxJson 
+            // 如果是 AjaxJson 
+            if(obj instanceof AjaxJson){	
             	SpApilogUtil.endRequest((AjaxJson)obj);
-            } else if (obj instanceof String) {	// 如果是 String 
+            } 
+            // 如果是 String  
+            else if (obj instanceof String) {	
             	SpApilogUtil.endRequest(AjaxJson.get(901, String.valueOf(obj)));
-            } else {	// 如果都不是 
+            } 
+            // 如果都不是 
+            else {	 
             	SpApilogUtil.endRequest(AjaxJson.get(902, String.valueOf(obj)));
             }
             return obj;
         } catch (Throwable e) {
-        	throw e;	// 3、发生异常时
+        	throw e;
         }
     }
     

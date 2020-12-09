@@ -7,7 +7,7 @@ import com.pj.project4sp.public4mapper.PublicMapper;
 import com.pj.project4sp.public4mapper.PublicService;
 
 /**
- * 公共Mapper 与 公共Service
+ * 公共Mapper 与 公共Service 
  * @author kong
  *
  */

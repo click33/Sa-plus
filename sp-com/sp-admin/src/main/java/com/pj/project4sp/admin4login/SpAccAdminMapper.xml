@@ -6,7 +6,7 @@
 	<!-- 指定id的账号成功登录一次  -->
 	<update id="successLogin">
 		update sp_admin set 
-		login_ip = #{login_ip},
+		login_ip = #{loginIp},
 		login_time = NOW(),
 		login_count = login_count + 1
 		where id = #{id}

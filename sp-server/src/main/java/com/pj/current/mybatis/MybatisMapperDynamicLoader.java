@@ -23,13 +23,12 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;
 
 /**
- * mapper.xml热刷新
- * @author kong
- *
+ * mapper.xml热刷新操作类
+ * @author kong 
  */
 public class MybatisMapperDynamicLoader implements InitializingBean, ApplicationContextAware {
 
-	public boolean enabled = true;	// 是否开启 
+	public boolean enabled = true;	
 	public MybatisMapperDynamicLoader(boolean enabled) {
 		this.enabled = enabled;
 	}
@@ -71,9 +70,6 @@ public class MybatisMapperDynamicLoader implements InitializingBean, Application
         }
     }
 
-    /**
-     * @author kong
-     */
     class Scanner {
         private static final String XML_RESOURCE_PATTERN = ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX + "**/*Mapper.xml";
         private final ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();

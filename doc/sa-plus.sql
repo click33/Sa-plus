@@ -7,18 +7,18 @@
 drop table if exists sp_role; 
 CREATE TABLE `sp_role` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色id，--主键、自增',
-  `role_name` varchar(20) NOT NULL COMMENT '角色名称, 唯一约束',
-  `role_info` varchar(200) DEFAULT NULL COMMENT '角色详细描述',
+  `name` varchar(20) NOT NULL COMMENT '角色名称, 唯一约束',
+  `info` varchar(200) DEFAULT NULL COMMENT '角色详细描述',
   `is_lock` int(11) NOT NULL DEFAULT '1' COMMENT '是否锁定(1=是,2=否), 锁定之后不可随意删除, 防止用户误操作',
   `create_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `role_name` (`role_name`) USING BTREE
+  UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统角色表';
 
-INSERT INTO `sp_role`(`id`, `role_name`, `role_info`, `is_lock`) VALUES (1, '超级管理员', '最高权限', 1);
-INSERT INTO `sp_role`(`id`, `role_name`, `role_info`, `is_lock`) VALUES (2, '二级管理员', '二级管理员', 2);
-INSERT INTO `sp_role`(`id`, `role_name`, `role_info`, `is_lock`) VALUES (11, '普通账号', '普通账号', 1);
-INSERT INTO `sp_role`(`id`, `role_name`, `role_info`, `is_lock`) VALUES (12, '测试角色', '测试角色', 2);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (1, '超级管理员', '最高权限', 1);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (2, '二级管理员', '二级管理员', 2);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (11, '普通账号', '普通账号', 1);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (12, '测试角色', '测试角色', 2);
 
 
 -- 角色权限对应表  
@@ -74,9 +74,9 @@ CREATE TABLE `sp_admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统管理员表';
 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10001, 'sa', '', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
+VALUES (10001, 'sa', 'http://demo-jj.dev33.cn/spdj-admin/sa-resources/admin-logo.png', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10002, 'admin', '', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 1, now()); 
+VALUES (10002, 'admin', 'http://demo-jj.dev33.cn/spdj-admin/sa-resources/admin-logo.png', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 1, now()); 
 
 
 

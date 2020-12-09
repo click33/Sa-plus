@@ -2,8 +2,6 @@ package com.pj.project4sp.admin4login;
 
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +16,7 @@ import com.pj.project4sp.role4permission.SpRolePermissionService;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.NbUtil;
 import com.pj.utils.sg.WebNbUtil;
+import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.util.SpringMvcUtil;
@@ -79,8 +78,8 @@ public class SpAccAdminService {
         if(NbUtil.isNull(admin.getPassword2())) {
         	return AjaxJson.getError("此账号尚未设置密码，无法登陆");
         }
-        String md5_password = SystemObject.getPasswordMd5(admin.getId(), password);
-        if(admin.getPassword2().equals(md5_password) == false){
+        String md5Password = SystemObject.getPasswordMd5(admin.getId(), password);
+        if(admin.getPassword2().equals(md5Password) == false){
         	return AjaxJson.getError("密码错误");	
         }
         
@@ -91,34 +90,43 @@ public class SpAccAdminService {
 
         // =========== 至此, 已登录成功 ============ 
         successLogin(admin);
-        StpUtil.setLoginId(admin.getId()); 			// 写入session 
+        StpUtil.setLoginId(admin.getId()); 		
         
         // 组织返回参数  
-		Map<String, Object> map = new HashMap<String, Object>();
+		SoMap map = new SoMap();
 		map.put("admin", admin);
-		map.put("per_list", spRolePermissionService.getPcodeByRid2(admin.getRole_id()));	// 当前拥有的权限集合 
+		map.put("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));
 		map.put("tokenInfo", StpUtil.getTokenInfo());
-		return AjaxJson.getSuccessData(map);	// 将信息返回到前台    
+		return AjaxJson.getSuccessData(map);	
 	}
 	
 	
-	// 指定id的账号成功登录一次 （修改最后登录时间等数据 ）
+	/**
+	 * 指定id的账号成功登录一次 （修改最后登录时间等数据 ）
+	 * @param s
+	 * @return
+	 */
 	public int successLogin(SpAdmin s){
-		String login_ip = WebNbUtil.getIP(SpringMvcUtil.getRequest());
-		int line = spAccAdminMapper.successLogin(s.getId(), login_ip);
+		String loginIp = WebNbUtil.getIP(SpringMvcUtil.getRequest());
+		int line = spAccAdminMapper.successLogin(s.getId(), loginIp);
 		if(line > 0) {
-	        s.setLogin_ip(login_ip);
-	        s.setLogin_time(new Date());
-	        s.setLogin_count(s.getLogin_count() + 1);
+	        s.setLoginIp(loginIp);
+	        s.setLoginTime(new Date());
+	        s.setLoginCount(s.getLoginCount() + 1);
 		}
         return line;
 	}
 	
-	// 修改手机号  
-	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)	// REQUIRED=如果调用方有事务  就继续使用调用方的事务 
-	public AjaxJson updatePhone(long admin_id, String new_phone) {
+	/**
+	 * 修改手机号  
+	 * @param adminId
+	 * @param newPhone
+	 * @return
+	 */
+	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
+	public AjaxJson updatePhone(long adminId, String newPhone) {
 		// 修改admin手机号
-		int line = SP.publicMapper.updateColumnById("sys_admin", "phone", new_phone, admin_id);	// 修改
+		int line = SP.publicMapper.updateColumnById("sys_admin", "phone", newPhone, adminId);
 		return AjaxJson.getByLine(line);
 	}
 	

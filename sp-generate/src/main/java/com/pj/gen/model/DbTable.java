@@ -194,6 +194,7 @@ public class DbTable {
 					AjaxError.getAndThrow("表[" + this.tableName + "]的tree请声明，必须指定一个存在的parent_id列");
 				}
 				parentIdColumn.setFlag("tree-parent-id");
+				ft.setDefaultValue("top", "-1");	// 标记：懒加载树形表格的count计数列 
 				
 				// 如果是懒加载的tree，继续追加逻辑 
 				if(ft.getFoType().equals("tree-lazy")) {
@@ -212,7 +213,6 @@ public class DbTable {
 					dc.tx.setDefaultValue("comment", "子级数量");
 					dc.tx.setDefaultValue("java-type", "Long"); 	// 默认的java类型
 					dc.setFlag("tree-lazy-children-count");	// 标记：懒加载树形表格的count计数列 
-					ft.setDefaultValue("top", "-1");	// 标记：懒加载树形表格的count计数列 
 					
 					// 加入到列列表
 					this.columnList.add(dc);

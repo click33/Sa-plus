@@ -11,36 +11,35 @@ import cn.dev33.satoken.stp.StpUtil;
 
 /**
  * 系统配置相关 
+ * @author kong
+ *
  */
 @RestController
 @RequestMapping("/SpCfg/")
 public class SpCfgController {
 
-	
-	// 配置信息
 	@Autowired
 	SpCfgService sysCfgService;
 		
-	
-	// 返回指定【cfg_name】配置信息 
+	/** 返回指定【cfgName】配置信息 */
 	@RequestMapping("getCfg")
-	public AjaxJson getCfg(String cfg_name){
-		StpUtil.checkPermission(AuthConst.p_sp_cfg);	// 鉴权 
-		return AjaxJson.getSuccessData(sysCfgService.getCfgValue(cfg_name));
+	public AjaxJson getCfg(String cfgName){
+		StpUtil.checkPermission(AuthConst.SP_CFG);
+		return AjaxJson.getSuccessData(sysCfgService.getCfgValue(cfgName));
 	}
 	
-	// 修改指定【cfg_name】配置信息 
+	/** 修改指定【cfgName】配置信息  */
 	@RequestMapping("updateCfg")
-	public AjaxJson updateCfg(String cfg_name, String cfg_value){
-		StpUtil.checkPermission(AuthConst.p_sp_cfg);	// 鉴权 
-		int a=sysCfgService.updateCfgValue(cfg_name, cfg_value);
+	public AjaxJson updateCfg(String cfgName, String cfgValue){
+		StpUtil.checkPermission(AuthConst.SP_CFG);
+		int a=sysCfgService.updateCfgValue(cfgName, cfgValue);
 		return AjaxJson.getByLine(a);
 	}
 
 
-	// 返回应用配置信息 （对公开放的）
-	@RequestMapping("app_cfg")
-	public AjaxJson app_cfg(){
+	/** 返回应用配置信息 （对公开放的） */
+	@RequestMapping("appCfg")
+	public AjaxJson appCfg(){
 		return AjaxJson.getSuccessData(sysCfgService.getCfgValue("app_cfg"));
 	}
 	
