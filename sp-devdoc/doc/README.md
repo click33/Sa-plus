@@ -25,7 +25,7 @@
 ## 🔥 在线资料 
 - #### 官网首页：[http://sa-plus.dev33.cn/](http://sa-plus.dev33.cn/)
 - #### 在线文档：[http://sa-plus.dev33.cn/doc/index.html](http://sa-plus.dev33.cn/doc/index.html)
-- #### 在线演示：[http://demo.dev33.cn/sp-admin/index.html](http://demo.dev33.cn/sp-admin/index.html)
+- #### 在线演示：[http://demo-jj.dev33.cn/spdj-admin/index.html](http://demo-jj.dev33.cn/spdj-admin/index.html)
 - #### 微服务版：[https://gitee.com/sz6/sp-cloud](https://gitee.com/sz6/sp-cloud)
 
 
