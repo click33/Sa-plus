@@ -17,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-12-1 新增部分构造方法
+ * <p>最新：2020-12-10 新增部分构造方法
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -47,7 +49,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	/** 获取一个值 */
 	@Override
 	public Object get(Object key) {
-		if(key.equals("this")) {
+		if("this".equals(key)) {
 			return this;
 		}
 		return super.get(key);
@@ -207,11 +209,12 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		// 循环复制  
 		for (Field field : cs.getDeclaredFields()) {
 			try {
-				Object value = this.get(field.getName());	// 获取对象 
+				// 获取对象 
+				Object value = this.get(field.getName());	
 				if(value == null) {
 					continue;
 				}
-				field.setAccessible(true);	// 打开私有访问
+				field.setAccessible(true);	
 				Object valueConvert = getValueByClass(value, field.getType());
 				field.set(obj, valueConvert);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -270,7 +273,8 @@ public class SoMap extends LinkedHashMap<String, Object> {
 
 	/** set一个值，连缀风格 */
 	public SoMap set(String key, Object value) {
-		if(key.toLowerCase().equals("this")) {		// 防止敏感key 
+		// 防止敏感key 
+		if(key.toLowerCase().equals("this")) {		
 			return this;
 		}
 		put(key, value);
@@ -307,6 +311,16 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
+	/** 将json字符串解析后塞进SoMap */
+	public SoMap setJsonString(String jsonString) {
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = new ObjectMapper().readValue(jsonString, Map.class);
+			return this.setMap(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	
 	// ============================= 删值 =============================
@@ -526,6 +540,16 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		}
 	}
 
+	/**
+	 * 转为JSON字符串, 带格式的 
+	 */
+	public String toJsonFormatString() {
+		try {
+			return JSON.toJSONString(this, true); 
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	// ============================= web辅助 =============================
 
@@ -535,11 +559,13 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	 * @return
 	 */
 	public static SoMap getRequestSoMap() {
-		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();// 大善人SpringMVC提供的封装 
+		// 大善人SpringMVC提供的封装 
+		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if(servletRequestAttributes == null) {
 			throw new RuntimeException("当前线程非JavaWeb环境");
 		}
-		HttpServletRequest request = servletRequestAttributes.getRequest(); // 当前request
+		// 当前request
+		HttpServletRequest request = servletRequestAttributes.getRequest(); 
 		if (request.getAttribute("currentSoMap") == null || request.getAttribute("currentSoMap") instanceof SoMap == false ) {
 			initRequestSoMap(request);
 		}
@@ -663,19 +689,19 @@ public class SoMap extends LinkedHashMap<String, Object> {
 			// 单条记录
 			SoMap aVal = (SoMap) list.get(j);
 			// 在hash中取出key为单条记录中pid的值
-			SoMap hashVP = (SoMap) hash.get(aVal.get(parentIdKey, "").toString());
+			SoMap hashVp = (SoMap) hash.get(aVal.get(parentIdKey, "").toString());
 			// 如果记录的pid存在，则说明它有父节点，将她添加到孩子节点的集合中
-			if (hashVP != null) {
+			if (hashVp != null) {
 				// 检查是否有child属性，有则添加，没有则新建 
-				if (hashVP.get(childListKey) != null) {
+				if (hashVp.get(childListKey) != null) {
 					@SuppressWarnings("unchecked")
-					List<SoMap> ch = (List<SoMap>) hashVP.get(childListKey);
+					List<SoMap> ch = (List<SoMap>) hashVp.get(childListKey);
 					ch.add(aVal);
-					hashVP.put(childListKey, ch);
+					hashVp.put(childListKey, ch);
 				} else {
 					List<SoMap> ch = new ArrayList<SoMap>();
 					ch.add(aVal);
-					hashVP.put(childListKey, ch);
+					hashVp.put(childListKey, ch);
 				}
 			} else {
 				newTreeList.add(aVal);
@@ -686,7 +712,7 @@ public class SoMap extends LinkedHashMap<String, Object> {
 	
 	
 
-	// 指定字符串的字符串下划线转大写模式
+	/** 指定字符串的字符串下划线转大写模式 */
 	private static String wordEachBig(String str){
 		String newStr = "";
 		for (String s : str.split("_")) {
@@ -694,27 +720,27 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		}
 		return newStr;
 	}
-	// 返回下划线转小驼峰形式
+	/** 返回下划线转小驼峰形式 */
 	private static String wordEachBigFs(String str){
 		return wordFirstSmall(wordEachBig(str));
 	}
 
-	// 将指定单词首字母大写;
+	/** 将指定单词首字母大写 */
 	private static String wordFirstBig(String str) {
 		return str.substring(0, 1).toUpperCase() + str.substring(1, str.length());
 	}
 
-	// 将指定单词首字母小写;
+	/** 将指定单词首字母小写 */
 	private static String wordFirstSmall(String str) {
 		return str.substring(0, 1).toLowerCase() + str.substring(1, str.length());
 	}
 
-	// 下划线转中划线
+	/** 下划线转中划线 */
 	private static String wordEachKebabCase(String str) {
 		return str.replaceAll("_", "-");
 	}
 
-	// 驼峰转下划线 
+	/** 驼峰转下划线  */
 	private static String wordHumpToLine(String str) {
 		return str.replaceAll("[A-Z]", "_$0").toLowerCase();
 	}

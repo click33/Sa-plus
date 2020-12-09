@@ -17,12 +17,14 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Map< String, Object> 是最常用的一种Map类型，但是它写着麻烦 
  * <p>所以特封装此类，继承Map，进行一些扩展，可以让Map更灵活使用 
- * <p>最新：2020-12-1 新增部分构造方法
+ * <p>最新：2020-12-10 新增部分构造方法
  * @author kong
  */
 public class SoMap extends LinkedHashMap<String, Object> {
@@ -309,6 +311,16 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		return this;
 	}
 
+	/** 将json字符串解析后塞进SoMap */
+	public SoMap setJsonString(String jsonString) {
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> map = new ObjectMapper().readValue(jsonString, Map.class);
+			return this.setMap(map);
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	
 	// ============================= 删值 =============================
@@ -528,6 +540,16 @@ public class SoMap extends LinkedHashMap<String, Object> {
 		}
 	}
 
+	/**
+	 * 转为JSON字符串, 带格式的 
+	 */
+	public String toJsonFormatString() {
+		try {
+			return JSON.toJSONString(this, true); 
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
 
 	// ============================= web辅助 =============================
 
