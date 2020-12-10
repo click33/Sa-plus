@@ -642,10 +642,10 @@ public class DbTable {
 			}
 			// 如果是priavate 
 			if(GenCfgManager.cfg.modelVisitWay == 1) {
-				str2 += "\t\ts.set" + c.getGetset() + "(" + c.getDefaultValue() + ");";
+				str2 += "\t\t" + getVarNameSimple() + ".set" + c.getGetset() + "(" + c.getDefaultValue() + ");";
 			}
 			if(GenCfgManager.cfg.modelVisitWay == 2) {
-				str2 += "\t\ts." + c.getFieldName() + " = " + c.getDefaultValue() + ";";
+				str2 += "\t\t" + getVarNameSimple() + "." + c.getFieldName() + " = " + c.getDefaultValue() + ";";
 			}
 			// 拼接注释 
 			if(GenCfgManager.cfg.utilDocWay == 1) {
