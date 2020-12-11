@@ -592,7 +592,7 @@ public class DbTable {
 		if(this.hasFt("tree")) {
 			otherwise = " `" + this.primaryKey.getAsColumnName() + "` asc ";
 		}
-		str = str + "\t\t\t<otherwise>" + otherwise + "`</otherwise>\r\n";
+		str = str + "\t\t\t<otherwise>" + otherwise + "</otherwise>\r\n";
 		return str;
 	}
 	
