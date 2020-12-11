@@ -116,7 +116,7 @@
 							<p style="padding-left: 3px;">
 								<b style="color: green;" v-if="s.row.resCode == 200">{{s.row.resCode}} - {{s.row.resMsg}}</b>
 								<b style="color: red;" v-else-if="s.row.resCode == 500 || s.row.resCode == 501">{{s.row.resCode}} - {{s.row.resMsg}}</b>
-								<b style="color: blue;" v-else>{{s.row.res_code}} - {{s.row.resMsg}}</b>
+								<b style="color: blue;" v-else>{{s.row.resCode}} - {{s.row.resMsg}}</b>
 							</p>
 							<p class="req-string" @click="seeResString(s.row)">
 								{{sa.maxLength(s.row.resString, 70)}}
@@ -241,7 +241,7 @@
 					},
 					// 查看：访问参数 
 					seeReqParame: function(data) {
-						var jsonStr = data.req_parame;
+						var jsonStr = data.reqParame;
 						jsonStr = JSON.stringify(JSON.parse(jsonStr), null, "\t");
 						layer.prompt({
 							title: '请求参数',
@@ -257,7 +257,7 @@
 					},
 					// 查看：返回参数  
 					seeResString: function(data) {
-						var jsonStr = data.res_string;
+						var jsonStr = data.resString;
 						jsonStr = JSON.stringify(JSON.parse(jsonStr), null, "\t");
 						layer.prompt({
 							title: '返回参数',
