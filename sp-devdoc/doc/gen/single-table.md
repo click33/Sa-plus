@@ -71,7 +71,7 @@ INSERT INTO `ser_goods`(`id`, `name`, `avatar`, `image_list`, `remark`, `content
 | [enum]			| 声明一个枚举字段，具体语法请查看下方示例，还可以写成 `[j]`		| [enum](#-enmu-枚举字段)		|
 | [logic-delete]		| 声明此表的逻辑删除字段，还可以简写成`[lc-del]`					| [logic-delete](#-logic-delete-逻辑删除)		|
 | ~~[fk-1]~~ 			| ~~声明一个外键~~ (已移除此特性，请查看表注释`fk-s`连接外键) 		| 无 |
-| ~~[fk-2]~~ 			| ~~声明一个外键~~ (已移除此特性，请查看表注释`fk-s`连接外键) 		| 无 |
+| ~~[fk-2]~~ 			| ~~声明一个外键~~ (已移除此特性，请查看表注释`fk-s`连接外键)**(此特性由追加参数[click](/gen/comment-args?id=-click-单击打开详情)代替)** 		| 无 |
 | ~~[no]~~			| ~~代表生成表单时忽略此字段~~	(已移除此特性，使用`[xxx not-add]`达到同样目的) 									| 无		|
 | --notp			| 此字段取消解析								| 无		|
 
