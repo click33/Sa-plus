@@ -27,8 +27,8 @@
 ${t.getT1List_ByMapperUpdateSet()}
 		where `${t.primaryKey.columnName}` = <#noparse>#</#noparse>{${t.primaryKey.fieldName}}
 	</update>
-	
-	
+
+
 	<!-- ================================== 查询相关 ================================== -->
 	<#if cfg.sqlSelectColumnWay == 1>
 	<!-- select ${t.getT1List_ByMapperInsertColumn()} from ${t.tableName}  --></#if>
