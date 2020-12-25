@@ -8,12 +8,15 @@ import com.pj.utils.so.*;
 <#if cfg.mybatisPlus>
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 </#if>
+import org.springframework.stereotype.Repository;
 
 /**
  * Mapper: ${t.tableName} -- ${t.tableComment}
  * @author ${cfg.author} 
  */
+
 @Mapper
+@Repository
 public interface ${t.mkNameBig}Mapper<#if cfg.mybatisPlus> extends BaseMapper <${t.modelName}></#if> {
 
 	/**
