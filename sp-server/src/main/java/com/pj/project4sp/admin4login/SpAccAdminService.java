@@ -18,8 +18,8 @@ import com.pj.utils.sg.NbUtil;
 import com.pj.utils.sg.WebNbUtil;
 import com.pj.utils.so.SoMap;
 
+import cn.dev33.satoken.spring.SpringMVCUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SpringMvcUtil;
 
 /**
  * service：admin账号相关
@@ -107,7 +107,7 @@ public class SpAccAdminService {
 	 * @return
 	 */
 	public int successLogin(SpAdmin s){
-		String loginIp = WebNbUtil.getIP(SpringMvcUtil.getRequest());
+		String loginIp = WebNbUtil.getIP(SpringMVCUtil.getRequest());
 		int line = spAccAdminMapper.successLogin(s.getId(), loginIp);
 		if(line > 0) {
 	        s.setLoginIp(loginIp);

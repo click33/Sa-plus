@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.NbUtil;
 
-import cn.dev33.satoken.SaTokenManager;
-import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
@@ -90,18 +88,6 @@ public class SpAdminUtil {
 	}
 	
 	
-	/**
-	 * 获取指定token对应的adminId 
-	 * @param token
-	 * @return
-	 */
-	public static long getAdminIdByToken(String token) {
-		Object loginId = SaTokenManager.getDao().getValue(StpUtil.stpLogic.getKeyTokenValue(token));
-		if(loginId == null) {
-			throw new NotLoginException();
-		}
-		return Long.parseLong(loginId.toString());
-	}
 
 
 
