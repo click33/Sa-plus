@@ -49,7 +49,8 @@
 			<!-- ------- 内容部分 ------- -->
 			<div class="s-body">
 				<div class="c-panel">
-					<div class="c-title">数据添加</div>
+                    <div class="c-title" v-if="id == 0">数据添加</div>
+					<div class="c-title" v-else>数据修改</div>
 					<el-form size="mini" v-if="m">
 <#list t.t12List as c>
 	<#if c.istx('no-add')>	
