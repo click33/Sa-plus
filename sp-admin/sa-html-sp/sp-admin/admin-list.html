@@ -157,6 +157,7 @@
 				data: {
 					sa: sa, 	// 超级对象
 					p: {		// 查询参数
+						type:'admin',
 						id: '',
 						name: '',
 						roleId: '',
@@ -172,11 +173,12 @@
 				methods: {
 					// 刷新
 					f5: function(isPage){
-						sa.ajax('/admin/getList', this.p, function(res){
-							this.dataList = res.data;	// 数据
-							this.dataCount = res.dataCount;
-							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this));
+						// sa.ajax('/admin/getList', this.p, function(res){
+						// 	this.dataList = res.data;	// 数据
+						// 	this.dataCount = res.dataCount;
+						// 	sa.f5TableHeight();		// 刷新表格高度 
+						// }.bind(this));
+						sa_IM.send(this.p)
 					},
 					// 新增
 					add: function() {
@@ -297,6 +299,20 @@
 					sa.ajax('/role/getList', function(res){
 						this.roleList = res.data;	// 数据  
 					}.bind(this), {msg: null});
+					
+					
+					// 接收消息
+					sa_IM.message().onmessage = (res) =>{
+					
+						res = JSON.parse(res.data)
+						if("admin" == res.type){
+							console.log(res.data)
+							this.dataList = res.data;	// 数据
+							sa.f5TableHeight();	
+							this.dataCount = res.dataCount;
+						}
+					
+					}
 				}
 			})
 			
