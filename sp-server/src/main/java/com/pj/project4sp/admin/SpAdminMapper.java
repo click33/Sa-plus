@@ -5,12 +5,14 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.pj.utils.so.SoMap;
+import org.springframework.stereotype.Repository;
 
 /**
  * Mapper: 系统管理员表
  * @author kong
  */
 @Mapper
+@Repository
 public interface SpAdminMapper {
 
 

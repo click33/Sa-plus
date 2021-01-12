@@ -120,6 +120,7 @@
 					// 提交 
 					ok: function(){
 						sa.ajax('/SpCfg/updateCfg', {cfgName: 'app_cfg', cfgValue: JSON.stringify(this.m)}, function(res){
+							sa.$sys.setAppCfg(JSON.stringify(this.m));
 							sa.ok2('保存成功');
 						}.bind(this));
 					},

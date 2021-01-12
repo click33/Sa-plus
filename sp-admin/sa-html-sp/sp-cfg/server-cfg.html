@@ -16,7 +16,7 @@
 			html,body,.vue-box{height: 100%; overflow: hidden;}
 			/* .vue-box{padding: 0px;} */
 			.c-panel{height: calc(100% - 4em); position: relative;}
-			.c-panel .c-label{width: 10em;}
+			.c-panel .c-label{width: 20em;}
 			.c-panel .el-input{width: 500px;}
 			.c-panel .el-textarea{width: 500px;}
 			.logo-img{
@@ -42,12 +42,19 @@
 							<label class="c-label">预留信息：</label>
 							<el-input size="mini" v-model="m.reserve_info"></el-input>
 						</div> -->
-						<div class="c-item">
+						<div class="c-item br">
 							<label class="c-label">抛出SQL：</label>
 							<el-switch v-model="m.throwOutSql" :active-value="1" :inactive-value="2"></el-switch>
 							<span class="c-remark" v-if="m.throwOutSql==1">开启</span>
 							<span class="c-remark" v-else>关闭</span>
 							<span class="c-remark" style="color: red;">( 抛出sql只为方便调试，建议只在开发环境下打开此选项，生产环境请务必关闭 )</span>
+						</div>
+						<div class="c-item br">
+							<label class="c-label">后台是否开启websocket：</label>
+							<el-switch v-model="m.websocket" :active-value="1" :inactive-value="2"></el-switch>
+							<span class="c-remark" v-if="m.websocket==1">开启</span>
+							<span class="c-remark" v-else>关闭</span>
+							<span class="c-remark" style="color: red;">( 开启websocket需要后台配合,可以实现添加数据是实时更新 )</span>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -75,6 +82,7 @@
 				return {
 					reserve_info: '预留信息', // 预留信息 
 					throwOutSql: 2,	// 是否隐藏sql，
+					websocket: 2,	// 是否隐藏websocket，
 				}
 			}
 		</script>
@@ -100,6 +108,7 @@
 						}
 						// 赋值
 						this.m = default_cfg;
+						console.log(this.m)
 					},
 					// 刷新
 					f5: function() {
@@ -115,6 +124,13 @@
 							cfgName: 'server_cfg',
 							cfgValue: JSON.stringify(this.m)
 						}, function(res) {
+							sa.$sys.setServerCfg(JSON.stringify(this.m));
+							if(this.m.websocket == 1){
+								sa.$sys.getCurrUser().id;
+								sa_IM.login(sa.$sys.getCurrUser().id)
+							}else{
+								sa_IM.close();
+							}
 							sa.ok2('保存成功');
 						}.bind(this));
 					}

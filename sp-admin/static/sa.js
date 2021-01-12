@@ -9,6 +9,7 @@ var sa = {
 (function(){
 	// 公司开发环境
 	var cfg_dev = {
+		ws_url:'ws://127.0.0.1:8099',
 		api_url: 'http://127.0.0.1:8099',	// 所有ajax请求接口父地址
 		web_url: 'http://www.baidu.com'		// 此项目前台地址 (此配置项非必须)
 	}
@@ -1191,10 +1192,22 @@ var sa = {
 		localStorage.setItem('app_cfg', cfg);
 	}
 	
+	me.setServerCfg = function(cfg) {
+		if(typeof cfg != 'string') {
+			cfg = JSON.stringify(cfg);
+		}
+		localStorage.setItem('server_cfg', cfg);
+	}
+	
 	// 获取配置信息
 	me.getAppCfg = function() {
 		var app_cfg = sa.JSONParse(localStorage.getItem('app_cfg'), {}) || {};
 		return app_cfg;
+	}
+	
+	me.getServerCfg = function() {
+		var server_cfg = sa.JSONParse(localStorage.getItem('server_cfg'), {}) || {};
+		return server_cfg;
 	}
 	
 	
@@ -1243,10 +1256,13 @@ var sa = {
 // 如果是sa_admin环境 
 window.sa_admin = window.sa_admin || parent.sa_admin || top.sa_admin;
 
+window.sa_IM = window.sa_IM || parent.sa_IM || top.sa_IM;
+
 // 如果当前是Vue环境, 则挂在到Vue示例
 if(window.Vue) {
 	Vue.prototype.sa = window.sa;
 	Vue.prototype.sa_admin = window.sa_admin;
+	Vue.prototype.sa_IM = window.sa_IM
 }
 
 // 对外开放, 在模块化时解开此注释 

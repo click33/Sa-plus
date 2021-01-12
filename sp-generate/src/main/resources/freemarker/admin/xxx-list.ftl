@@ -238,7 +238,8 @@
 			var app = new Vue({
 				el: '.vue-box',
 				data: {
-					p: { // 查询参数  
+					p: { // 查询参数
+						ofType:'${t.kebabName}',
 				<#list t.getT1List() as c>
 					<#if c.getFlag() == 'tree-parent-id' && t.hasFt('tree-lazy')>
 						${c.fieldName}: sa.p('${c.fieldName}', ${t.getFt('tree-lazy').top}),		// ${c.columnComment} 
@@ -267,11 +268,16 @@
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this));
 <#else>
-						sa.ajax('/${t.mkNameBig}/getList', sa.removeNull(this.p), function(res) {
-							this.dataList = res.data; // 数据
-							this.dataCount = res.dataCount; // 数据总数 
-							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this));
+						if(sa.$sys.getServerCfg().websocket == 1){
+							sa_IM.send(this.p)
+							this.websocket()
+						}else {
+							sa.ajax('/${t.mkNameBig}/getList', sa.removeNull(this.p), function (res) {
+								this.dataList = res.data; // 数据
+								this.dataCount = res.dataCount; // 数据总数
+								sa.f5TableHeight();		// 刷新表格高度
+							}.bind(this));
+						}
 </#if>
 					},
 <#if t.hasFt('tree-lazy')>
@@ -384,6 +390,24 @@
 						});
 					},
 			</#list>
+					// 接收websocket消息
+					websocket :function(){
+						// 接收消息
+						sa_IM.message().onmessage = (res) =>{
+
+							res = JSON.parse(res.data)
+							if("${t.kebabName}" == res.ofType){
+								if(200 == res.code){
+
+									this.dataList = res.data;	// 数据
+									this.dataCount = res.dataCount;
+									sa.f5TableHeight();
+								}else{
+									sa.error(res.info)
+								}
+							}
+						}
+					}
 				},
 				created: function() {
 					this.f5();

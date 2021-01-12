@@ -8,7 +8,7 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         url: jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
         username: root
-        password: root123456 
+        password: root
         # 是否打开sql监控台  (生产环境请务必关闭此选项) 
         druid: 
             stat-view-servlet:

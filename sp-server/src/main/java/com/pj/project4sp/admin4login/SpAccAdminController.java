@@ -61,9 +61,10 @@ public class SpAccAdminController {
 		// 组织参数 (admin信息，权限信息，配置信息)
 		SoMap map = new SoMap();
 		map.set("admin", SpAdminUtil.getCurrAdmin());	
-		map.set("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));				
-		map.set("app_cfg", SpCfgUtil.getAppCfg());	
-		return AjaxJson.getSuccessData(map); 
+		map.set("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));
+		map.set("app_cfg", SpCfgUtil.getAppCfg());
+		map.set("server_cfg", SpCfgUtil.getServerCfg());
+		return AjaxJson.getSuccessData(map);
 	}
 	
 	

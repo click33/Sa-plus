@@ -25,7 +25,7 @@ public class SpGenerateApplication {
         config.setDriverClassName("com.mysql.jdbc.Driver");
         config.setUrl("jdbc:mysql://127.0.0.1:3306/sp-dev?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=UTC");
         config.setUsername("root");
-        config.setPassword("root123456");
+        config.setPassword("root");
         config.setPrintSql(true);		// 是否打印sql  
         FlyObjects.setConfig(config);    // 注入到框架中 
         // ！！！注意：如果报错创建连接失败，可尝试将连接字符串中的 useSSL=true 改为 useSSL=false 
@@ -61,7 +61,8 @@ public class SpGenerateApplication {
             .setSqlEnclose(2) 				// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否) 
             .setSaTokenAuthWay(2)   		// 鉴权代码的方式 (1=代码式鉴权, 2=注解式鉴权)
 			.setMybatisPlus(false)			// 是否生成的代码遵循mybatis-plus风格(继承一些mp的特定父类)
-			.setOutFC(true)					// 是否输出FC.java工厂类 
+			.setOutFC(true)					// 是否输出FC.java工厂类
+			.setOutWebsocket(true)			// 是否生成后台websocket
 			.setDefaultMeunIcon("el-icon-folder-opened")	// 生成后台管理页面时，默认的菜单图标
 			.setWebLibImportWay(1) 			// 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)

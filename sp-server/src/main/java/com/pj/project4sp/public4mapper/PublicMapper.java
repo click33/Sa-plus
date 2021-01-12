@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.pj.utils.so.SoMap;
+import org.springframework.stereotype.Repository;
 
 /**
  * 公用Mapper，封装一些常见的Mapper操作，避免某些及其简单的逻辑也要写一堆xml方法
@@ -14,6 +15,7 @@ import com.pj.utils.so.SoMap;
  *
  */
 @Mapper
+@Repository
 public interface PublicMapper {
 
 	

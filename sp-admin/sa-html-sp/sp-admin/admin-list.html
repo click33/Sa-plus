@@ -157,6 +157,7 @@
 				data: {
 					sa: sa, 	// 超级对象
 					p: {		// 查询参数
+						ofType:'admin-list',
 						id: '',
 						name: '',
 						roleId: '',
@@ -172,11 +173,16 @@
 				methods: {
 					// 刷新
 					f5: function(isPage){
-						sa.ajax('/admin/getList', this.p, function(res){
-							this.dataList = res.data;	// 数据
-							this.dataCount = res.dataCount;
-							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this));
+						if(sa.$sys.getServerCfg().websocket == 1){
+							sa_IM.send(this.p)
+							this.websocket()
+						}else{
+							sa.ajax('/admin/getList', this.p, function(res){
+								this.dataList = res.data;	// 数据
+								this.dataCount = res.dataCount;
+								sa.f5TableHeight();		// 刷新表格高度 
+							}.bind(this));
+						}
 					},
 					// 新增
 					add: function() {
@@ -289,6 +295,26 @@
 							}.bind(this))
 						}.bind(this));
 					},
+					websocket :function(){
+						// 接收消息
+						// this.$forceUpdate()
+						sa_IM.message().onmessage = (res) =>{
+							
+							res = JSON.parse(res.data)
+							if("admin-list" == res.ofType){
+								console.log(res.data)
+								if(200 == res.code){
+									
+									this.dataList = res.data;	// 数据
+									this.dataCount = res.dataCount;
+									sa.f5TableHeight();	
+								}else{
+									sa.error(res.info)
+								}
+							}
+						
+						}
+					}
 				},
 				created: function(){
 					this.f5();
@@ -297,6 +323,7 @@
 					sa.ajax('/role/getList', function(res){
 						this.roleList = res.data;	// 数据  
 					}.bind(this), {msg: null});
+					
 				}
 			})
 			
