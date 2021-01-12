@@ -1,6 +1,7 @@
 package com.pj.project4sp;
 
 import com.pj.project4sp.admin.SpAdminMapper;
+import com.pj.project4sp.websocket.AdminWebsocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,12 @@ public class SP {
 	/**
 	 * 公共Service
 	 */
-	public static PublicService publicService;				
+	public static PublicService publicService;
+
+	/**
+	 * webSocket service
+	 */
+	public static AdminWebsocketService adminWebsocketService;
 	
 
 	@Autowired
@@ -38,12 +44,14 @@ public class SP {
 			PublicMapper publicMapper,
 			SpAdminMapper spAdminMapper,
 
-			PublicService publicService
+			PublicService publicService,
+			AdminWebsocketService adminWebsocketService
 			) {
 		SP.publicMapper = publicMapper;
 		SP.spAdminMapper = spAdminMapper;
 
 		SP.publicService = publicService;
+		SP.adminWebsocketService = adminWebsocketService;
 	}
 	
 	

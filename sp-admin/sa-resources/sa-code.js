@@ -32,11 +32,12 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 	// var myMenuList = window.menuList;    // window.menuList 在 menu-list.js 中定义 
 	sa_admin.initMenu(res.data.per_list);    // 初始化菜单   
 	sa.setAuth(res.data.per_list);		// 当前用户权限码集合 
-	console.log(sa_IM)
-	sa_IM.login(res.data.admin.id);
 	// 配置信息 
-	sa.$sys.setAppCfg(res.app_cfg);
+	sa.$sys.setServerCfg(res.data.server_cfg);
 	
+	if(sa.$sys.getServerCfg().websocket == 1){
+		sa_IM.login(res.data.admin.id);
+	}
 	// 初始化模板(必须调用) 
 	sa_admin.init();	
 	

@@ -1192,10 +1192,22 @@ var sa = {
 		localStorage.setItem('app_cfg', cfg);
 	}
 	
+	me.setServerCfg = function(cfg) {
+		if(typeof cfg != 'string') {
+			cfg = JSON.stringify(cfg);
+		}
+		localStorage.setItem('server_cfg', cfg);
+	}
+	
 	// 获取配置信息
 	me.getAppCfg = function() {
 		var app_cfg = sa.JSONParse(localStorage.getItem('app_cfg'), {}) || {};
 		return app_cfg;
+	}
+	
+	me.getServerCfg = function() {
+		var server_cfg = sa.JSONParse(localStorage.getItem('server_cfg'), {}) || {};
+		return server_cfg;
 	}
 	
 	

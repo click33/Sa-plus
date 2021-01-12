@@ -71,7 +71,12 @@ public class SpCfgUtil {
 
 	/** 获取app端全部配置信息 */
 	public static String getAppCfg() {
-		return sysCfgService.getCfgValue("AppCfg");
+		return sysCfgService.getCfgValue("app_cfg");
+	}
+
+	/** 获取服务端全部配置信息 */
+	public static String getServerCfg() {
+		return sysCfgService.getCfgValue("server_cfg");
 	}
 
 	// --- app  

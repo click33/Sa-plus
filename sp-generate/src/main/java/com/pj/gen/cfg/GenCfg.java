@@ -50,7 +50,8 @@ public class GenCfg {
 	public int sqlEnclose = 2;			// 生成的sql语句中，是否将字段用`包裹起来(1=是,2=否)
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
 	public boolean mybatisPlus = false; // 是否使用mybatisPlus
-	public boolean isOutFC = true; // 是否输出FC.java工厂类 
+	public boolean isOutFC = true; // 是否输出FC.java工厂类
+	public boolean isOutWebsocket = true; // 是否生成后台websocket
 	public int webLibImportWay = 1; // 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 	
 	
@@ -466,8 +467,7 @@ public class GenCfg {
 	public boolean getMybatisPlus(){
 		return mybatisPlus;
 	}
-	
-	
+
 	/**
 	 * @return isOutFC
 	 */
@@ -481,6 +481,15 @@ public class GenCfg {
 		this.isOutFC = isOutFC;
 		return this;
 	}
+	/**
+	 * @param isOutWebsocket 要设置的 isOutWebsocket
+	 */
+	public GenCfg setOutWebsocket(boolean isOutWebsocket){
+		this.isOutFC = true;
+		this.isOutWebsocket = isOutWebsocket;
+		return this;
+	}
+
 	/**
 	 * @return defaultMeunIcon
 	 */

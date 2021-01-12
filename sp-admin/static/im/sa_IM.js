@@ -10,22 +10,27 @@ var adminId;
 		
 		adminId = id;
 		// 连接websocket
-		this.Socket= new WebSocket(sa.cfg.ws_url+"/adminWebsocket/"+id);
+		sa_IM.Socket= new WebSocket(sa.cfg.ws_url+"/adminWebsocket/"+id);
 		
 		// this.Socket.onmessage = message;
-		this.Socket.onopen = open;
-		this.Socket.onclose = close;
+		sa_IM.Socket.onopen = open;
+		sa_IM.Socket.onclose = close;
 	};
 	
 	// 发送信息
 	sa_IM.send = function send(data){
-		this.Socket.send(JSON.stringify(data));
+		sa_IM.Socket.send(JSON.stringify(data));
 	};
 	
 	// 接收消息
 	sa_IM.message = function message(){
-		return this.Socket;
+		
+		return sa_IM.Socket;
 	};
+	// 手动关闭websocket
+	sa_IM.close = function close(){
+		sa_IM.Socket.onclose(2);
+	}
 })();
 
 
@@ -39,13 +44,14 @@ function open(){
 	setdate();
 }
 // 连接断开
-function close(){
+function close(type){
 	console.log("连接断开");
-	
-	boo = false;
-	setTimeout(function(){
-		sa_IM.login(adminId);
-	},3000);
+	if(type != 2){
+		boo = false;
+		setTimeout(function(){
+			sa_IM.login(adminId);
+		},3000);
+	}
 }
 // 心跳
 function setdate(){

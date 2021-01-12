@@ -150,10 +150,8 @@ public class SpAdminController {
 		int line = spAdminMapper.update(obj);
 		return AjaxJson.getByLine(line);
 	}
-	
-	
-	
-	
+
+
 	
 	
 	
