@@ -51,7 +51,7 @@ public class GenCfg {
 	public int saTokenAuthWay = 1;			// 鉴权代码的方式 (1=代码鉴权, 2=注解式鉴权)
 	public boolean mybatisPlus = false; // 是否使用mybatisPlus
 	public boolean isOutFC = true; // 是否输出FC.java工厂类
-	public boolean isOutWebsocket = true; // 是否生成后台websocket
+	public boolean isOutWebsocket = false; // 是否生成后台websocket
 	public int webLibImportWay = 1; // 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 	
 	

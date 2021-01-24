@@ -1,7 +1,5 @@
 package com.pj.project4sp.spcfg;
 
-import com.pj.project4sp.SP;
-import com.pj.utils.so.SoMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -172,17 +172,12 @@
 				},
 				methods: {
 					// 刷新
-					f5: function(isPage){
-						if(sa.$sys.getServerCfg().websocket == 1){
-							sa_IM.send(this.p)
-							this.websocket()
-						}else{
-							sa.ajax('/admin/getList', this.p, function(res){
-								this.dataList = res.data;	// 数据
-								this.dataCount = res.dataCount;
-								sa.f5TableHeight();		// 刷新表格高度 
-							}.bind(this));
-						}
+					f5: function(){
+						sa.ajax('/admin/getList', this.p, function(res){
+							this.dataList = res.data;	// 数据
+							this.dataCount = res.dataCount;
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
 					},
 					// 新增
 					add: function() {

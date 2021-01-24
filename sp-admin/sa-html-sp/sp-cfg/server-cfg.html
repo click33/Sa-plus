@@ -125,12 +125,6 @@
 							cfgValue: JSON.stringify(this.m)
 						}, function(res) {
 							sa.$sys.setServerCfg(JSON.stringify(this.m));
-							if(this.m.websocket == 1){
-								sa.$sys.getCurrUser().id;
-								sa_IM.login(sa.$sys.getCurrUser().id)
-							}else{
-								sa_IM.close();
-							}
 							sa.ok2('保存成功');
 						}.bind(this));
 					}

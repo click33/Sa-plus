@@ -41,42 +41,32 @@ public class GenUtil {
 		for (DbTable t : GenCfgManager.cfg.tableList) {
 			
 			// model
-			// 路径
 			String modelPath = t.getServerIoPath() + t.getModelName() + ".java";
-			// 内容
 			String modelContent = FreeMarkerUtil.getResult("mybatis/Model.ftl", "t", t);
 			SUtil.outFile(modelPath, modelContent);
 			System.out.println(t.getModelName() + " 写入成功：\t\t\t" + modelPath);
 			
 			// Mapper.java
-			// 路径
 			String mapperJavaPath = t.getServerIoPath() + t.getMkNameBig() + "Mapper.java";
-			// 内容
 			String mapperJavaContent = FreeMarkerUtil.getResult("mybatis/MapperJava.ftl", "t", t);
 			SUtil.outFile(mapperJavaPath, mapperJavaContent);
 			System.out.println(t.getModelName() + "Mapper.java 写入成功：\t\t" + mapperJavaPath);
 
 			// Mapper.xml
-			// 路径
 			String mapperXmlPath = t.getServerIoPath() + t.getMkNameBig() + "Mapper.xml";
-			// 内容
 			String mapperXmlContent = FreeMarkerUtil.getResult("mybatis/MapperXml.ftl", "t", t);
 			mapperXmlContent = GenCfgManager.cfg.getSqlEncloseRefreshStr(mapperXmlContent);
 			SUtil.outFile(mapperXmlPath, mapperXmlContent);
 			System.out.println(t.getModelName() + "Mapper.xml 写入成功：\t\t" + mapperXmlPath);
 
 			// Controller
-			// 路径
 			String controllerPath = t.getServerIoPath() + t.getMkNameBig() + "Controller.java";
-			// 内容
 			String controllerContent = FreeMarkerUtil.getResult("mybatis/Controller.ftl", "t", t);
 			SUtil.outFile(controllerPath, controllerContent);
 			System.out.println(t.getModelName() + "Controller 写入成功：\t\t" + controllerPath);
 
 			// Util
-			// 路径
 			String utilPath = t.getServerIoPath() + t.getMkNameBig() + "Util.java";
-			// 内容
 			String utilContent = FreeMarkerUtil.getResult("mybatis/Util.ftl", "t", t);
 			SUtil.outFile(utilPath, utilContent);
 			System.out.println(t.getModelName() + "Util 写入成功：\t\t" + utilPath);
@@ -87,18 +77,14 @@ public class GenUtil {
 		
 		// FC.java 依赖清单 
 		if(GenCfgManager.cfg.isOutFC) {
-			// 路径
 			String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";
-			// 内容
 			String FContent = FreeMarkerUtil.getResult("mybatis/FC.ftl", "abc", 123);
 			SUtil.outFile(FCPath, FContent);
 			System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
 		}
 		// AdminWebsocket.java
 		if (GenCfgManager.cfg.isOutWebsocket){
-			// 路径
 			String websocketPath = GenCfgManager.cfg.getServerIoPath() + "AdminWebsocket.java";
-			// 内容
 			String websocketContent = FreeMarkerUtil.getResult("mybatis/adminWebsocket.ftl", "abc", 123);
 			SUtil.outFile(websocketPath, websocketContent);
 			System.out.println("AdminWebsocket.java 依赖清单写入成功：\t\t" + websocketPath);
@@ -114,17 +100,13 @@ public class GenUtil {
 		for (DbTable t : GenCfgManager.cfg.tableList) {
 
 			// Service
-			// 路径
 			String servicePath = t.getServerIoPath() + t.getMkNameBig() + "Service.java";
-			// 内容
 			String serviceContent = FreeMarkerUtil.getResult("service/Service.ftl", "t", t);
 			SUtil.outFile(servicePath, serviceContent);
 			System.out.println(t.getModelName() + "Service 写入成功：\t\t" + servicePath);
 
 			// Controller
-			// 路径
 			String controllerPath = t.getServerIoPath() + t.getMkNameBig() + "Controller.java";
-			// 内容
 			String controllerContent = FreeMarkerUtil.getResult("service/Controller.ftl", "t", t);
 			SUtil.outFile(controllerPath, controllerContent);
 			System.out.println(t.getModelName() + "Controller 写入成功：\t\t" + controllerPath);
@@ -135,9 +117,7 @@ public class GenUtil {
 		
 		// FC.java 依赖清单 
 		if(GenCfgManager.cfg.isOutFC) {
-			// 路径
 			String FCPath = GenCfgManager.cfg.getServerIoPath() + "FC.java";
-			// 内容
 			String FContent = FreeMarkerUtil.getResult("service/FC.ftl", "abc", 123);
 			SUtil.outFile(FCPath, FContent);
 			System.out.println("FC.java 依赖清单写入成功：\t\t" + FCPath);
