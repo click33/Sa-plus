@@ -15,7 +15,7 @@ public class StpUserUtil {
 	/**
 	 * 底层的 StpLogic 对象  
 	 */
-	public static StpLogic stpLogic = new StpLogic("login"); 
+	public static StpLogic stpLogic = new StpLogic("user"); 
 	
 	
 	// =================== 获取token 相关 ===================
