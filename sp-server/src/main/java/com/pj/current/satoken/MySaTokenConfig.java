@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import cn.dev33.satoken.interceptor.SaCheckInterceptor;
+import cn.dev33.satoken.interceptor.SaAnnotationInterceptor;
 
 /**
  * sa-token代码方式进行配置 
@@ -18,7 +18,7 @@ public class MySaTokenConfig implements WebMvcConfigurer {
 	 */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SaCheckInterceptor()).addPathPatterns("/**"); 
+        registry.addInterceptor(new SaAnnotationInterceptor()).addPathPatterns("/**"); 
     }
 	
 	

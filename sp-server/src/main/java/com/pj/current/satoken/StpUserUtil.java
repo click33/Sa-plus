@@ -2,12 +2,14 @@ package com.pj.current.satoken;
 
 import java.util.List;
 
+import cn.dev33.satoken.fun.SaFunction;
 import cn.dev33.satoken.session.SaSession;
+import cn.dev33.satoken.stp.SaLoginModel;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
 
 /**
- * user表认证实现 
+ * sa-token user表认证实现
  * @author kong 
  */
 public class StpUserUtil {
@@ -16,7 +18,16 @@ public class StpUserUtil {
 	 * 底层的 StpLogic 对象  
 	 */
 	public static StpLogic stpLogic = new StpLogic("user"); 
+
 	
+	/**
+	 * 获取当前StpLogin的loginKey 
+	 * @return 当前StpLogin的loginKey
+	 */
+	public static String getLoginKey(){
+		return stpLogic.getLoginKey();
+	}
+
 	
 	// =================== 获取token 相关 ===================
 
@@ -28,20 +39,21 @@ public class StpUserUtil {
  		return stpLogic.getTokenName();
  	}
 
+ 	/**
+ 	 * 在当前会话写入当前tokenValue 
+ 	 * @param tokenValue token值 
+ 	 * @param cookieTimeout Cookie存活时间(秒)
+ 	 */
+	public static void setTokenValue(String tokenValue, int cookieTimeout){
+		stpLogic.setTokenValue(tokenValue, cookieTimeout);
+	}
+ 	
 	/**
-	 *  获取当前tokenValue
+	 * 获取当前tokenValue
 	 * @return 当前tokenValue
 	 */
 	public static String getTokenValue() {
 		return stpLogic.getTokenValue();
-	}
-
-	/**
-	 * 获取当前StpLogin的loginKey
-	 * @return 当前StpLogin的loginKey
-	 */
-	public static String getLoginKey(){
-		return stpLogic.getLoginKey();
 	}
 
 	/**
@@ -63,6 +75,33 @@ public class StpUserUtil {
 		stpLogic.setLoginId(loginId);
 	}
 
+	/**
+	 * 在当前会话上登录id, 并指定登录设备 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param device 设备标识 
+	 */
+	public static void setLoginId(Object loginId, String device) {
+		stpLogic.setLoginId(loginId, device);
+	}
+
+	/**
+	 * 在当前会话上登录id, 并指定登录设备 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param isLastingCookie 是否为持久Cookie 
+	 */
+	public static void setLoginId(Object loginId, boolean isLastingCookie) {
+		stpLogic.setLoginId(loginId, isLastingCookie);
+	}
+	
+	/**
+	 * 在当前会话上登录id, 并指定所有登录参数Model 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param loginModel 此次登录的参数Model 
+	 */
+	public static void setLoginId(Object loginId, SaLoginModel loginModel) {
+		stpLogic.setLoginId(loginId, loginModel);
+	}
+	
 	/** 
 	 * 当前会话注销登录
 	 */
@@ -87,6 +126,16 @@ public class StpUserUtil {
 		stpLogic.logoutByLoginId(loginId);
 	}
 
+	/**
+	 * 指定loginId指定设备的会话注销登录（踢人下线）
+	 * <p> 当对方再次访问系统时，会抛出NotLoginException异常，场景值=-2
+	 * @param loginId 账号id 
+	 * @param device 设备标识 
+	 */
+	public static void logoutByLoginId(Object loginId, String device) {
+		stpLogic.logoutByLoginId(loginId, device);
+	}
+	
 	
 	// 查询相关
 
@@ -175,6 +224,15 @@ public class StpUserUtil {
 	 */
 	public static SaSession getSessionByLoginId(Object loginId, boolean isCreate) {
 		return stpLogic.getSessionByLoginId(loginId, isCreate);
+	}
+
+	/** 
+	 * 获取指定key的session, 如果session尚未创建，则返回null
+	 * @param sessionId sessionId
+	 * @return session对象 
+	 */
+	public static SaSession getSessionBySessionId(String sessionId) {
+		return stpLogic.getSessionBySessionId(sessionId);
 	}
 
 	/** 
@@ -282,7 +340,7 @@ public class StpUserUtil {
 	// =================== 角色验证操作 ===================  
 
  	/** 
- 	 * 指定账号id是否含有角色标识 
+ 	 * 指定账号id是否含有角色标识, 返回true或false  
  	 * @param loginId 账号id
  	 * @param role 角色标识
  	 * @return 是否含有指定角色标识
@@ -292,7 +350,7 @@ public class StpUserUtil {
  	}
  	
  	/** 
- 	 * 当前账号id是否含有指定角色标识
+ 	 * 当前账号是否含有指定角色标识, 返回true或false 
  	 * @param role 角色标识
  	 * @return 是否含有指定角色标识
  	 */
@@ -301,7 +359,7 @@ public class StpUserUtil {
  	}
 	
  	/** 
- 	 * 当前账号是否含有指定角色标识，没有就抛出异常
+ 	 * 当前账号是否含有指定角色标识, 如果验证未通过，则抛出异常: NotRoleException 
  	 * @param role 角色标识
  	 */
  	public static void checkRole(String role) {
@@ -309,7 +367,7 @@ public class StpUserUtil {
  	}
 
  	/** 
- 	 * 当前账号是否含有指定角色标识, [指定多个，必须全都有]
+ 	 * 当前账号是否含有指定角色标识 [指定多个，必须全部验证通过] 
  	 * @param roleArray 角色标识数组
  	 */
  	public static void checkRoleAnd(String... roleArray){
@@ -317,7 +375,7 @@ public class StpUserUtil {
  	}
 
  	/** 
- 	 * 当前账号是否含有指定角色标识, [指定多个，有一个就可以通过]
+ 	 * 当前账号是否含有指定角色标识 [指定多个，只要其一验证通过即可] 
  	 * @param roleArray 角色标识数组
  	 */
  	public static void checkRoleOr(String... roleArray){
@@ -328,46 +386,46 @@ public class StpUserUtil {
 	// =================== 权限验证操作 ===================
 
  	/** 
- 	 * 指定账号id是否含有指定权限 
+ 	 * 指定账号id是否含有指定权限, 返回true或false 
  	 * @param loginId 账号id
- 	 * @param permissionCode 权限码
+ 	 * @param permission 权限码
  	 * @return 是否含有指定权限
  	 */
-	public static boolean hasPermission(Object loginId, String permissionCode) {
-		return stpLogic.hasPermission(loginId, permissionCode);
+	public static boolean hasPermission(Object loginId, String permission) {
+		return stpLogic.hasPermission(loginId, permission);
 	}
 
  	/** 
- 	 * 当前账号id是否含有指定权限 
- 	 * @param permissionCode 权限码
+ 	 * 当前账号是否含有指定权限, 返回true或false 
+ 	 * @param permission 权限码
  	 * @return 是否含有指定权限
  	 */
-	public static boolean hasPermission(String permissionCode) {
-		return stpLogic.hasPermission(permissionCode);
+	public static boolean hasPermission(String permission) {
+		return stpLogic.hasPermission(permission);
 	}
 
  	/** 
- 	 * 当前账号是否含有指定权限， 没有就抛出异常 
- 	 * @param permissionCode 权限码
+ 	 * 当前账号是否含有指定权限, 如果验证未通过，则抛出异常: NotPermissionException 
+ 	 * @param permission 权限码
  	 */
-	public static void checkPermission(String permissionCode) {
-		stpLogic.checkPermission(permissionCode);
+	public static void checkPermission(String permission) {
+		stpLogic.checkPermission(permission);
 	}
 
  	/** 
- 	 * 当前账号是否含有指定权限, [指定多个，必须全都有] 
- 	 * @param permissionCodeArray 权限码数组
+ 	 * 当前账号是否含有指定权限 [指定多个，必须全部验证通过] 
+ 	 * @param permissionArray 权限码数组
  	 */
-	public static void checkPermissionAnd(String... permissionCodeArray) {
-		stpLogic.checkPermissionAnd(permissionCodeArray);
+	public static void checkPermissionAnd(String... permissionArray) {
+		stpLogic.checkPermissionAnd(permissionArray);
 	}
 
  	/** 
- 	 * 当前账号是否含有指定权限, [指定多个，有一个就可以通过] 
- 	 * @param permissionCodeArray 权限码数组
+ 	 * 当前账号是否含有指定权限 [指定多个，只要其一验证通过即可] 
+ 	 * @param permissionArray 权限码数组
  	 */
-	public static void checkPermissionOr(String... permissionCodeArray) {
-		stpLogic.checkPermissionOr(permissionCodeArray);
+	public static void checkPermissionOr(String... permissionArray) {
+		stpLogic.checkPermissionOr(permissionArray);
 	}
 
 
@@ -383,14 +441,115 @@ public class StpUserUtil {
 	public static String getTokenValueByLoginId(Object loginId) {
 		return stpLogic.getTokenValueByLoginId(loginId);
 	}
+
+	/** 
+	 * 获取指定loginId指定设备端的tokenValue  
+	 * <p> 在配置为允许并发登录时，此方法只会返回队列的最后一个token，
+	 * 如果你需要返回此账号id的所有token，请调用 getTokenValueListByLoginId 
+	 * @param loginId 账号id
+	 * @param device 设备标识 
+	 * @return token值 
+	 */
+	public static String getTokenValueByLoginId(Object loginId, String device) {
+		return stpLogic.getTokenValueByLoginId(loginId, device);
+	}
 	
  	/** 
-	 * 获取指定loginId的tokenValue 
+	 * 获取指定loginId的tokenValue集合 
 	 * @param loginId 账号id 
 	 * @return 此loginId的所有相关token 
  	 */
 	public static List<String> getTokenValueListByLoginId(Object loginId) {
 		return stpLogic.getTokenValueListByLoginId(loginId);
+	}
+
+ 	/** 
+	 * 获取指定loginId指定设备端的tokenValue集合 
+	 * @param loginId 账号id 
+	 * @param device 设备标识 
+	 * @return 此loginId的所有相关token 
+ 	 */
+	public static List<String> getTokenValueListByLoginId(Object loginId, String device) {
+		return stpLogic.getTokenValueListByLoginId(loginId, device);
+	}
+	
+	/**
+	 * 返回当前token的登录设备 
+	 * @return 当前令牌的登录设备 
+	 */
+	public static String getLoginDevice() {
+		return stpLogic.getLoginDevice(); 
+	}
+
+	
+	// =================== 会话管理 ===================  
+
+	/**
+	 * 根据条件查询token 
+	 * @param keyword 关键字 
+	 * @param start 开始处索引 (-1代表查询所有) 
+	 * @param size 获取数量 
+	 * @return token集合 
+	 */
+	public static List<String> searchTokenValue(String keyword, int start, int size) {
+		return stpLogic.searchTokenValue(keyword, start, size);
+	}
+	
+	/**
+	 * 根据条件查询SessionId 
+	 * @param keyword 关键字 
+	 * @param start 开始处索引 (-1代表查询所有) 
+	 * @param size 获取数量 
+	 * @return sessionId集合 
+	 */
+	public static List<String> searchSessionId(String keyword, int start, int size) {
+		return stpLogic.searchSessionId(keyword, start, size);
+	}
+
+	/**
+	 * 根据条件查询token专属Session的Id 
+	 * @param keyword 关键字 
+	 * @param start 开始处索引 (-1代表查询所有) 
+	 * @param size 获取数量 
+	 * @return sessionId集合 
+	 */
+	public static List<String> searchTokenSessionId(String keyword, int start, int size) {
+		return stpLogic.searchTokenSessionId(keyword, start, size);
+	}
+	
+
+	// =================== 身份切换 ===================  
+
+	/**
+	 * 临时切换身份为指定loginId 
+	 * @param loginId 指定loginId 
+	 */
+	public static void switchTo(Object loginId) {
+		stpLogic.switchTo(loginId);
+	}
+	
+	/**
+	 * 结束临时切换身份
+	 */
+	public static void endSwitch() {
+		stpLogic.endSwitch();
+	}
+
+	/**
+	 * 当前是否正处于[身份临时切换]中 
+	 * @return 是否正处于[身份临时切换]中 
+	 */
+	public static boolean isSwitch() {
+		return stpLogic.isSwitch();
+	}
+
+	/**
+	 * 在一个代码段里方法内，临时切换身份为指定loginId
+	 * @param loginId 指定loginId 
+	 * @param function 要执行的方法 
+	 */
+	public static void switchTo(Object loginId, SaFunction function) {
+		stpLogic.switchTo(loginId, function);
 	}
 	
 	

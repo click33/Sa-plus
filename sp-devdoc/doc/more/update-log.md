@@ -273,4 +273,4 @@
 - 第一个版本出炉 
 - 包含：项目基架、java代码生成、admin后台管理生成 
 - GitHub：[https://github.com/click33/sa-plus](https://github.com/click33/sa-plus)
-- gitee：[https://gitee.com/sz6/sa-plus](https://gitee.com/sz6/sa-plus)
+- gitee：[https://gitee.com/click33/sa-plus](https://gitee.com/click33/sa-plus)

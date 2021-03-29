@@ -1,10 +1,10 @@
 <p align="center">
-    <img alt="logo" src="https://gitee.com/sz6/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
+    <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
 </p>
 <h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sa-plus v1.24.0</h2>
 <h4 align="center">一个基于springboot架构的快速开发框架，内置代码生成器</h4>
 <h4 align="center">
-	<a href="https://gitee.com/sz6/sa-plus/stargazers"><img src="https://gitee.com/sz6/sa-plus/badge/star.svg"></a>
+	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
 	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/sa--plus-v1.24.0-2B9939"></a>
 	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
 	<a href="https://github.com/click33/sa-plus/stargazers"><img src="https://img.shields.io/github/stars/click33/sa-plus"></a>
@@ -26,7 +26,7 @@
 - #### 官网首页：[http://sa-plus.dev33.cn/](http://sa-plus.dev33.cn/)
 - #### 在线文档：[http://sa-plus.dev33.cn/doc/index.html](http://sa-plus.dev33.cn/doc/index.html)
 - #### 在线演示：[http://demo-jj.dev33.cn/spdj-admin/index.html](http://demo-jj.dev33.cn/spdj-admin/index.html)
-- #### 微服务版：[https://gitee.com/sz6/sp-cloud](https://gitee.com/sz6/sp-cloud)
+- #### 微服务版：[https://gitee.com/click33/sp-cloud](https://gitee.com/click33/sp-cloud)
 
 
 ## ⚡ 功能架构 

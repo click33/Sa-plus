@@ -4,12 +4,12 @@
 <h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sp-cloud v1.20.0</h2>
 <h4 align="center">sa-plus的微服务版本, 基于Spring-Cloud-Alibaba</h4>
 <h4 align="center">
-	<a href="https://gitee.com/sz6/sp-cloud"><img src="https://img.shields.io/badge/sp--cloud-v1.20.0-2B9939"></a>
-	<a href="https://gitee.com/sz6/sp-cloud"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
+	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/sp--cloud-v1.20.0-2B9939"></a>
+	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
 	<a href="http://sa-plus.dev33.cn/"><img src="https://img.shields.io/badge/based-sa--plus-4183C4"></a>
-	<a href="https://gitee.com/sz6/sp-cloud/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg"></a>
-	<a href="https://gitee.com/sz6/sp-cloud/stargazers"><img src="https://gitee.com/sz6/sp-cloud/badge/star.svg?theme=dark"></a>
-	<a href="https://gitee.com/sz6/sp-cloud/members"><img src="https://gitee.com/sz6/sp-cloud/badge/fork.svg?theme=dark"></a>
+	<a href="https://gitee.com/click33/sp-cloud/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg"></a>
+	<a href="https://gitee.com/click33/sp-cloud/stargazers"><img src="https://gitee.com/click33/sp-cloud/badge/star.svg?theme=dark"></a>
+	<a href="https://gitee.com/click33/sp-cloud/members"><img src="https://gitee.com/click33/sp-cloud/badge/fork.svg?theme=dark"></a>
 </h4>
  
  
@@ -23,7 +23,7 @@
 - 在线演示：[http://demo.dev33.cn/sp-admin/index.html](http://demo.dev33.cn/sp-admin/index.html)
 - 在线文档: [http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/README](http://sa-plus.dev33.cn/doc/index.html#/sp-cloud/README)
 - 需求提交：[我们深知一个优秀的项目需要海纳百川，点我在线提交需求](http://sa-app.dev33.cn/wall.html?name=sa-plus)
-- Gitee地址: [https://gitee.com/sz6/sp-cloud](https://gitee.com/sz6/sp-cloud)
+- Gitee地址: [https://gitee.com/click33/sp-cloud](https://gitee.com/click33/sp-cloud)
 
 
 ## 文档目录

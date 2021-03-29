@@ -3,7 +3,7 @@
 ### 获取代码
 
 - 你可以从gitee，或者github上获取最新代码 
-	- gitee地址：[https://gitee.com/sz6/sa-plus](https://gitee.com/sz6/sa-plus)
+	- gitee地址：[https://gitee.com/click33/sa-plus](https://gitee.com/click33/sa-plus)
 	- github地址：[https://github.com/click33/sa-plus](https://github.com/click33/sa-plus)
 
 
