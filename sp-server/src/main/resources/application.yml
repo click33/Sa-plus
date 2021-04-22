@@ -47,6 +47,10 @@ spring:
         # 是否彩色SQl日志
         color-sql: true
     
+    # Sa-Token配置
+    sa-token:
+        # 关闭Cookie模式
+        is-read-cookie: false
         
         
 # mybatis-plus配置  
