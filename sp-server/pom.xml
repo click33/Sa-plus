@@ -84,7 +84,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.0.7</version>
+            <version>5.6.4</version>
         </dependency>
         
         <!-- OkHttps网络请求库： http://okhttps.ejlchina.com/ -->
