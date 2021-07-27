@@ -46,13 +46,12 @@ spring:
         is-pw: true
         # 是否彩色SQl日志
         color-sql: true
-    
-    # Sa-Token配置
-    sa-token:
-        # 关闭Cookie模式
-        is-read-cookie: false
-        
-        
+
+# Sa-Token配置
+sa-token: 
+    # 关闭Cookie模式
+    is-read-cookie: false
+          
 # mybatis-plus配置  
 mybatis-plus: 
     # 配置别名包，在mapper.xml中可以直接返回SoMap

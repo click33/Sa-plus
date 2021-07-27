@@ -9,23 +9,27 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpLogic;
 
 /**
- * sa-token user表认证实现
+ * Sa-Token 权限验证工具类 (User版)
  * @author kong 
  */
 public class StpUserUtil {
-
+	
+	/**
+	 * 账号类型标识 
+	 */
+	public static final String TYPE = "user";
+	
 	/**
 	 * 底层的 StpLogic 对象  
 	 */
-	public static StpLogic stpLogic = new StpLogic("user"); 
+	public static StpLogic stpLogic = new StpLogic(TYPE); 
 
-	
 	/**
-	 * 获取当前StpLogin的loginKey 
-	 * @return 当前StpLogin的loginKey
+	 * 获取当前 StpLogic 的账号类型
+	 * @return See Note 
 	 */
-	public static String getLoginKey(){
-		return stpLogic.getLoginKey();
+	public static String getLoginType(){
+		return stpLogic.getLoginType();
 	}
 
 	
@@ -40,7 +44,7 @@ public class StpUserUtil {
  	}
 
  	/**
- 	 * 在当前会话写入当前tokenValue 
+ 	 * 在当前会话写入当前TokenValue 
  	 * @param tokenValue token值 
  	 * @param cookieTimeout Cookie存活时间(秒)
  	 */
@@ -49,7 +53,7 @@ public class StpUserUtil {
 	}
  	
 	/**
-	 * 获取当前tokenValue
+	 * 获取当前TokenValue
 	 * @return 当前tokenValue
 	 */
 	public static String getTokenValue() {
@@ -57,7 +61,7 @@ public class StpUserUtil {
 	}
 
 	/**
-	 * 获取当前会话的token信息 
+	 * 获取当前会话的Token信息 
 	 * @return token信息 
 	 */
 	public static SaTokenInfo getTokenInfo() {
@@ -68,49 +72,49 @@ public class StpUserUtil {
 	// =================== 登录相关操作 ===================
 
 	/**
-	 * 在当前会话上登录id 
-	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * 会话登录 
+	 * @param id 账号id，建议的类型：（long | int | String）
 	 */
-	public static void setLoginId(Object loginId) {
-		stpLogic.setLoginId(loginId);
+	public static void login(Object id) {
+		stpLogic.login(id);
 	}
 
 	/**
-	 * 在当前会话上登录id, 并指定登录设备 
-	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * 会话登录，并指定登录设备 
+	 * @param id 账号id，建议的类型：（long | int | String）
 	 * @param device 设备标识 
 	 */
-	public static void setLoginId(Object loginId, String device) {
-		stpLogic.setLoginId(loginId, device);
+	public static void login(Object id, String device) {
+		stpLogic.login(id, device);
 	}
 
 	/**
-	 * 在当前会话上登录id, 并指定登录设备 
-	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * 会话登录，并指定是否 [记住我] 
+	 * @param id 账号id，建议的类型：（long | int | String）
 	 * @param isLastingCookie 是否为持久Cookie 
 	 */
-	public static void setLoginId(Object loginId, boolean isLastingCookie) {
-		stpLogic.setLoginId(loginId, isLastingCookie);
+	public static void login(Object id, boolean isLastingCookie) {
+		stpLogic.login(id, isLastingCookie);
 	}
-	
+
 	/**
-	 * 在当前会话上登录id, 并指定所有登录参数Model 
-	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * 会话登录，并指定所有登录参数Model 
+	 * @param id 登录id，建议的类型：（long | int | String）
 	 * @param loginModel 此次登录的参数Model 
 	 */
-	public static void setLoginId(Object loginId, SaLoginModel loginModel) {
-		stpLogic.setLoginId(loginId, loginModel);
+	public static void login(Object id, SaLoginModel loginModel) {
+		stpLogic.login(id, loginModel);
 	}
 	
 	/** 
-	 * 当前会话注销登录
+	 * 会话注销
 	 */
 	public static void logout() {
 		stpLogic.logout();
 	}
 
 	/**
-	 * 指定token的会话注销登录 
+	 * 会话注销，根据指定Token
 	 * @param tokenValue 指定token
 	 */
 	public static void logoutByTokenValue(String tokenValue) {
@@ -118,8 +122,8 @@ public class StpUserUtil {
 	}
 	
 	/**
-	 * 指定loginId的会话注销登录（踢人下线）
-	 * <p> 当对方再次访问系统时，会抛出NotLoginException异常，场景值=-2
+	 * 会话注销，根据账号id （踢人下线）
+	 * <p> 当对方再次访问系统时，会抛出NotLoginException异常，场景值=-2 </p>
 	 * @param loginId 账号id 
 	 */
 	public static void logoutByLoginId(Object loginId) {
@@ -127,7 +131,7 @@ public class StpUserUtil {
 	}
 
 	/**
-	 * 指定loginId指定设备的会话注销登录（踢人下线）
+	 * 会话注销，根据账号id and 设备标识 （踢人下线）
 	 * <p> 当对方再次访问系统时，会抛出NotLoginException异常，场景值=-2
 	 * @param loginId 账号id 
 	 * @param device 设备标识 
@@ -135,19 +139,18 @@ public class StpUserUtil {
 	public static void logoutByLoginId(Object loginId, String device) {
 		stpLogic.logoutByLoginId(loginId, device);
 	}
-	
-	
+
 	// 查询相关
 
- 	/** 
- 	 * 获取当前会话是否已经登录 
+	/** 
+ 	 * 当前会话是否已经登录 
  	 * @return 是否已登录 
  	 */
 	public static boolean isLogin() {
 		return stpLogic.isLogin();
 	}
 
- 	/** 
+	/** 
  	 * 检验当前会话是否已经登录，如未登录，则抛出异常 
  	 */
  	public static void checkLogin() {
@@ -163,7 +166,7 @@ public class StpUserUtil {
 	}
 
 	/** 
-	 * 获取当前会话登录id, 如果未登录，则返回默认值 
+	 * 获取当前会话账号id, 如果未登录，则返回默认值 
 	 * @param <T> 返回类型 
 	 * @param defaultValue 默认值
 	 * @return 登录id 
@@ -173,7 +176,7 @@ public class StpUserUtil {
 	}
 
 	/** 
-	 * 获取当前会话登录id, 如果未登录，则返回null 
+	 * 获取当前会话账号id, 如果未登录，则返回null 
 	 * @return 账号id 
 	 */
 	public static Object getLoginIdDefaultNull() {
@@ -181,7 +184,7 @@ public class StpUserUtil {
  	}
 
 	/** 
-	 * 获取当前会话登录id, 并转换为String
+	 * 获取当前会话账号id, 并转换为String类型
 	 * @return 账号id 
 	 */
 	public static String getLoginIdAsString() {
@@ -189,7 +192,7 @@ public class StpUserUtil {
 	}
 
 	/** 
-	 * 获取当前会话登录id, 并转换为int
+	 * 获取当前会话账号id, 并转换为int类型
 	 * @return 账号id 
 	 */
 	public static int getLoginIdAsInt() {
@@ -197,17 +200,17 @@ public class StpUserUtil {
 	}
 
 	/**
-	 * 获取当前会话登录id, 并转换为long
+	 * 获取当前会话账号id, 并转换为long类型 
 	 * @return 账号id 
 	 */
 	public static long getLoginIdAsLong() {
 		return stpLogic.getLoginIdAsLong();
 	}
 
- 	/** 
- 	 * 获取指定token对应的登录id，如果未登录，则返回 null 
+	/** 
+ 	 * 获取指定Token对应的账号id，如果未登录，则返回 null 
  	 * @param tokenValue token
- 	 * @return 登录id
+ 	 * @return 账号id
  	 */
  	public static Object getLoginIdByToken(String tokenValue) {
  		return stpLogic.getLoginIdByToken(tokenValue);
@@ -216,46 +219,46 @@ public class StpUserUtil {
  	
 	// =================== session相关 ===================
 
-	/** 
-	 * 获取指定loginId的session, 如果session尚未创建，isCreate=是否新建并返回
+ 	/** 
+	 * 获取指定账号id的Session, 如果Session尚未创建，isCreate=是否新建并返回
 	 * @param loginId 账号id
 	 * @param isCreate 是否新建
-	 * @return SaSession
+	 * @return Session对象
 	 */
 	public static SaSession getSessionByLoginId(Object loginId, boolean isCreate) {
 		return stpLogic.getSessionByLoginId(loginId, isCreate);
 	}
 
 	/** 
-	 * 获取指定key的session, 如果session尚未创建，则返回null
-	 * @param sessionId sessionId
-	 * @return session对象 
+	 * 获取指定key的Session, 如果Session尚未创建，则返回null
+	 * @param sessionId SessionId
+	 * @return Session对象 
 	 */
 	public static SaSession getSessionBySessionId(String sessionId) {
 		return stpLogic.getSessionBySessionId(sessionId);
 	}
 
 	/** 
-	 * 获取指定loginId的session，如果session尚未创建，则新建并返回 
+	 * 获取指定账号id的Session，如果Session尚未创建，则新建并返回 
 	 * @param loginId 账号id 
-	 * @return session会话 
+	 * @return Session对象 
 	 */
 	public static SaSession getSessionByLoginId(Object loginId) {
 		return stpLogic.getSessionByLoginId(loginId);
 	}
 
 	/** 
-	 * 获取当前会话的session, 如果session尚未创建，isCreate=是否新建并返回 
+	 * 获取当前会话的Session, 如果Session尚未创建，isCreate=是否新建并返回 
 	 * @param isCreate 是否新建 
-	 * @return 当前会话的session 
+	 * @return Session对象 
 	 */
 	public static SaSession getSession(boolean isCreate) {
 		return stpLogic.getSession(isCreate);
 	}
 
 	/** 
-	 * 获取当前会话的session，如果session尚未创建，则新建并返回 
-	 * @return 当前会话的session 
+	 * 获取当前会话的Session，如果Session尚未创建，则新建并返回 
+	 * @return Session对象 
 	 */
 	public static SaSession getSession() {
 		return stpLogic.getSession();
@@ -265,17 +268,17 @@ public class StpUserUtil {
 	// =================== token专属session ===================  
 	
 	/** 
-	 * 获取指定token的专属session，如果session尚未创建，则新建并返回 
-	 * @param tokenValue token值
-	 * @return session会话 
+	 * 获取指定Token-Session，如果Session尚未创建，则新建并返回 
+	 * @param tokenValue Token值
+	 * @return Session对象  
 	 */
 	public static SaSession getTokenSessionByToken(String tokenValue) {
 		return stpLogic.getTokenSessionByToken(tokenValue);
 	}
 	
 	/** 
-	 * 获取当前token的专属-session，如果session尚未创建，则新建并返回 
-	 * @return session会话 
+	 * 获取当前Token-Session，如果Session尚未创建，则新建并返回
+	 * @return Session对象 
 	 */
 	public static SaSession getTokenSession() {
 		return stpLogic.getTokenSession();
@@ -284,7 +287,7 @@ public class StpUserUtil {
 
 	// =================== [临时过期] 验证相关 ===================  
 
- 	/**
+	/**
  	 * 检查当前token 是否已经[临时过期]，如果已经过期则抛出异常  
  	 */
  	public static void checkActivityTimeout() {
@@ -340,7 +343,7 @@ public class StpUserUtil {
 	// =================== 角色验证操作 ===================  
 
  	/** 
- 	 * 指定账号id是否含有角色标识, 返回true或false  
+ 	 * 指定账号id是否含有角色标识, 返回true或false 
  	 * @param loginId 账号id
  	 * @param role 角色标识
  	 * @return 是否含有指定角色标识
@@ -432,7 +435,7 @@ public class StpUserUtil {
 	// =================== id 反查token 相关操作 ===================  
 	
 	/** 
-	 * 获取指定loginId的tokenValue 
+	 * 获取指定账号id的tokenValue 
 	 * <p> 在配置为允许并发登录时，此方法只会返回队列的最后一个token，
 	 * 如果你需要返回此账号id的所有token，请调用 getTokenValueListByLoginId 
 	 * @param loginId 账号id
@@ -443,7 +446,7 @@ public class StpUserUtil {
 	}
 
 	/** 
-	 * 获取指定loginId指定设备端的tokenValue  
+	 * 获取指定账号id指定设备端的tokenValue 
 	 * <p> 在配置为允许并发登录时，此方法只会返回队列的最后一个token，
 	 * 如果你需要返回此账号id的所有token，请调用 getTokenValueListByLoginId 
 	 * @param loginId 账号id
@@ -454,8 +457,8 @@ public class StpUserUtil {
 		return stpLogic.getTokenValueByLoginId(loginId, device);
 	}
 	
- 	/** 
-	 * 获取指定loginId的tokenValue集合 
+	/** 
+	 * 获取指定账号id的tokenValue集合 
 	 * @param loginId 账号id 
 	 * @return 此loginId的所有相关token 
  	 */
@@ -463,8 +466,8 @@ public class StpUserUtil {
 		return stpLogic.getTokenValueListByLoginId(loginId);
 	}
 
- 	/** 
-	 * 获取指定loginId指定设备端的tokenValue集合 
+	/** 
+	 * 获取指定账号id指定设备端的tokenValue 集合 
 	 * @param loginId 账号id 
 	 * @param device 设备标识 
 	 * @return 此loginId的所有相关token 
@@ -474,7 +477,7 @@ public class StpUserUtil {
 	}
 	
 	/**
-	 * 返回当前token的登录设备 
+	 * 返回当前会话的登录设备 
 	 * @return 当前令牌的登录设备 
 	 */
 	public static String getLoginDevice() {
@@ -485,7 +488,7 @@ public class StpUserUtil {
 	// =================== 会话管理 ===================  
 
 	/**
-	 * 根据条件查询token 
+	 * 根据条件查询Token 
 	 * @param keyword 关键字 
 	 * @param start 开始处索引 (-1代表查询所有) 
 	 * @param size 获取数量 
@@ -507,7 +510,7 @@ public class StpUserUtil {
 	}
 
 	/**
-	 * 根据条件查询token专属Session的Id 
+	 * 根据条件查询Token专属Session的Id 
 	 * @param keyword 关键字 
 	 * @param start 开始处索引 (-1代表查询所有) 
 	 * @param size 获取数量 
@@ -516,12 +519,51 @@ public class StpUserUtil {
 	public static List<String> searchTokenSessionId(String keyword, int start, int size) {
 		return stpLogic.searchTokenSessionId(keyword, start, size);
 	}
-	
 
+	
+	// ------------------- 账号封禁 -------------------  
+
+	/**
+	 * 封禁指定账号
+	 * <p> 此方法不会直接将此账号id踢下线，而是在对方再次登录时抛出`DisableLoginException`异常 
+	 * @param loginId 指定账号id 
+	 * @param disableTime 封禁时间, 单位: 秒 （-1=永久封禁）
+	 */
+	public static void disable(Object loginId, long disableTime) {
+		stpLogic.disable(loginId, disableTime);
+	}
+	
+	/**
+	 * 指定账号是否已被封禁 (true=已被封禁, false=未被封禁) 
+	 * @param loginId 账号id
+	 * @return see note
+	 */
+	public static boolean isDisable(Object loginId) {
+		return stpLogic.isDisable(loginId);
+	}
+	
+	/**
+	 * 获取指定账号剩余封禁时间，单位：秒（-1=永久封禁，-2=未被封禁）
+	 * @param loginId 账号id
+	 * @return see note 
+	 */
+	public static long getDisableTime(Object loginId) {
+		return stpLogic.getDisableTime(loginId);
+	}
+
+	/**
+	 * 解封指定账号
+	 * @param loginId 账号id 
+	 */
+	public static void untieDisable(Object loginId) {
+		stpLogic.untieDisable(loginId);
+	}
+	
+	
 	// =================== 身份切换 ===================  
 
 	/**
-	 * 临时切换身份为指定loginId 
+	 * 临时切换身份为指定账号id 
 	 * @param loginId 指定loginId 
 	 */
 	public static void switchTo(Object loginId) {
@@ -544,13 +586,109 @@ public class StpUserUtil {
 	}
 
 	/**
-	 * 在一个代码段里方法内，临时切换身份为指定loginId
-	 * @param loginId 指定loginId 
+	 * 在一个代码段里方法内，临时切换身份为指定账号id
+	 * @param loginId 指定账号id 
 	 * @param function 要执行的方法 
 	 */
 	public static void switchTo(Object loginId, SaFunction function) {
 		stpLogic.switchTo(loginId, function);
 	}
 	
+
+	// ------------------- 二级认证 -------------------  
+	
+	/**
+	 * 在当前会话 开启二级认证 
+	 * @param safeTime 维持时间 (单位: 秒) 
+	 */
+	public static void openSafe(long safeTime) {
+		stpLogic.openSafe(safeTime);
+	}
+
+	/**
+	 * 当前会话 是否处于二级认证时间内 
+	 * @return true=二级认证已通过, false=尚未进行二级认证或认证已超时 
+	 */
+	public static boolean isSafe() {
+		return stpLogic.isSafe();
+	}
+
+	/**
+	 * 检查当前会话是否已通过二级认证，如未通过则抛出异常 
+	 */
+	public static void checkSafe() {
+		stpLogic.checkSafe();
+	}
+	
+	/**
+	 * 获取当前会话的二级认证剩余有效时间 (单位: 秒, 返回-2代表尚未通过二级认证)
+	 * @return 剩余有效时间
+	 */
+	public static long getSafeTime() {
+		return stpLogic.getSafeTime();
+	}
+
+	/**
+	 * 在当前会话 结束二级认证 
+	 */
+	public static void closeSafe() {
+		stpLogic.closeSafe();
+	}
+
+
+	// =================== 历史API，兼容旧版本 ===================  
+
+	/**
+	 * <h1> 本函数设计已过时，未来版本可能移除此函数，请及时更换为 StpUtil.getLoginType() ，使用方式保持不变 </h1>
+	 * 获取当前StpLogin的loginKey 
+	 * @return 当前StpLogin的loginKey
+	 */
+	@Deprecated
+	public static String getLoginKey(){
+		return stpLogic.getLoginType();
+	}
+
+	/**
+	 * <h1> 本函数设计已过时，未来版本可能移除此函数，请及时更换为 StpUtil.login() ，使用方式保持不变 </h1>
+	 * 在当前会话上登录id 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 */
+	@Deprecated
+	public static void setLoginId(Object loginId) {
+		stpLogic.login(loginId);
+	}
+
+	/**
+	 * <h1> 本函数设计已过时，未来版本可能移除此函数，请及时更换为 StpUtil.login() ，使用方式保持不变 </h1>
+	 * 在当前会话上登录id, 并指定登录设备 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param device 设备标识 
+	 */
+	@Deprecated
+	public static void setLoginId(Object loginId, String device) {
+		stpLogic.login(loginId, device);
+	}
+
+	/**
+	 * <h1> 本函数设计已过时，未来版本可能移除此函数，请及时更换为 StpUtil.login() ，使用方式保持不变 </h1>
+	 * 在当前会话上登录id, 并指定登录设备 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param isLastingCookie 是否为持久Cookie 
+	 */
+	@Deprecated
+	public static void setLoginId(Object loginId, boolean isLastingCookie) {
+		stpLogic.login(loginId, isLastingCookie);
+	}
+	
+	/**
+	 * <h1> 本函数设计已过时，未来版本可能移除此函数，请及时更换为 StpUtil.login() ，使用方式保持不变 </h1>
+	 * 在当前会话上登录id, 并指定所有登录参数Model 
+	 * @param loginId 登录id，建议的类型：（long | int | String）
+	 * @param loginModel 此次登录的参数Model 
+	 */
+	@Deprecated
+	public static void setLoginId(Object loginId, SaLoginModel loginModel) {
+		stpLogic.login(loginId, loginModel);
+	}
 	
 }

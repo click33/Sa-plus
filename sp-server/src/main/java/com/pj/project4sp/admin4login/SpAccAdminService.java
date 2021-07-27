@@ -90,7 +90,7 @@ public class SpAccAdminService {
 
         // =========== 至此, 已登录成功 ============ 
         successLogin(admin);
-        StpUtil.setLoginId(admin.getId()); 		
+        StpUtil.login(admin.getId()); 		
         
         // 组织返回参数  
 		SoMap map = new SoMap();
