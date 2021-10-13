@@ -45,7 +45,7 @@ public class SpGenerateApplication {
 	        .setPackage_utils("com.pj.utils.sg.*")			// 服务端代码 - util类包地址 
 	        .setAuthor("shengzhang")						// 服务端代码 - 代码作者 (一定要换成您的大名哦，哈哈)
 	        .setAdminProjectName("sp-admin")				// 后台管理 - 项目名称 
-            .setAdminCodePath("sa-html/")					// 后台管理-代码存放目录 
+            .setAdminCodePath("sa-view/")					// 后台管理-代码存放目录 
 	        .setApidocProjectName("sp-apidoc") 				// 接口文档 - 项目名称 
             .setApidocCodePath("project/")					// 接口文档 - 存放目录  
             .setFileUploadWay(1)			// 文件上传方式 (1=普通文件上传, 2=阿里云oss文件服务器[需要集成阿里云oss相关工具类]) 
@@ -83,7 +83,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.24.0，更新于2020-12-10 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.25.0，更新于2020-12-10 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

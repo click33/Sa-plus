@@ -41,6 +41,8 @@
 			/*  普通文本和富文本一起变长  */
 			.c-panel .el-form .el-input, .c-panel .el-form .el-textarea__inner{width: 700px;}
 			.c-item-mline{width: 700px;}
+			.editor-box{display: inline-block;}
+			.c-item .editor-box, .editor-box #editor{width: 700px;}
 		</#if>
 		</style>
 	</head>

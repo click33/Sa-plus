@@ -21,46 +21,6 @@ var sa_admin_code_util = {
 		// $(selected).find('iframe').css('height', (height - title_height) + 'px');
 	},
 	
-	// 全屏 
-	fullScreen: function(){
-		if(document.documentElement.RequestFullScreen){
-			document.documentElement.RequestFullScreen();
-		}
-		//兼容火狐
-		if(document.documentElement.mozRequestFullScreen){
-			document.documentElement.mozRequestFullScreen();
-		}
-		//兼容谷歌等可以webkitRequestFullScreen也可以webkitRequestFullscreen
-		if(document.documentElement.webkitRequestFullScreen){
-			document.documentElement.webkitRequestFullScreen();
-		}
-		//兼容IE,只能写msRequestFullscreen
-		if(document.documentElement.msRequestFullscreen){
-			document.documentElement.msRequestFullscreen();
-		}
-	},
-	
-	// 退出全屏
-	fullScreenNormal: function() {
-		if(document.exitFullScreen){
-			document.exitFullscreen()
-		}
-		//     		//兼容火狐
-		//     		console.log(document.mozExitFullScreen)
-		if(document.mozCancelFullScreen){
-			document.mozCancelFullScreen()
-		}
-		//     		//兼容谷歌等
-		if(document.webkitExitFullscreen){
-			document.webkitExitFullscreen()
-		}
-		//     		//兼容IE
-		if(document.msExitFullscreen){
-			document.msExitFullscreen()
-		}
-	},
-	
-	
 	// ======================== 菜单集合相关 ======================== 
 	
 	// 将一维平面数组转换为 Tree 菜单 (根据其指定的parent_id添加到其父菜单的childList)
@@ -69,7 +29,7 @@ var sa_admin_code_util = {
 			var menu = menu_list[i];
 			// 添加到其指定的父菜单的childList
 			if(menu.parent_id) {
-				var parent_menu = this.getMenuById(menu_list, menu.parent_id);
+				var parent_menu = this.findMenuById(menu_list, menu.parent_id);
 				if(parent_menu) {
 					parent_menu.childList = parent_menu.childList || [];
 					parent_menu.childList.push(menu);
@@ -120,18 +80,18 @@ var sa_admin_code_util = {
 	// 将 Tree 菜单 转换为 一维平面数组 
 	treeToArray: function(menu_list) {
 		var arr = [];
-		function fn(menu_list) {
+		function _dg(menu_list) {
 			menu_list = menu_list || [];
 			for (var i = 0; i < menu_list.length; i++) {
 				var menu = menu_list[i];
 				arr.push(menu);
 				// 如果有子菜单 
 				if(menu.childList) {
-					fn(menu.childList);
+					_dg(menu.childList);
 				}
 			}
 		}
-		fn(menu_list);
+		_dg(menu_list);
 		return arr;
 	},
 	

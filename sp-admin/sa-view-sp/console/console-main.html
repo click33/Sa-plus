@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Sa-Admin 控制台</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<style type="text/css">
+			.vue-box{margin: 0; padding: 0; height: 100%;}
+			.el-card{border-radius: 0px; border: 1px #ddd solid ; margin-bottom: 14px;}
+			.s-row{/* background-color: antiquewhite; */ padding: 0 14px; padding-bottom: 0px;}
+			.s-row-1{padding-top: 14px;}
+			.s-row-2{/* margin-top: -10px; */}
+			.s-row-2 .el-card .el-card__body{height: 250px;}
+			.s-row-3 .el-card{/* height: 100%; */}
+			
+			.echarts-div{height: 100%;}
+			.s-row-3 .el-alert{margin-bottom: 14px;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			
+			<!-- ------------ 第一栏 - 统计数据 ------------- -->
+			<div class="s-row s-row-1">
+				<com-sta-data></com-sta-data>
+			</div>
+			
+			<!-- ------------ 第二栏 - 图表 ------------- -->
+			<div class="s-row s-row-2">
+				<el-row :gutter="14">
+					<el-col :lg="8" :xs="24">
+						<el-card shadow="never" header="柱状图">
+							<com-chart-1></com-chart-1>
+						</el-card>
+					</el-col>
+					<el-col :lg="8" :xs="24">
+						<el-card shadow="never" header="饼图">
+							<com-chart-2></com-chart-2>
+						</el-card>
+					</el-col>
+					<el-col :lg="8" :xs="24">
+						<el-card shadow="never" header="折线图">
+							<com-chart-3></com-chart-3>
+						</el-card>
+					</el-col>
+				</el-row>
+			</div>
+			
+			<!-- ------------ 第三栏 - 框架信息 ------------- -->
+			<div class="s-row s-row-3">
+				<el-row :gutter="14" type="flex" style="flex-wrap: wrap-reverse;">
+					<!-- 左边 -->
+					<el-col :lg="12" :xs="24">
+						<!-- 技术选型 -->
+						<el-card shadow="never" header="技术选型">
+							<com-stack></com-stack>
+						</el-card>
+						<!-- 更新日志 -->
+						<el-card shadow="never" header="更新日志">
+							<com-update-log></com-update-log>
+						</el-card>
+					</el-col>
+					<!-- 右边 -->
+					<el-col :lg="12" :xs="24">
+						<el-card shadow="never" header="Sa-Admin ">
+							<com-origin></com-origin>
+						</el-card>
+					</el-col>
+				</el-row>
+			</div>
+			
+		</div>
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="https://unpkg.com/echarts@4.6.0/dist/echarts-en.min.js"></script>
+		<script src="../../static/sa.js"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				components: {
+					'com-sta-data': httpVueLoader('com-sta-data.vue'),
+					'com-chart-1': httpVueLoader('com-chart-1.vue'),
+					'com-chart-2': httpVueLoader('com-chart-2.vue'),
+					'com-chart-3': httpVueLoader('com-chart-3.vue'),
+					'com-stack': httpVueLoader('com-stack.vue'),
+					'com-update-log': httpVueLoader('com-update-log.vue'),
+					'com-origin': httpVueLoader('com-origin.vue'),
+					// 'com-intro': httpVueLoader('com-intro.vue'),
+				},
+				el: '.vue-box',
+				data: {
+				},
+				methods: {
+				},
+				mounted: function() {
+				}
+			})
+			
+			// 设置监听，改变窗口大小时重绘图表 
+			window.myChartList = [];
+			window.onresize = function() {
+				myChartList.forEach(function(myChart) {
+					myChart.resize();
+				})
+			}
+		</script>
+		<!-- 百度统计（下载到本地后请删除） -->
+		<div style="height: 0px; overflow: hidden;">
+			<script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1279021391&web_id=1279021391"></script>
+		</div>
+	</body>
+</html>

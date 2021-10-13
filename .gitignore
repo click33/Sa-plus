@@ -32,8 +32,8 @@ hs_err_pid*
 # 以下为测试时添加的忽略规则，如需使用git功能，请将以下规则全部删掉
 
 sp-server/src/main/java/com/pj/project/*
-sp-admin/sa-resources/menu-list.js
-sp-admin/sa-html/*
+sp-admin/sa-frame/menu-list.js
+sp-admin/sa-view/*
 sp-apidoc/project/*
 
 

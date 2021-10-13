@@ -146,7 +146,7 @@ public class GenUtil {
 		}
 		
 		// menu-list.js 菜单列表 
-		String menuListPath = GenCfgManager.cfg.getAdminProjectPath() + "sa-resources\\menu-list.js";						// 路径  
+		String menuListPath = GenCfgManager.cfg.getAdminProjectPath() + "sa-frame\\menu-list.js";						// 路径  
 		String menuListContent = FreeMarkerUtil.getResult("admin/menu-list.ftl", "abc", 123);		// 内容 
 		SUtil.outFile(menuListPath, menuListContent);
 		System.out.println("menu-list.js 菜单列表, 写入成功：\t\t" + menuListPath);

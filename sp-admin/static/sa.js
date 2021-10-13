@@ -22,10 +22,7 @@ var sa = {
 		api_url: 'http://www.baidu.com',
 		web_url: 'http://www.baidu.com'
 	}
-	// 最终环境 , 上线前请选择正确的环境 
-	sa.cfg = cfg_dev; 
-	// sa.cfg = cfg_test; 
-	// sa.cfg = cfg_prod; 
+	sa.cfg = cfg_dev; // 最终环境 , 上线前请选择正确的环境 
 })();
 
 
@@ -112,10 +109,10 @@ var sa = {
 			type: cfg.type, 
 			data: data,
 			dataType: 'json',
-			// xhrFields: {
-			// 	withCredentials: true // 携带跨域cookie
-			// },
-			// crossDomain: true,
+			xhrFields: {
+				withCredentials: true // 携带跨域cookie
+			},
+			crossDomain: true,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 				// 追加token
@@ -515,6 +512,10 @@ var sa = {
 			}
 			return y + '-' + m + '-' + d;  
 		};
+		// 时间日期 
+		me.forDatetime = function(inputTime) {
+			return me.forDate(inputTime, 2);
+		}
 		
 		// 将时间转化为 个性化 如：3小时前, 
 		// d1 之于 d2 ，d2不填则默认取当前时间 
@@ -988,8 +989,8 @@ var sa = {
 				sa.hideLoading();
 			}
 			
-			// 判断是否首次加载 
 			sa.loading('正在导出...');
+			// 判断是否首次加载 
 			if(window.XLSX) {
 				return exportExcel_fn(select, fileName);
 			} else {
@@ -1025,30 +1026,43 @@ var sa = {
 		me.onInputEnter = function(app) {
 			Vue.nextTick(function() {
 				app = app || window.app;
-				document.querySelectorAll('.el-form input').forEach(function(item) {
+				// document.querySelectorAll('.el-form input').forEach(function(item) {
+				// 	item.onkeydown = function(e) {
+				// 		var theEvent = e || window.event;
+				// 		var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+				// 		if (code == 13) {
+				// 			app.p.pageNo = 1;
+				// 			app.f5();
+				// 		}    
+				// 	}
+				// })
+				document.querySelectorAll('.el-form').forEach(function(item) {
 					item.onkeydown = function(e) {
 						var theEvent = e || window.event;
 						var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
 						if (code == 13) {
-							app.p.pageNo = 1;
-							app.f5();
-						}    
+							var target = e.target||e.srcElement;
+							if(target.tagName.toLowerCase()=="input") {
+								app.p.pageNo = 1;
+								app.f5();
+							}
+						}
 					}
 				})
 			})
 		}
 		
 		// 如果value为true，则抛出异常 
-		me.check = function(value, error_msg) {
+		me.check = function(value, errorMsg) {
 			if(value === true) {
-				throw error_msg;
+				throw {type: 'sa-error', msg: errorMsg};
 			}
 		}
 		
 		// 如果value为null，则抛出异常 
-		me.checkNull = function(value, error_msg) {
+		me.checkNull = function(value, errorMsg) {
 			if(me.isNull(value)) {
-				throw error_msg;
+				throw {type: 'sa-error', msg: errorMsg};
 			}
 		}
 		
@@ -1157,7 +1171,7 @@ var sa = {
 	sa.checkAuth = function(pcode, not_pcode_url) {
 		var is_have = sa.keyListHas(pcode_key, pcode);	
 		if(is_have == false) {
-			location.href= not_pcode_url || '../../sa-html/error-page/403.html';
+			location.href= not_pcode_url || '../../sa-view/error-page/403.html';
 			throw '暂无权限: ' + pcode;
 		}
 	}
@@ -1165,7 +1179,7 @@ var sa = {
 	sa.checkAuthTs = function(pcode, not_pcode_url) {
 		var is_have = sa.keyListHas(pcode_key, pcode);	
 		if(is_have == false) {
-			var url = not_pcode_url || '../../sa-html/error-page/403.html';
+			var url = not_pcode_url || '../../sa-view/error-page/403.html';
 			layer.open({
 				type: 2,	
 				title: false,	// 标题 
@@ -1239,14 +1253,34 @@ var sa = {
 })();
 
 
-
 // 如果是sa_admin环境 
 window.sa_admin = window.sa_admin || parent.sa_admin || top.sa_admin;
+window.saAdmin = window.sa_admin;
 
-// 如果当前是Vue环境, 则挂在到Vue示例
+// 如果当前是Vue环境, 则挂在到 Vue 示例
 if(window.Vue) {
+	// 全局的 sa 对象
 	Vue.prototype.sa = window.sa;
 	Vue.prototype.sa_admin = window.sa_admin;
+	Vue.prototype.saAdmin = window.saAdmin;
+	
+	// 表单校验异常捕获 
+	Vue.config.errorHandler = function(err, vm) {
+		if(err.type == 'sa-error') {
+			return sa.error(err.msg);
+		}
+		throw err;
+	}
+	
+	// Element-UI 全局组件样式  
+	Vue.prototype.$ELEMENT = { size: 'mini', zIndex: 3000 };
+	
+	// 加载全局组件 (注意路径问题)
+	// if(window.httpVueLoader && window.loadComponent !== false) {
+	// 	Vue.component("sa-item", httpVueLoader('../../sa-frame/com/sa-item.vue'));
+	// 	Vue.component("sa-td", httpVueLoader('../../sa-frame/com/sa-td.vue'));
+	// }
+	
 }
 
 // 对外开放, 在模块化时解开此注释 

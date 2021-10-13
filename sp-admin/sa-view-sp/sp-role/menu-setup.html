@@ -43,8 +43,8 @@
 							@check="node_click"
 							>
 							<span class="custom-tree-node" slot-scope="s">
-								<span style="color: #2D8CF0;" v-if="s.data.is_show == undefined || s.data.is_show == true">{{ s.data.name }}</span>
-								<span style="color: #999;" v-if="s.data.is_show == false">{{ s.data.name }} (隐藏)</span>
+								<span style="color: #2D8CF0;" v-if="s.data.isShow == undefined || s.data.isShow == true">{{ s.data.name }}</span>
+								<span style="color: #999;" v-if="s.data.isShow == false">{{ s.data.name }} (隐藏)</span>
 								<span style="color: #999;" v-if="s.data.info">&emsp;———— {{s.data.info}} </span>
 							</span>
 						</el-tree>
@@ -58,9 +58,9 @@
 				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 		</div>
-		<script src="../../sa-resources/menu-list.js"></script> 
-		<script src="../../sa-resources/menu-list-sp.js"></script> 
-		<script src="../../sa-resources/index/admin-util.js"></script>
+		<script src="../../sa-frame/menu-list.js"></script> 
+		<script src="../../sa-frame/menu-list-sp.js"></script> 
+		<script src="../../sa-frame/index/admin-util.js"></script>
         <script>
 			var roleId = sa.p('roleId');
 			var app = new Vue({

@@ -122,7 +122,7 @@ public class SpAdminController {
 		SP.publicMapper.updateColumnById("sp_admin", "status", status, adminId);
 		// 如果是禁用，就停掉其秘钥有效果性，使其账号的登录状态立即无效 
 		if(status == 2) {
-			StpUtil.logoutByLoginId(adminId);
+			StpUtil.logout(adminId);
 		}
 		return AjaxJson.getSuccess();
 	}

@@ -2,7 +2,14 @@
 // sa-plus 快速开发平台:		http://sa-plus.dev33.cn
 // ....
 
+
+
 // ================================= 示例：一些基本信息 ================================= 
+
+// 设置模板标题 
+// sa_admin.title = "Sa-Admin";
+// sa_admin.logo = 'sa-frame/admin-logo.png';    // 设置logo图标地址   
+// sa_admin.icon = 'sa-frame/admin-logo.png';    // 设置icon图标地址 
 
 
 // ================================= 用户信息 和 菜单 =================================
@@ -15,14 +22,14 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 	
 	// 配置 
 	sa_admin.title = "sa-plus 后台";
-	sa_admin.logo_url = 'sa-resources/admin-logo.png';    // 设置logo图标地址 
-	sa_admin.icon_url = "sa-resources/admin-logo.png";    // 设置logo图标地址 
+	sa_admin.logo = 'sa-frame/admin-logo.png';    // 设置logo图标地址 
+	sa_admin.icon = "sa-frame/admin-logo.png";    // 设置logo图标地址 
 	
 	
 	// 当前用户信息 
 	sa_admin.user = {
 		username: res.data.admin.name,
-		avatar: !!res.data.admin.avatar ? res.data.admin.avatar : 'sa-resources/admin-logo.png' // 使用logo作为头像 
+		avatar: !!res.data.admin.avatar ? res.data.admin.avatar : 'sa-frame/admin-logo.png' // 使用logo作为头像 
 		// avatar: res.data.admin.avatar // 此写法为账号头像 
 	};		
 	sa.$sys.setCurrUser(res.data.admin);
@@ -43,32 +50,13 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 
 
 
-// 如果需要获得更多操作能力，如：动态添加菜单、删除菜单等
-// 可直接 sa_admin.menuList 获得菜单引用，直接操作对象 
-
-
-// ================================= 示例：js控制打开某个菜单 =================================
-
-// 打开一个 菜单，根据 id
-// sa_admin.showMenuById('1-1');	
- 
-// 关闭一个 页面，根据 id 
-// sa_admin.closePageById('');
- 
-// 打开一个自定义 页面  
-// sa_admin.showPage({id: 12345, name: '新页面', url: 'http://web.yanzhi21.com'});		// id尽量不要和已有的菜单id冲突，其它属性均可参照菜单项
-
-
-// ================================= 设置user信息 =================================
-
-
 
 // ================================= 示例：设置登录后的头像处，下拉可以出现的选项  =================================
 sa_admin.dropList = [		// 头像点击处可操作的选项
 	{
 		name: '我的资料',
 		click: function() {
-			sa.showIframe('我的资料', 'sa-html-sp/sp-admin/admin-info.html', '700px', '600px');
+			sa.showIframe('我的资料', 'sa-view-sp/sp-admin/admin-info.html', '700px', '600px');
 		}
 	},
     {
@@ -86,7 +74,7 @@ sa_admin.dropList = [		// 头像点击处可操作的选项
     {
         name: '修改密码',
         click: function () {
-			sa.showIframe('修改密码', 'sa-html-sp/sp-admin/update-password.html', '550px', '350px');
+			sa.showIframe('修改密码', 'sa-view-sp/sp-admin/update-password.html', '550px', '350px');
         }
 	},
     {
@@ -111,8 +99,36 @@ sa_admin.dropList = [		// 头像点击处可操作的选项
 ]
 
 
-// 或者以下方式，增加配置项
-// sa_admin.init({
-// 	themeDefault: '1',	// 默认的主题，可选值：1、2、3、4
-// 	switchDefault: '1',	// 默认的切换动画，可选值：fade、slide、cube、coverflow、flip
-// });
+// ================================= 示例：js控制打开某个菜单 =================================
+
+// 显示主页选项卡 
+// sa_admin.showHome();
+
+// 显示一个选项卡, 根据id
+// sa_admin.showTabById('1-1');
+
+// 关闭一个选项卡，根据 id 
+// sa_admin.closeTabById('1-1');
+
+// 新增一个选项卡
+// sa_admin.addTab({id: 12345, name: '新页面', url: 'http://web.yanzhi21.com'});	// id不要和已有的菜单id冲突，其它属性均可参照菜单项 
+
+// 新增一个选项卡、并立即显示  
+// sa_admin.showTab({id: 12345, name: '新页面', url: 'http://web.yanzhi21.com'});	// 参数同上 
+
+// 打开一个 菜单，根据 id
+// sa_admin.showMenuById('1-1');	
+
+
+
+// ================================= 示例：调用另一个页面的代码 =================================
+// var win = sa_admin.getTabWindow('2-1');		// 根据id获取其页面的window对象   （如果此页面未打开，则返回空）（跨域模式下无法获取其window对象）
+// win.app.f5();
+
+// 注意:
+// 根据`iframe`的子父通信原则，在子页面中调用父页面的方法，需要加上parent前缀，例如：
+// parent.sa_admin.msg('啦啦啦');		// 调用父页面的弹窗方法 
+
+
+
+
