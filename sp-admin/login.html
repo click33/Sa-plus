@@ -87,7 +87,7 @@
 					return layer.msg('请输入账号密码');
 				}
 				// 3、请求后台
-				sa.ajax2('/acc/doLogin', p, function(res) {
+				sa.ajax('/AccAdmin/doLogin', p, function(res){
 					// 写入token
 					if(res.data.tokenInfo) {
 						localStorage.tokenName = res.data.tokenInfo.tokenName; 
