@@ -274,6 +274,26 @@ public class DbColumn {
 	public void setJvList(Map<String, String> jvList) {
 		this.jvList = jvList;
 	}
+	// 返回json形式的枚举值，形如：{1: '正常', 2: '禁用'}
+	public String getJvJson() {
+		String str = "";
+		int i = 0;
+		for (String key : jvList.keySet()) {
+			// 判断key是否追加引号 
+			String key2 = key;
+			if(tx.getString("dt", "").toLowerCase().equals("string")) {
+				key2 = "'" + key2 + "'";
+			}
+			// 拼接参数 
+			str += key2 + ": " + "'" + jvList.get(key) + "'";
+			if(i != jvList.size() - 1) {
+				str += ", ";
+			}
+			i++;
+		}
+		str = "{" + str + "}";
+		return str;
+	}
 
 	// 枚举所有取值的key 
 	private List<String> jvKeyList = new ArrayList<String>();	

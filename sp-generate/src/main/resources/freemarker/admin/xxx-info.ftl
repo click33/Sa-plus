@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -19,6 +20,7 @@
 		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="../../static/kj/vue.min.js"></script>
 		<script src="../../static/kj/element-ui/index.js"></script>
+		<script src="../../static/kj/httpVueLoader.js"></script>
 		<script src="../../static/kj/jquery.min.js"></script>
 		<script src="../../static/kj/layer/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -27,9 +29,9 @@
 			.c-panel .c-label{width: 8em;}
 		<#if t.hasFo('richtext') >
 			/* 富文本样式 */
-			.content-box{width: 700px; min-height: 100px; border: 1px #ddd solid; padding: 1em; transition: all 0.2s;overflow: hidden;}
+			.content-box{width: 800px; min-height: 100px; border: 1px #ddd solid; padding: 1em; transition: all 0.2s;overflow: hidden;}
 			.content-box img{max-width: 200px !important;}
-			.c-item-mline{width: 700px;}
+			.c-item-mline{width: 800px;}
 		</#if>
 		<#if t.hasFo('img-list') >
 			.c-item .image-box-2{height: 90px;}
@@ -46,91 +48,36 @@
 	<#if c.istx('no-show')>
 	<#elseif c.foType == 'logic-delete'>	
 	<#elseif c.foType == 'text'>	
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span>{{m.${c.fieldName}}}</span>
-						</div>
+						<sa-info name="${c.columnComment3}" br>{{m.${c.fieldName}}}</sa-info>
 	<#elseif c.foType == 'num'>	
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span class="tc-num">{{m.${c.fieldName}}}</span>
-						</div>
+						<sa-info type="num" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
+	<#elseif c.foType == 'textarea'>	
+						<sa-info type="textarea" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.foType == 'richtext'>
-						<div class="c-item br">
-							<label class="c-label" style="float: left;">${c.columnComment3}：</label>
-							<div class="content-box" style="float: left;">
-								<div v-html="m.${c.fieldName}"></div>
-							</div>
-						</div>
-						<div style="clear: both;"></div>
+						<sa-info type="richtext" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.foType == 'enum'>
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-		<#list c.jvList?keys as jv>
-							<b v-if="m.${c.fieldName} == ${jv}">${c.jvList[jv]}</b>
-		</#list>
-						</div>
+						<sa-info type="enum" name="${c.columnComment3}" :value="m.${c.fieldName}" :jv="${c.getJvJson()}" br></sa-info>
 	<#elseif c.foType == 'img'>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<img :src="m.${c.fieldName}" style="width: 3em; height: 3em; cursor: pointer;" 
-								@click="sa.showImage(m.${c.fieldName}, '400px', '400px')" v-if="m.${c.fieldName}">
-							<span v-else>无</span>
-						</div>
+						<sa-info type="img" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.isFoType('audio', 'video', 'file')>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<el-link type="info" :href="m.${c.fieldName}" target="_blank" v-if="!sa.isNull(m.${c.fieldName})">{{m.${c.fieldName}}}</el-link>
-							<span v-else>无</span>
-						</div>
+						<sa-info type="${c.foType}" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.foType == 'img-list'>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<div class="c-item-mline image-box" v-if="m.${c.fieldName}">
-								<div class="image-box-2" v-for="image in m.${c.fieldName}.split(',')">
-									<img :src="image" @click="sa.showImage(image, '500px', '400px')" />
-								</div>
-							</div>
-							<span v-else>无</span>
-						</div>
+						<sa-info type="img-list" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.isFoType('audio-list', 'video-list', 'file-list', 'img-video-list')>
-						<div class="c-item br">
-							<label class="c-label" style="vertical-align: top;">${c.columnComment3}：</label>
-							<div class="c-item-mline" v-if="m.${c.fieldName}">
-								<div v-for="item in m.${c.fieldName}.split(',')">
-									<el-link type="info" :href="item" target="_blank">{{item}}</el-link>
-								</div>
-							</div>
-							<span v-else>无</span>
-						</div>
+						<sa-info type="${c.foType}" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span class="tc-date">{{sa.forDate(m.${c.fieldName}, 2)}}</span>
-						</div>
+						<sa-info type="datetime" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.isFoType('time')>
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span class="tc-num" class="tc-date">{{m.${c.fieldName}}}</span>
-						</div>
+						<sa-info type="time" name="${c.columnComment3}" :value="m.${c.fieldName}" br></sa-info>
 	<#elseif c.foType == 'fk-1' || c.foType == 'fk-2'>
 					<#if c.isTx('showfk')>
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span>{{m.${c.fieldName}}}</span>
-						</div>
+						<sa-info name="${c.columnComment3}">{{m.${c.fieldName}}}</sa-info>
 					</#if>
 					<#list c.fkPkConcatList as fk>
-						<div class="c-item">
-							<label class="c-label">${fk.fkPkConcatComment}：</label>
-							<span>{{m.${fk.fieldName}}}</span>
-						</div>
+						<sa-info name="${fk.fkPkConcatComment}">{{m.${fk.fieldName}}}</sa-info>
 					</#list>
 	<#else>
-						<div class="c-item br">
-							<label class="c-label">${c.columnComment3}：</label>
-							<span>{{m.${c.fieldName}}}</span>
-						</div>
+						<sa-info name="${c.columnComment3}" br>{{m.${c.fieldName}}}</sa-info>
 	</#if>
 </#list>
 					</el-form>
@@ -144,6 +91,9 @@
 		</div>
 		<script>
 			var app = new Vue({
+				components: {
+					"sa-info": httpVueLoader('../../sa-frame/com/sa-info.vue')
+				},
 				el: '.vue-box',
 				data: {
 					id: sa.p('id', 0),	// 获取数据ID 

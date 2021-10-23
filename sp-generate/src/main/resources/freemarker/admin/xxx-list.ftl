@@ -8,8 +8,9 @@
 <#if cfg.webLibImportWay == 1 >
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
 		<link rel="stylesheet" href="../../static/sa.css">
-		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -19,6 +20,7 @@
 		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="../../static/kj/vue.min.js"></script>
 		<script src="../../static/kj/element-ui/index.js"></script>
+		<script src="../../static/kj/httpVueLoader.js"></script>
 		<script src="../../static/kj/jquery.min.js"></script>
 		<script src="../../static/kj/layer/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -40,169 +42,82 @@
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
 	<#elseif c.isFoType('time')>
 	<#elseif c.isFoType('text', 'textarea', 'richtext', 'no')>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}"></el-input>
-					</div>
+					<sa-item type="text" name="${c.columnComment3}" v-model="p.${c.fieldName}"></sa-item>
 	<#elseif c.isFoType('num')>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-						<el-input size="mini" v-model="p.${c.fieldName}" type="number"></el-input>
-					</div>
+					<sa-item type="num" name="${c.columnComment3}" v-model="p.${c.fieldName}"></sa-item>
 	<#elseif c.foType == 'enum'>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
-			<#if c.gtx('s-type') == '1' || c.gtx('s-type') == '2'>
-						<el-radio-group v-model="p.${c.fieldName}" size="mini" <#if c.gtx('s-type') == '2'>class="s-radio-text" </#if>>
-							<el-radio label="">不限</el-radio>
-							<#list c.jvList?keys as jv>
-							<el-radio :label="${jv}">${c.jvList[jv]}</el-radio>
-							</#list>
-						</el-radio-group>
-			<#elseif c.gtx('s-type') == '3'>
-						<el-radio-group v-model="p.${c.fieldName}" size="mini">
-							<el-radio-button label="">不限</el-radio-button>
-							<#list c.jvList?keys as jv>
-							<el-radio-button :label="${jv}">${c.jvList[jv]}</el-radio-button>
-							</#list>
-						</el-radio-group>
-			<#elseif c.gtx('s-type') == '4'>
-						<el-select v-model="p.${c.fieldName}" size="mini">
-							<el-option label="不限" value=""></el-option>
-							<#list c.jvList?keys as jv>
-							<el-option label="${c.jvList[jv]}" :value="${jv}"></el-option>
-							</#list>
-						</el-select>
-			</#if>
-					</div>
+					<sa-item type="enum" name="${c.columnComment3}" v-model="p.${c.fieldName}" 
+						:jv="${c.getJvJson()}" jtype="${c.gtx('s-type')}" def="不限"></sa-item>
 	<#elseif c.foType == 'fk-s'>
 			<#if c.istx('drop')>
-					<div class="c-item">
-						<label class="c-label">${c.columnComment3}：</label>
+					<sa-item name="${c.columnComment3}">
 						<el-select size="mini" v-model="p.${c.fkSCurrDc.fieldName}">
 							<el-option label="不限" value=""></el-option>
 							<el-option v-for="item in ${c.fieldName}List" :label="item.${c.tx.catc}" :value="item.${c.tx.jc}" :key="item.${c.tx.jc}"></el-option>
 						</el-select>
-					</div>
+					</sa-item>
 			</#if>
 	<#elseif c.foType == 'fk-p'>
 	<#else>
 					<!-- 未识别类型：${c.columnComment3}: p.${c.fieldName} 请检查配置 -->
 	</#if>
 </#list>
-					<div class="c-item" style="min-width: 0px;">
-						<el-button size="mini" type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
-					</div>
+					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
 					<br />
-					<div class="c-item s-radio-text">
-						<label class="c-label">综合排序：</label>
-						<el-radio-group v-model="p.sortType">
+					<sa-item name="综合排序">
+						<el-radio-group v-model="p.sortType" class="s-radio-text">
 							<el-radio :label="0">默认</el-radio>
-<#list t.getTallListBySort() as c>
+						<#list t.getTallListBySort() as c>
 							<el-radio :label="${c_index + 1}">${c.columnComment3}</el-radio>
-</#list>
+						</#list>
 						</el-radio-group>
-					</div>
+					</sa-item>
 				</el-form>
 				<!-- ------------- 快捷按钮 ------------- -->
-				<div class="fast-btn">
-					<el-button size="mini" type="primary" icon="el-icon-plus" @click="add()">新增</el-button>
-					<el-button size="mini" type="success" icon="el-icon-view" @click="getBySelect()">查看</el-button>
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
-					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
-					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
-				</div>
+				<sa-item type="fast-btn" show="add,get,delete,export,reset"></sa-item>
 				<!-- ------------- 数据列表 ------------- -->
-				<el-table class="data-table" ref="data-table" :data="dataList" size="small"<#if t.hasFt('tree')> row-key="${t.primaryKey.fieldName}" border @expand-change="sa.f5TableHeight()"</#if><#if t.hasFt('tree-lazy')> row-key="${t.primaryKey.fieldName}" border lazy :load="loadChildren" @expand-change="sa.f5TableHeight()"</#if>>
-					<el-table-column type="selection" width="45px"></el-table-column>
+				<el-table class="data-table" ref="data-table" :data="dataList" <#if t.hasFt('tree')> row-key="${t.primaryKey.fieldName}" border @expand-change="sa.f5TableHeight()"</#if><#if t.hasFt('tree-lazy')> row-key="${t.primaryKey.fieldName}" border lazy :load="loadChildren" @expand-change="sa.f5TableHeight()"</#if>>
+					<sa-td type="selection"></sa-td>
 <#list t.tallList as c>
 	<#if c.istx('no-show')>
 	<#elseif c.foType == 'logic-delete'>
 	<#elseif c.istx('click')>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<el-link type="primary" @click="sa.showIframe(' id = ' + s.row.${c.getClickCatKeyColumn()} + '  详细信息', '../${c.getClickCatTableKebabName()}/${c.getClickCatTableKebabName()}-info.html?id=' + s.row.${c.getClickCatKeyColumn()})">
-								{{s.row.${c.fieldName}}} 
-							</el-link>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="link-btn" @click="s => sa.showIframe(' id = ' + s.row.${c.getClickCatKeyColumn()} + '  详细信息', '../${c.getClickCatTableKebabName()}/${c.getClickCatTableKebabName()}-info.html?id=' + s.row.${c.getClickCatKeyColumn()})"></sa-td>
 	<#elseif c.istx('switch')>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<el-switch v-model="s.row.${c.fieldName}" :active-value="${c.jvKeyList[0]}" :inactive-value="${c.jvKeyList[1]}" @change="update${c.fieldNameFnCat}(s.row)" inactive-color="#ff4949" style="vertical-align: top;"></el-switch>
-							<span style="color: #999;" v-if="s.row.status == ${c.jvKeyList[0]}">${c.jvList[c.jvKeyList[0]]}</span>
-							<span style="color: #999;" v-if="s.row.status == ${c.jvKeyList[1]}">${c.jvList[c.jvKeyList[1]]}</span>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="switch" :jv="${c.getJvJson()}" @change="s => update${c.fieldNameFnCat}(s.row)"></sa-td>
 	<#elseif c.istx('fast-update')>
 					<el-table-column label="${c.columnComment3}">
 						<template slot-scope="s">
 							<span>{{s.row.${c.fieldName}}}</span>
-							<el-button type="text" size="small" @click="update${c.fieldNameFnCat}(s.row)">改</el-button>
+							<el-button type="text" @click="update${c.fieldNameFnCat}(s.row)">改</el-button>
 						</template>
 					</el-table-column>
-	<#elseif c.isFoType('text', 'textarea', 'fk-s', 'fk-p')>
-					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
+	<#elseif c.isFoType('text', 'fk-s', 'fk-p')>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" ></sa-td>
+	<#elseif c.isFoType('textarea')>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="textarea"></sa-td>
 	<#elseif c.isFoType('num')>
-					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" class-name="tc-num"></el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="num"></sa-td>
 	<#elseif c.foType == 'richtext'>
-					<el-table-column label="${c.columnComment3}" show-overflow-tooltip>
-						<template slot-scope="s"><span>{{sa.maxLength(sa.text(s.row.${c.fieldName}), 100)}}</span></template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="richtext"></sa-td>
 	<#elseif c.isFoType('date', 'date-create', 'date-update')>
-					<el-table-column label="${c.columnComment3}" class-name="tc-date">
-						<template slot-scope="s">{{sa.forDate(s.row.${c.fieldName}, 2)}}</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="datetime"></sa-td>
 	<#elseif c.isFoType('time')>
 					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" class-name="tc-date"></el-table-column>
 	<#elseif c.foType == 'img'>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<img :src="s.row.${c.fieldName}" style="width: 3em; height: 3em; border-radius: 3px; cursor: pointer;" 
-								@click="sa.showImage(s.row.${c.fieldName}, '400px', '400px')" v-if="s.row.${c.fieldName}" />
-							<div v-else>无</div>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="img"></sa-td>
 	<#elseif c.isFoType('audio', 'video', 'file')>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<el-link type="info" :href="s.row.${c.fieldName}" target="_blank" v-if="!sa.isNull(s.row.${c.fieldName})">预览</el-link>
-							<div v-else>无</div>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="${c.foType}"></sa-td>
 	<#elseif c.foType == 'img-list'>
-					<el-table-column label="${c.columnComment3}" min-width="120px">
-						<template slot-scope="s">
-							<div @click="sa.showImageList(s.row.${c.fieldName}.split(','))" style="cursor: pointer;" v-if="s.row.${c.fieldName}">
-								<img :src="s.row.${c.fieldName}.split(',')[0]" style="width: 3em; height: 3em; border-radius: 3px; cursor: pointer;" />
-								<span style="color: #999; padding-left: 0.5em;">点击预览</span>
-							</div>
-							<div v-else>无</div>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="img-list"></sa-td>
 	<#elseif c.isFoType('audio-list', 'video-list', 'file-list', 'img-video-list')>
-					<el-table-column label="${c.columnComment3}" min-width="70px">
-						<template slot-scope="s">
-							<span v-if="s.row.${c.fieldName}" style="color: #666;">共{{s.row.${c.fieldName}.split(',').length}}个</span>
-							<span v-else>无</span>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="${c.foType}"></sa-td>
 	<#elseif c.foType == 'link'>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-							<el-link type="primary" :href="s.row.${c.fieldName}" target="_blank">{{s.row.${c.fieldName}}}</el-link>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="link"></sa-td>
 	<#elseif c.foType == 'enum'>
-					<el-table-column label="${c.columnComment3}">
-						<template slot-scope="s">
-		<#list c.jvList?keys as jv>
-							<b v-if="s.row.${c.fieldName} == ${jv}">${c.jvList[jv]}</b>
-		</#list>
-						</template>
-					</el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" type="enum" :jv="${c.getJvJson()}"></sa-td>
 	<#else>
-					<el-table-column label="${c.columnComment3}" prop="${c.fieldName}" ></el-table-column>
+					<sa-td name="${c.columnComment3}" prop="${c.fieldName}" ></sa-td>
 	</#if>
 </#list>
 					<el-table-column label="操作" fixed="right" <#if t.hasFt('tree', 'tree-lazy')> width="320px"<#else> width="240px"</#if>>
@@ -217,25 +132,15 @@
 					</el-table-column>
 				</el-table>
 				<!-- ------------- 分页 ------------- -->
-				<div class="page-box">
-					<el-pagination background
-						layout="total, prev, pager, next, sizes, jumper" 
-						:current-page.sync="p.pageNo" 
-						:page-size.sync="p.pageSize" 
-						:total="dataCount" 
-<#if t.hasFt('tree')>
-						:page-sizes="[1000]" 
-<#else>
-						:page-sizes="[1, 10, 20, 30, 40, 50, 100, 1000]" 
-</#if>
-						@current-change="f5()" 
-						@size-change="f5()">
-					</el-pagination>
-				</div>
+				<sa-item type="page" :curr.sync="p.pageNo" :size.sync="p.pageSize" :total="dataCount" @change="f5()"<#if t.hasFt('tree')> :sizes="[1000]"</#if>></sa-item>
 			</div>
 		</div>
 		<script>
 			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),  
+					"sa-td": httpVueLoader('../../sa-frame/com/sa-td.vue'),		
+				},
 				el: '.vue-box',
 				data: {
 					p: { // 查询参数  
@@ -262,17 +167,13 @@
 					f5: function() {
 <#if t.hasFt('tree')>
 						sa.ajax('/${t.mkNameBig}/getTree', sa.removeNull(this.p), function(res) {
-							this.dataList = res.data; // 数据
-							this.dataCount = res.dataCount; // 数据总数 
-							sa.f5TableHeight();		// 刷新表格高度 
-						}.bind(this));
 <#else>
 						sa.ajax('/${t.mkNameBig}/getList', sa.removeNull(this.p), function(res) {
+</#if>
 							this.dataList = res.data; // 数据
 							this.dataCount = res.dataCount; // 数据总数 
 							sa.f5TableHeight();		// 刷新表格高度 
 						}.bind(this));
-</#if>
 					},
 <#if t.hasFt('tree-lazy')>
 					// 加载子节点 
@@ -288,7 +189,7 @@
 </#if>
 					// 查看
 					get: function(data) {
-						sa.showIframe('数据详情', '${t.kebabName}-info.html?id=' + data.id, '950px', '90%');
+						sa.showIframe('数据详情', '${t.kebabName}-info.html?id=' + data.id, '1050px', '90%');
 					},
 					// 查看 - 根据选中的
 					getBySelect: function(data) {
@@ -300,16 +201,16 @@
 					},
 					// 修改
 					update: function(data) {
-						sa.showIframe('修改数据', '${t.kebabName}-add.html?id=' + data.id, '900px', '90%');
+						sa.showIframe('修改数据', '${t.kebabName}-add.html?id=' + data.id, '1000px', '90%');
 					},
 					// 新增
 					add: function(data) {
-						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1', '900px', '90%');
+						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1', '1000px', '90%');
 					},
 <#if t.hasFt('tree', 'tree-lazy')>
 					// 新增子级
 					addChildren: function(data) {
-						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1&${t.getTreeFkey()}=' + data.${t.getTreeIdkey()}, '900px', '90%');
+						sa.showIframe('新增数据', '${t.kebabName}-add.html?id=-1&${t.getTreeFkey()}=' + data.${t.getTreeIdkey()}, '1000px', '90%');
 	<#if t.hasFt('tree-lazy')>
 	</#if>
 					},
