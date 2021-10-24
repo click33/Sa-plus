@@ -1,12 +1,8 @@
 <p align="center">
-    <!-- <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;"> -->
-	<h2 align="center" style="padding: 30px 0 20px; font-size: 72px; position: relative;">
-		<b>Sa-plus</b>
-		<small style="font-size: 14px; position: absolute; bottom: 10px;">v1.26.0</small>
-	</h2>
+	<img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/sa-plus.png" width="350">
 </p>
-<h4 align="center" style="font-weight: 400;">🔥🔥🔥</h4>
-<h3 align="center" style="font-weight: 400;">一个基于 SpringBoot 的快速开发框架，内置代码生成器</h3>
+<h4 align="center">v1.26.0</h4>
+<h4 align="center">一个基于 SpringBoot 的快速开发框架，内置代码生成器</h4>
 <h4 align="center">
 	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
 	<a href='https://gitee.com/click33/sa-plus/members'><img src='https://gitee.com/click33/sa-plus/badge/fork.svg'></a>
