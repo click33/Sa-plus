@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../../static/sa.css"> 
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -23,36 +24,29 @@
 			<div class="s-body">
 				<div class="c-panel">
 					<div class="c-title">数据添加</div>
-					<el-form size="mini" v-if="m">
+					<el-form v-if="m">
 						<!-- no字段： m.id - id -->
-						<div class="c-item br">
-							<label class="c-label">角色id：</label>
-							<el-input size="mini" v-model="m.id"></el-input>
-						</div>
-						<div class="c-item br">
-							<label class="c-label">角色昵称：</label>
-							<el-input size="mini" v-model="m.name"></el-input>
-						</div>
-						<div class="c-item br">
-							<label class="c-label">责任描述：</label>
-							<el-input size="mini" v-model="m.info"></el-input>
-						</div>
-						<div class="c-item br s-ok">
-							<label class="c-label"></label>
-							<el-button size="mini" type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
-						</div>
+						<sa-item type="text" name="角色id" v-model="m.id" br></sa-item>
+						<sa-item type="text" name="角色昵称" v-model="m.name" br></sa-item>
+						<sa-item type="text" name="责任描述" v-model="m.info" br></sa-item>
+						<sa-item name="" br>
+							<el-button type="primary" icon="el-icon-plus" @click="ok()">保存</el-button>
+						</sa-item>
 					</el-form>
 				</div>
 			</div>
 			<!-- ------- 底部按钮 ------- -->
 			<div class="s-foot">
-				<el-button size="mini" type="primary" @click="ok()">确定</el-button>
-				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+				<el-button type="primary" @click="ok()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 		</div>
         <script>
 			
 			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),
+				},
 				el: '.vue-box',
 				data: {
 					id: sa.p('id', 0),		// 获取超链接中的id参数（0=添加，非0=修改） 
@@ -62,7 +56,7 @@
 					// 创建一个 默认Model 
 					createModel: function() {
 						return {
-							id: 0, 
+							id: '', 
 							name: '',
 							info: '',
 							isLock: 2,
@@ -70,23 +64,13 @@
 							is_update: false,
 						}
 					},
-					// 表单验证
-					submitCheck: function() {
-						try{
-							var m = this.m;		// 获取 m对象 
-							sa.checkNull(m.name, '请输入角色名字');
-							sa.checkNull(m.info, '请输入责任描述');
-							return 'ok';	// 全部通过验证，返回ok 表示正确 
-						} catch(e) {
-							sa.error(e);
-						}
-					},
 					// 提交数据 
 					ok: function(){
 						// 验证 
-						if(this.submitCheck() != 'ok') {
-							return;
-						}
+						let m = this.m;		// 获取 m对象 
+						sa.checkNull(m.name, '请输入角色名字');
+						sa.checkNull(m.info, '请输入责任描述');
+						
 						// 开始增加
 						sa.ajax('/role/add', this.m, function(res){
 							sa.alert('增加成功', function() {

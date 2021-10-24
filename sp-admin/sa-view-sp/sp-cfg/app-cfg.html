@@ -45,15 +45,15 @@
 						</div>
 						<div class="c-item br">
 							<label class="c-label">系统名称：</label>
-							<el-input size="mini" v-model="m.appName"></el-input>
+							<el-input v-model="m.appName"></el-input>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">版本编号：</label>
-							<el-input size="mini" v-model="m.appVersionNo"></el-input>
+							<el-input v-model="m.appVersionNo"></el-input>
 						</div>
 						<div class="c-item br">
 							<label class="c-label">更新描述：</label>
-							<el-input size="mini" v-model="m.appVersionLog"></el-input>
+							<el-input v-model="m.appVersionLog"></el-input>
 						</div>
 					</el-tab-pane>
 					
@@ -70,8 +70,8 @@
 					<hr style="height: 2px;">
 					<div class="c-item">
 						<label class="c-label"></label>
-						<el-button type="primary" size="mini" icon="el-icon-check" @click="ok">保存修改</el-button>
-						<el-button type="primary" size="mini" icon="el-icon-refresh-right" @click="f5">重置</el-button>
+						<el-button type="primary" icon="el-icon-check" @click="ok">保存修改</el-button>
+						<el-button type="primary" icon="el-icon-refresh-right" @click="f5">重置</el-button>
 					</div>
 				</div>
 			</div>

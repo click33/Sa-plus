@@ -9,6 +9,7 @@
 		<link rel="stylesheet" href="../../static/sa.css"> 
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
 		<script src="../../static/sa.js"></script>
@@ -28,69 +29,35 @@
 			<!-- ------- 内容部分 ------- -->
 			<div class="s-body">
 				<div class="c-panel">
-					<el-form size="mini" v-if="m">
+					<el-form v-if="m">
 						<div style="height: 20px;"></div>
-						<div class="c-item">
-							<label class="c-label">编号：</label>
-							<span>{{m.id}}</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">名称：</label>
-							<span>{{m.name}}</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">手机：</label>
-							<span>{{m.phone}}</span>
-							<span v-if="sa.isNull(m.phone)">无</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">角色：</label>
-							<b>{{m.roleName}}</b>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">创建账号：</label>
+						<sa-info name="编号" br>{{m.id}}</sa-info>
+						<sa-info name="名称" br>{{m.name}}</sa-info>
+						<sa-info name="手机" br>{{m.phone || '无'}}</sa-info>
+						<sa-info name="角色" br>{{m.roleName}}</sa-info>
+						<sa-info name="创建账号" br>
 							<span v-if="m.createByAid == -1">无</span>
 							<a v-else :href=" 'admin-info.html?id=' +  m.createByAid">{{m.createByAid}}</a>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">创建时间：</label>
-							<span>{{sa.forDate(m.createTime, 2)}}</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">最后登录：</label>
-							<span>{{sa.forDate(m.loginTime, 2)}}</span>
-							<span v-if="sa.isNull(m.loginTime)">无</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">登录次数：</label>
-							<span>{{m.loginCount}}</span>
-						</div>
-						<br>
-						<div class="c-item">
-							<label class="c-label">最后登录IP：</label>
-							<span>{{m.loginIp}}</span>
-							<span v-if="sa.isNull(m.loginIp)">无</span>
-						</div>
+						</sa-info>
+						<sa-info name="创建时间" br>{{sa.forDate(m.createTime, 2)}}</sa-info>
+						<sa-info name="最后登录" br>{{sa.forDate(m.loginTime, 2) || '无'}}</sa-info>
+						<sa-info name="最后登录IP" br>{{m.loginIp || '无'}}</sa-info>
 					</el-form>
 				</div>
 			</div>
 			<!-- ------- 底部按钮 ------- -->
 			<div class="s-foot">
-				<el-button size="mini" type="success" @click="sa.closeCurrIframe()">确定</el-button>
-				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+				<el-button type="success" @click="sa.closeCurrIframe()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 			
 		</div>
 		
 		<script type="text/javascript">
 			var app = new Vue({
+				components: {
+					"sa-info": httpVueLoader('../../sa-frame/com/sa-info.vue')
+				},
 				el: '.vue-box',
 				data: {
 					id: parseInt(sa.p('id', 0)),
@@ -102,16 +69,6 @@
 					ok: function(pageNo) {
 						sa.closeCurrIframe();
 					},
-					// 打开资金详细记录 
-					openZJXX: function() {
-						var url = 'html/ser-change-log/ser-change-log-list.html?type=1&acc_id=' + this.m.id;
-						var tab = {id: 'admin-money-' + this.m.id, name: '资金记录', url: url};
-						top.sa_admin.showTab(tab);
-						// 如果是本人的，在sa_admin打开的窗口，就关闭这个窗口 
-						if(this.id == 0) {
-							sa.closeCurrIframe();
-						}
-					}
 				},
 				created: function() {
 					if(this.id == 0 || this.id == sa.$sys.getCurrUser().id) {

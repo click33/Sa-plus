@@ -29,7 +29,7 @@
 			<div class="c-panel">
 				<!-- 参数栏 -->
 				<div class="c-title">检索参数</div>
-				<el-form size="mini" :inline="true" @submit.native.prevent>
+				<el-form :inline="true" @submit.native.prevent>
 					<el-form-item label="记录id：">
 						<el-input v-model="p.id" placeholder="精确定位"></el-input>
 					</el-form-item>
@@ -72,14 +72,14 @@
 				</el-form>
 				<!-- ------------- 快捷按钮 ------------- -->
 				<div class="fast-btn" style="margin-top: -10px;">
-					<el-button size="mini" type="primary" icon="el-icon-plus" @click="copyAll()">复制全部</el-button>
-					<!-- <el-button size="mini" type="success" icon="el-icon-edit" @click="update($refs['data-table'].selection[0])"
+					<el-button type="primary" icon="el-icon-plus" @click="copyAll()">复制全部</el-button>
+					<!-- <el-button type="success" icon="el-icon-edit" @click="update($refs['data-table'].selection[0])"
 						:disabled="!$refs['data-table'] || $refs['data-table'].selection.length != 1">修改</el-button> -->
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
-					<el-button size="mini" type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
-					<el-button size="mini" type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
-					<el-button size="mini" type="danger" icon="el-icon-delete" @click="deleteByStartEnd()">范围删除</el-button>
-					<el-button size="mini" type="success" icon="el-icon-view" @click="f5StaData()">统计数据</el-button>
+					<el-button type="danger" icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
+					<el-button type="warning" icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
+					<el-button type="info"  icon="el-icon-refresh"  @click="sa.f5()">重置</el-button>
+					<el-button type="danger" icon="el-icon-delete" @click="deleteByStartEnd()">范围删除</el-button>
+					<el-button type="success" icon="el-icon-view" @click="f5StaData()">统计数据</el-button>
 				</div>
 				<!-- ------------- 数据列表 ------------- -->
 				<el-table class="data-table" ref="data-table" :data="dataList" size="small">
@@ -152,8 +152,8 @@
 					</el-table-column>
 					<el-table-column label="操作" width="120px">
 						<template slot-scope="s">
-							<el-button type="text" size="mini" @click="copy(s.row)">复制</el-button>
-							<el-button type="text" size="mini" @click="del(s.row)" v-if="way == 1">删除</el-button>
+							<el-button type="text" @click="copy(s.row)">复制</el-button>
+							<el-button type="text" @click="del(s.row)" v-if="way == 1">删除</el-button>
 						</template>
 					</el-table-column>
 				</el-table>

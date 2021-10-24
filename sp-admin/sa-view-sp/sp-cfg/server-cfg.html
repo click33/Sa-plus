@@ -40,7 +40,7 @@
 					<el-tab-pane label="系统参数" name="tab1">
 						<!-- <div class="c-item br">
 							<label class="c-label">预留信息：</label>
-							<el-input size="mini" v-model="m.reserve_info"></el-input>
+							<el-input v-model="m.reserve_info"></el-input>
 						</div> -->
 						<div class="c-item">
 							<label class="c-label">抛出SQL：</label>
@@ -63,8 +63,8 @@
 					<hr style="height: 2px;">
 					<div class="c-item">
 						<label class="c-label"></label>
-						<el-button type="primary" size="mini" icon="el-icon-check" @click="ok">保存修改</el-button>
-						<el-button type="primary" size="mini" icon="el-icon-refresh-right" @click="f5">重置</el-button>
+						<el-button type="primary" icon="el-icon-check" @click="ok">保存修改</el-button>
+						<el-button type="primary" icon="el-icon-refresh-right" @click="f5">重置</el-button>
 					</div>
 				</div>
 			</div>

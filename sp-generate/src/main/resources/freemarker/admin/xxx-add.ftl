@@ -60,7 +60,7 @@
 				<div class="c-panel">
                     <div class="c-title" v-if="id == 0">数据添加</div>
 					<div class="c-title" v-else>数据修改</div>
-					<el-form size="mini" v-if="m">
+					<el-form v-if="m">
 <#list t.t12List as c>
 	<#if c.istx('no-add')>	
 	<#elseif c.foType == 'logic-delete'>	
@@ -117,8 +117,8 @@
 			</div>
 			<!-- ------- 底部按钮 ------- -->
 			<div class="s-foot">
-				<el-button size="mini" type="primary" @click="ok()">确定</el-button>
-				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+				<el-button type="primary" @click="ok()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 		</div>
         <script>

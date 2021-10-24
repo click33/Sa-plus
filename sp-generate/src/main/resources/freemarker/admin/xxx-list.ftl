@@ -51,7 +51,7 @@
 	<#elseif c.foType == 'fk-s'>
 			<#if c.istx('drop')>
 					<sa-item name="${c.columnComment3}">
-						<el-select size="mini" v-model="p.${c.fkSCurrDc.fieldName}">
+						<el-select v-model="p.${c.fkSCurrDc.fieldName}">
 							<el-option label="不限" value=""></el-option>
 							<el-option v-for="item in ${c.fieldName}List" :label="item.${c.tx.catc}" :value="item.${c.tx.jc}" :key="item.${c.tx.jc}"></el-option>
 						</el-select>

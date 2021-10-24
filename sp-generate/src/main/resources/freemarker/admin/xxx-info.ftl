@@ -43,7 +43,7 @@
 			<!-- ------- 内容部分 ------- -->
 			<div class="s-body">
 				<div class="c-panel">
-					<el-form size="mini" v-if="m">
+					<el-form v-if="m">
 <#list t.tallList as c>
 	<#if c.istx('no-show')>
 	<#elseif c.foType == 'logic-delete'>	
@@ -85,8 +85,8 @@
 			</div>
 			<!-- ------- 底部按钮 ------- -->
 			<div class="s-foot">
-				<el-button size="mini" type="success" @click="sa.closeCurrIframe()">确定</el-button>
-				<el-button size="mini" @click="sa.closeCurrIframe()">取消</el-button>
+				<el-button type="success" @click="sa.closeCurrIframe()">确定</el-button>
+				<el-button @click="sa.closeCurrIframe()">取消</el-button>
 			</div>
 		</div>
 		<script>
