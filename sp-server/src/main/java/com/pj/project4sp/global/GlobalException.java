@@ -24,7 +24,6 @@ import cn.dev33.satoken.exception.NotPermissionException;
 @ControllerAdvice
 public class GlobalException {
 
-	
 	/** 全局异常拦截  */
 	@ResponseBody
 	@ExceptionHandler
