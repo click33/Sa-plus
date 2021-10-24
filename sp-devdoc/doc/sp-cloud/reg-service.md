@@ -8,7 +8,7 @@
 - 这四个子项目便是我们的业务模块，这四个服务彼此独立、互不干扰，你可以依次启动这四个服务
 - 启动步骤：
 	- 下载`sp-plus`基础版项目，然后新建数据库`sp-dev`，导入脚本`doc/sa-plus.sql`
-	- 启动`redis`，并确保`nocas`中的配置信息正确，然后依次启动四个服务
+	- 启动`redis`，并确保`nacos`中的配置信息正确，然后依次启动四个服务
 	- 然后访问`nacos`控制台, 可以看到四个服务已经成功注册到`nacos`
 
 ![nacos服务中心](http://oss.dev33.cn/sp-cloud/nacos-service-list.png)
