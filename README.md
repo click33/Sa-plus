@@ -1,9 +1,10 @@
 <p align="center">
 	<img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/sa-plus.png" width="350">
+	<!-- <h2 align="center" style="font-size: 80px; font-weight: 700;">Sa-plus</h2> -->
 </p>
-<h4 align="center">v1.26.0</h4>
+<h2 align="center" style="margin-top: 30px;">v1.26.0</h2>
 <h4 align="center">一个基于 SpringBoot 的快速开发框架，内置代码生成器</h4>
-<h4 align="center">
+<p align="center">
 	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
 	<a href='https://gitee.com/click33/sa-plus/members'><img src='https://gitee.com/click33/sa-plus/badge/fork.svg'></a>
 	<a href="https://github.com/click33/sa-plus/stargazers"><img src="https://img.shields.io/github/stars/click33/sa-plus?style=flat-square&logo=GitHub"></a>
@@ -11,7 +12,7 @@
 	<a href="https://github.com/click33/sa-plus/network/members"><img src="https://img.shields.io/github/forks/click33/sa-plus?style=flat-square&logo=GitHub"></a>
 	<a href="https://github.com/click33/sa-plus/issues"><img src="https://img.shields.io/github/issues/click33/sa-plus.svg?style=flat-square&logo=GitHub"></a>
 	<a href="https://github.com/click33/sa-plus/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg?style=flat-square&logo=GitHub"></a>
-</h4>
+</p>
 
 
 ## 😘 项目优点 
