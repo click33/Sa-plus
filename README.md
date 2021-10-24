@@ -1,16 +1,20 @@
 <p align="center">
-    <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
+    <!-- <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;"> -->
+	<h2 align="center" style="padding: 30px 0 20px; font-size: 72px; position: relative;">
+		<b>Sa-plus</b>
+		<small style="font-size: 14px; position: absolute; bottom: 10px;">v1.26.0</small>
+	</h2>
 </p>
-<h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sa-plus v1.26.0</h2>
-<h4 align="center">一个基于springboot架构的快速开发框架，内置代码生成器</h4>
+<h4 align="center" style="font-weight: 400;">🔥🔥🔥</h4>
+<h3 align="center" style="font-weight: 400;">一个基于 SpringBoot 的快速开发框架，内置代码生成器</h3>
 <h4 align="center">
 	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
-	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/sa--plus-v1.26.0-2B9939"></a>
-	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
-	<a href="https://github.com/click33/sa-plus/stargazers"><img src="https://img.shields.io/github/stars/click33/sa-plus"></a>
-	<a href="https://github.com/click33/sa-plus/watchers"><img src="https://img.shields.io/github/watchers/click33/sa-plus"></a>
-	<a href="https://github.com/click33/sa-plus/network/members"><img src="https://img.shields.io/github/forks/click33/sa-plus"></a>
-	<a href="https://github.com/click33/sa-plus/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg"></a>
+	<a href='https://gitee.com/click33/sa-plus/members'><img src='https://gitee.com/click33/sa-plus/badge/fork.svg'></a>
+	<a href="https://github.com/click33/sa-plus/stargazers"><img src="https://img.shields.io/github/stars/click33/sa-plus?style=flat-square&logo=GitHub"></a>
+	<a href="https://github.com/click33/sa-plus/watchers"><img src="https://img.shields.io/github/watchers/click33/sa-plus?style=flat-square&logo=GitHub"></a>
+	<a href="https://github.com/click33/sa-plus/network/members"><img src="https://img.shields.io/github/forks/click33/sa-plus?style=flat-square&logo=GitHub"></a>
+	<a href="https://github.com/click33/sa-plus/issues"><img src="https://img.shields.io/github/issues/click33/sa-plus.svg?style=flat-square&logo=GitHub"></a>
+	<a href="https://github.com/click33/sa-plus/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg?style=flat-square&logo=GitHub"></a>
 </h4>
 
 
@@ -83,7 +87,6 @@
 ## 😎 QQ群 
 - QQ交流群：[782974737 点击加入](https://jq.qq.com/?_wv=1027&k=5DHN5Ib)
 - 如遇bug或者有好想法，请加入qq群一起交流  
-
 
 
 
