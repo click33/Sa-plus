@@ -1,8 +1,8 @@
-<p align="center">
+<div align="center">
 	<!-- <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/sa-plus.png" width="350"> -->
 	<h2 align="center" style="font-size: 80px; font-weight: 700;">Sa-plus</h2>
-</p>
-<h2 align="center" style="margin-top: 30px;">v1.26.0</h2>
+</div>
+<div align="center" style="margin-top: 30px; font-size: 22px;"><b>v1.26.0</b></div>
 <h4 align="center">一个基于 SpringBoot 的快速开发框架，内置代码生成器</h4>
 <p align="center">
 	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
