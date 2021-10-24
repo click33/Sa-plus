@@ -50,7 +50,7 @@ public class MybatisStdOutImpl implements Log {
 		}
 		// 如果是sql语句，则: 蓝色、加粗、下划线 
 		// 参考：https://blog.csdn.net/soinice/article/details/97052030
-		if(SystemObject.config.getColorSql() && s.startsWith("==>  Preparing")) {
+		if(SystemObject.config != null && SystemObject.config.getColorSql() && s.startsWith("==>  Preparing")) {
 			s = "\033[34;1;4m" + s + "\033[0m";
 //			s = s.replaceAll("==>  Preparing: ", "");
 //			s = "==>  Preparing: " + s;

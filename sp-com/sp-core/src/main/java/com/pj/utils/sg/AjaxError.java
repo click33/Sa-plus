@@ -60,12 +60,12 @@ public class AjaxError extends RuntimeException {
 	// ========================= 获取相关 =========================  
 	
 	/** 获得一个异常AjaxError */
-	public static AjaxError get(String error_msg){
-		return new AjaxError(error_msg);
+	public static AjaxError get(String errorMsg){
+		return new AjaxError(errorMsg);
 	}
 	/** 获得一个异常AjaxError */
-	public static AjaxError get(int code, String error_msg){
-		return new AjaxError(code, error_msg);
+	public static AjaxError get(int code, String errorMsg){
+		return new AjaxError(code, errorMsg);
 	}
 	/** 获得一个异常AjaxError */
 	public static AjaxError get(Throwable e){
@@ -76,20 +76,20 @@ public class AjaxError extends RuntimeException {
 	// ========================= 获取并抛出 =========================  
 	
 	/** 获得一个异常，并直接抛出 */
-	public static void getAndThrow(String error_msg) {
-		throw new AjaxError(error_msg);
+	public static void getAndThrow(String errorMsg) {
+		throw new AjaxError(errorMsg);
 	}
 
 	/** 如果条件为true，则抛出异常 */
-	public static void throwBy(boolean bo, int code, String error_msg) {
+	public static void throwBy(boolean bo, int code, String errorMsg) {
 		if(bo) {
-			throw get(code, error_msg);
+			throw get(code, errorMsg);
 		}
 	}
 	/** 如果条件为true，则抛出异常 */
-	public static void throwBy(boolean bo, String error_msg) {
+	public static void throwBy(boolean bo, String errorMsg) {
 		if(bo) {
-			throw get(error_msg);
+			throw get(errorMsg);
 		}
 	}
 	/** 如果条件为true，则抛出异常 */
@@ -101,15 +101,15 @@ public class AjaxError extends RuntimeException {
 	
 
 	/** 根据受影响行数的(大于0通过，小于等于0抛出error) */ 
-	public static void throwByLine(int line, int code, String error_msg){
+	public static void throwByLine(int line, int code, String errorMsg){
 		if(line <= 0){
-			throw get(code, error_msg);
+			throw get(code, errorMsg);
 		}
 	}
 	/** 根据受影响行数的(大于0通过，小于等于0抛出error) */ 
-	public static void throwByLine(int line, String error_msg){
+	public static void throwByLine(int line, String errorMsg){
 		if(line <= 0){
-			throw get(error_msg);
+			throw get(errorMsg);
 		}
 	}
 	/** 根据受影响行数的(大于0通过，小于等于0抛出error) */ 
@@ -122,15 +122,15 @@ public class AjaxError extends RuntimeException {
 
 
 	/** 抛出异常，根据: 是否为空 */ 
-	public static void throwByIsNull(Object value, int code, String error_msg){
+	public static void throwByIsNull(Object value, int code, String errorMsg){
 		if(isNull(value)){
-			throw get(code, error_msg);
+			throw get(code, errorMsg);
 		}
 	}
 	/** 抛出异常，根据: 是否为空 */ 
-	public static void throwByIsNull(Object value, String error_msg){
+	public static void throwByIsNull(Object value, String errorMsg){
 		if(isNull(value)){
-			throw get(error_msg);
+			throw get(errorMsg);
 		}
 	}
 	/** 抛出异常，根据: 是否为空 */ 

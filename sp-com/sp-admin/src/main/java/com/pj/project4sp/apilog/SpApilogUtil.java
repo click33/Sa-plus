@@ -16,8 +16,8 @@ import com.pj.utils.LogUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.WebNbUtil;
 
+import cn.dev33.satoken.spring.SpringMVCUtil;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.dev33.satoken.util.SpringMvcUtil;
 import cn.hutool.core.util.IdUtil;
 
 /**
@@ -47,7 +47,7 @@ public class SpApilogUtil {
 		}
 		
 		// 1、开始时 
-    	HttpServletRequest request = SpringMvcUtil.getRequest();
+    	HttpServletRequest request = SpringMVCUtil.getRequest();
     	SpApilog a = new SpApilog();
     	a.setId(getSnowflakeId());		
     	a.setReqIp(WebNbUtil.getIP(request));	
@@ -77,7 +77,7 @@ public class SpApilogUtil {
 		}
 		
 		// 读取本次请求的 ApiLog 对象 
-		HttpServletRequest request = SpringMvcUtil.getRequest();
+		HttpServletRequest request = SpringMVCUtil.getRequest();
 		SpApilog a = (SpApilog)request.getAttribute(APILOG_OBJ_SAVE_KEY);
 		if(a == null) {
 //	    	LogUtil.info("未找到相应ApiLog对象（可能原因：全局异常），aj=" + aj);
@@ -125,7 +125,7 @@ public class SpApilogUtil {
 
 	/** 获取当前请求的id */
 	public static String getCurrReqId() {
-		HttpServletRequest request = SpringMvcUtil.getRequest();
+		HttpServletRequest request = SpringMVCUtil.getRequest();
 		String id = (String)request.getAttribute(APILOG_OBJ_SAVE_ID_KEY);
 		if(id == null) {
 			id = IdUtil.simpleUUID();

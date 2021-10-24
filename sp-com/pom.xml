@@ -8,7 +8,7 @@
     <modules>
         <!-- 核心模块 -->
         <module>sp-core</module>
-        <!-- sa-plus内置的代码模块 -->
+        <!-- Sa-plus内置的代码模块 -->
         <module>sp-admin</module>
         <!-- 启动类模块 -->
         <module>sp-start</module>
@@ -32,7 +32,7 @@
 	
 	<dependencies>
 
-		<!-- springboot依赖 -->
+		<!-- SpringBoot 依赖 -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -42,7 +42,7 @@
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
 
-       	<!-- springboot集成 mybatis-plus -->
+       	<!-- SpringBoot 集成 mybatis-plus -->
 		<dependency>
 		    <groupId>com.baomidou</groupId>
 		    <artifactId>mybatis-plus-boot-starter</artifactId>
@@ -76,25 +76,32 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- sa-token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
+		<!-- Sa-Token 权限认证, 在线文档：http://sa-token.dev33.cn/ -->
 		<dependency>
 		    <groupId>cn.dev33</groupId>
-		    <artifactId>sa-token</artifactId>
-		    <version>1.4.0</version>
+		    <artifactId>sa-token-spring-boot-starter</artifactId>
+		    <version>1.27.0</version>
 		</dependency>
+		
+	    <!-- Sa-Token 整合 Redis (使用jackson序列化方式) -->
+	    <dependency>
+	        <groupId>cn.dev33</groupId>
+	        <artifactId>sa-token-dao-redis-jackson</artifactId>
+		    <version>1.27.0</version>
+	    </dependency>
         
         <!-- 工具类大全 - 在线文档：https://hutool.cn/docs/#/ -->
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.0.7</version>
+            <version>5.7.15</version>
         </dependency>
         
         <!-- OkHttps网络请求库： http://okhttps.ejlchina.com/ -->
         <dependency>
 		     <groupId>com.ejlchina</groupId>
 		     <artifactId>okhttps</artifactId>
-		     <version>2.4.5</version>
+		     <version>3.2.0</version>
 		</dependency>
         
         <!-- redis java客户端jar包 -->
@@ -106,10 +113,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-pool2</artifactId>
         </dependency>
-        <!-- <dependency>
-		    <groupId>redis.clients</groupId>
-		    <artifactId>jedis</artifactId>
-		</dependency> -->
         
         <!--Alijson插件-->
         <dependency>
@@ -125,8 +128,6 @@
         	<optional>true</optional>
         </dependency>
         
-
-
     </dependencies>
 
 
