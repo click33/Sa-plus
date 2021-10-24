@@ -1,11 +1,11 @@
 <p align="center">
     <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
 </p>
-<h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sa-plus v1.25.0</h2>
+<h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sa-plus v1.26.0</h2>
 <h4 align="center">一个基于springboot架构的快速开发框架，内置代码生成器</h4>
 <h4 align="center">
 	<a href="https://gitee.com/click33/sa-plus/stargazers"><img src="https://gitee.com/click33/sa-plus/badge/star.svg"></a>
-	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/sa--plus-v1.25.0-2B9939"></a>
+	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/sa--plus-v1.26.0-2B9939"></a>
 	<a href="https://github.com/click33/sa-plus"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
 	<a href="https://github.com/click33/sa-plus/stargazers"><img src="https://img.shields.io/github/stars/click33/sa-plus"></a>
 	<a href="https://github.com/click33/sa-plus/watchers"><img src="https://img.shields.io/github/watchers/click33/sa-plus"></a>

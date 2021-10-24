@@ -83,7 +83,7 @@ public class SpGenerateApplication {
 		
 		// ===================================  完结输出   =================================== 
 		System.out.println("\n\n------------------------------ 完结撒花 ------------------------------");
-		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.25.0，更新于2021-10-14 ");
+		System.out.println(" - sa-plus 快速开发平台,  当前版本v1.26.0，更新于2021-10-24 ");
 		System.out.println(" - 在线文档： http://sa-plus.dev33.cn");
 		System.out.println(" - 开源地址： https://github.com/click33/sa-plus\n\n");
 		

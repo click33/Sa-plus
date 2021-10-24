@@ -74,9 +74,9 @@ CREATE TABLE `sp_admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统管理员表';
 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10001, 'sa', 'http://demo-jj.dev33.cn/spdj-admin/sa-resources/admin-logo.png', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
+VALUES (10001, 'sa', 'http://sa-admin.dev33.cn/sa-frame/admin-logo.png', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10002, 'admin', 'http://demo-jj.dev33.cn/spdj-admin/sa-resources/admin-logo.png', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 1, now()); 
+VALUES (10002, 'admin', 'http://sa-admin.dev33.cn/sa-frame/admin-logo.png', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 1, now()); 
 
 
 
