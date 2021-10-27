@@ -24,7 +24,7 @@
 ![绕过网关测试](http://oss.dev33.cn/sp-cloud/sp-admin-zj-test.png)
 
 - 如图所示，如果一个请求未经网关，直接访问子服务上，会被识别为无效请求，拒绝提供服务
-- 而提供网关鉴权功能的正是`sp-gateway-auth`模块，这个模块会在内部生成一个`token`存储到`redis`上，只有通过网关的请求，才会携带token进入子服务
+- 而提供网关鉴权功能的正是 Sa-Token 的 `Id-Token` 模块（[详细了解](https://sa-token.dev33.cn/doc/index.html#/micro/id-token)），这个模块会在内部生成一个`token`存储到`redis`上，只有通过网关的请求，才会携带token进入子服务
 - 如果请求未经网关，直接访问子服务上，则无法通过token验证，而被拒之门外
 
 
@@ -33,7 +33,7 @@
 
 
 #### 如果网关携带token转发的请求在落到子服务的节点上时，恰好刷新了token，导致鉴权未通过怎么办？
-`sp-gateway-auth`模块在设计时，充分考虑到了这一点，在每次刷新`token`时，`旧token`会被作为`次级token`存储起来，
+`Id-Token`模块在设计时，充分考虑到了这一点，在每次刷新`token`时，`旧token`会被作为`次级token`存储起来，
 只要网关携带的`token`符合`新token`与`次级token`任意一个即可通过认证，直至下一次刷新，`新token`再次作为`次级token`将此替换掉
 
 
@@ -90,14 +90,14 @@ public class RouteLocatorBean {
 	    return builder.routes()
 	        .route(p -> p
 	            .path("/sp-admin/**")
-	            .filters(f -> f.stripPrefix(1).addRequestHeader(GatewayAuthUtil.REQUEST_TOKEN_KEY, GatewayAuthUtil.getToken()))
+				.filters(f -> f.stripPrefix(1).addRequestHeader(SaIdUtil.ID_TOKEN, SaIdUtil.getToken()))
 	            .uri("lb://sp-admin")
 	        ).build();
 	}
 }
 ```
 
-#### sp-cloud源码使用的哪一种？
-- `sp-cloud`使用的第一种，通过服务列表自动转发，只不过将配置信息放在了`nacos`中，就是在配置`nacos`时添加的`sp-gateway.yml`文件
+#### Sp-Cloud源码使用的哪一种？
+- `Sp-Cloud`使用的第一种，通过服务列表自动转发，只不过将配置信息放在了`nacos`中，就是在配置`nacos`时添加的`sp-gateway.yml`文件
 - 当`gateway`集成`nacos`后，将可以做到实时监听注册中心，每次有新服务注册或者退出时，`gateway`将自动刷新路由表规则
 

@@ -1,21 +1,22 @@
+<div align="center">
+	<!-- <img alt="logo" src="https://gitee.com/click33/sa-plus/raw/master/sp-devdoc/sp-cloud.png" width="330"> -->
+	<h2 align="center" style="font-size: 80px; font-weight: 700;">Sp-Cloud</h2>
+</div>
+<div align="center" style="margin-top: 30px; font-size: 22px;"><b>v1.26.0</b></div>
+<h4 align="center">Sa-plus 的微服务版本，基于 Spring-Cloud-Alibaba</h4>
 <p align="center">
-    <img alt="logo" src="http://sa-plus.dev33.cn/logo-150.png" width="150" height="150" style="margin-bottom: 10px;">
-</p>
-<h2 align="center" style="margin: 30px 0 30px;font-weight: bold; ">sp-cloud v1.20.0</h2>
-<h4 align="center">sa-plus的微服务版本, 基于Spring-Cloud-Alibaba</h4>
-<h4 align="center">
-	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/sp--cloud-v1.20.0-2B9939"></a>
-	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/language-java-2B9939"></a>
-	<a href="http://sa-plus.dev33.cn/"><img src="https://img.shields.io/badge/based-sa--plus-4183C4"></a>
-	<a href="https://gitee.com/click33/sp-cloud/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg"></a>
 	<a href="https://gitee.com/click33/sp-cloud/stargazers"><img src="https://gitee.com/click33/sp-cloud/badge/star.svg?theme=dark"></a>
-	<a href="https://gitee.com/click33/sp-cloud/members"><img src="https://gitee.com/click33/sp-cloud/badge/fork.svg?theme=dark"></a>
-</h4>
+	<a href='https://gitee.com/click33/sp-cloud/members'><img src='https://gitee.com/click33/sp-cloud/badge/fork.svg?theme=dark'></a>
+	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/Sp--Cloud-v1.26.0-2B9939?style=flat-square&logo=GitHub"></a>
+	<a href="https://gitee.com/click33/sp-cloud"><img src="https://img.shields.io/badge/language-java-2B9939?style=flat-square&logo=GitHub"></a>
+	<a href="http://sa-plus.dev33.cn/"><img src="https://img.shields.io/badge/based-sa--plus-4183C4?style=flat-square&logo=GitHub"></a>
+	<a href="https://gitee.com/click33/sp-cloud/blob/master/LICENSE"><img src="https://img.shields.io/github/license/click33/sa-plus.svg?style=flat-square&logo=GitHub"></a>
+</p>
+
  
- 
-## sp-cloud介绍 😘
+## Sp-Cloud介绍 😘
 - 本项目为`sa-plus`的微服务版本，在其基础架构下，将系统功能拆分成若干个服务，每个服务都能独立部署、独立维护、独立扩展，更适合多人协作的开发模式
-- 如需要单体架构模式，请移步: [sa-plus基础版](https://github.com/click33/sa-plus)
+- 如需要单体架构模式，请移步: [Sa-plus基础版](https://github.com/click33/sa-plus)
 
 
 ## 在线资料
@@ -72,9 +73,7 @@
 	├── sp-core                        // 内部核心模块
 	│       └── sp-api                          // API接口包模块
 	│       └── sp-nacos                        // nacos统一配置文件模块 
-	│       └── sp-redis                        // redis相关操作模块
-	│       └── sp-gateway-auth                 // 网关token鉴权模块
-	│       └── sp-base                         // 以上所有模块的汇总，方便引用 
+	│       └── sp-base                         // 基础模块的汇总，方便引用 
 	├── sp-native                      // springcloud相关服务 
 	│       └── sp-gateway                      // 服务网关 [8080]
 	│       └── sp-boot-admin                   // 服务监控台 [8003]

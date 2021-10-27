@@ -97,7 +97,7 @@ set MODE="standalone"
 sh ./startup.sh
 
 // window下运行:
-start.cmd
+startup.cmd
 ```
 
 

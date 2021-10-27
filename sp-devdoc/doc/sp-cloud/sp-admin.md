@@ -1,7 +1,7 @@
 # 后台管理UI界面
 
-1. 首先将`sa-plus`基础版下载到本地，`sp-admin`为后台管理UI界面
-2. 打开`\sp-admin\static\sa.js`文件，修改后台服务地址，如下所示
+1. `sp-admin-ui`为后台管理UI界面
+2. 打开`\sp-admin-ui\static\sa.js`文件，修改后台服务地址，如下所示
 ``` js
 	// 公司开发环境
 	var cfg_dev = {
@@ -11,10 +11,10 @@
 ```
 注: 将`cfg_dev.api_url`改为：`http://127.0.0.1:8080/sp-admin`
 
-3. 在前端ide中导入`sp-admin`项目，并打开`index.html`, 默认账号为: `sa` `123456`
+3. 在前端ide中导入`sp-admin-ui`项目，并打开`index.html`, 默认账号为: `sa` `123456`
 4. 如果看到如下界面，将证明集成成功
 
-![测试qps限流](http://oss.dev33.cn/sp-cloud/sp-admin-home.png)
+![测试](http://oss.dev33.cn/sp-cloud/sp-admin-home.png)
 
 
 
