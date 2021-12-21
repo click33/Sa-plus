@@ -3,12 +3,11 @@
 	<div>
 		<div class="btn-box">
 			<el-popover placement="top-start" trigger="hover">
-			    <el-button slot="reference" type="primary" size="small" @click="sa.open('https://jq.qq.com/?_wv=1027&k=5DHN5Ib')">QQ群(782974737)</el-button>
+			    <el-button slot="reference" type="primary" size="small" @click="sa.open('https://jq.qq.com/?_wv=1027&k=NNBSOkeA')">QQ群(310293485)</el-button>
 				<div style="text-align: center;">
 					<img src="http://dev33-yxzj.oss-cn-beijing.aliyuncs.com/dyc/img/2020/01/17/157924554064970545739.png" style="width: 150px; height: 150px;" >
 				</div>
 			</el-popover>
-			<!-- <el-button type="primary" size="small" @click="sa.open('https://jq.qq.com/?_wv=1027&k=5DHN5Ib')">QQ群(782974737)</el-button> -->
 			<el-button type="success" size="small" @click="sa.open('https://github.com/click33/sa-admin')">GitHub 地址 (求star)</el-button>
 			<el-button type="danger" size="small" @click="sa.open('https://gitee.com/click33/sa-admin')">Gitee 地址</el-button>
 			<!-- <el-button type="info" size="small" @click="sa_admin.showMenuById('1-11')">意见吐槽</el-button> -->

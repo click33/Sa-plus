@@ -127,7 +127,7 @@
 
 
 ## QQ群 
-- QQ交流群：[782974737 点击加入](https://jq.qq.com/?_wv=1027&k=5DHN5Ib)
+- QQ交流群：[310293485 点击加入](https://jq.qq.com/?_wv=1027&k=NNBSOkeA)
 - 如遇bug或者有好想法，请加入qq群一起交流  
 
 
