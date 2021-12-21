@@ -1,0 +1,318 @@
+<template>
+  <div class="vue-box" style="display: none;" :style="'display: block;'">
+    <div class="c-panel">
+      <!-- 参数栏 -->
+      <div class="c-title">检索参数</div>
+      <el-form :inline="true" @submit.native.prevent>
+        <el-form-item label="记录id：">
+          <el-input v-model="p.id" placeholder="精确定位" />
+        </el-form-item>
+        <el-form-item label="请求ip：">
+          <el-input v-model="p.reqIp" placeholder="IP筛选" />
+        </el-form-item>
+        <el-form-item label="请求api：">
+          <el-input v-model="p.reqApi" placeholder="API接口筛选" />
+        </el-form-item>
+        <el-form-item style="min-width: 0px;">
+          <el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+        </el-form-item>
+        <br>
+        <el-form-item label="请求token：">
+          <el-input v-model="p.reqToken" placeholder="定向跟踪token" />
+        </el-form-item>
+        <el-form-item label="userId：">
+          <el-input v-model="p.userId" placeholder="定向跟踪用户" />
+        </el-form-item>
+        <el-form-item label="adminId：">
+          <el-input v-model="p.adminId" placeholder="定向跟踪用户" />
+        </el-form-item>
+        <br>
+        <el-form-item label="res状态码：">
+          <el-input v-model="p.resCode" placeholder="状态码筛选" />
+        </el-form-item>
+        <el-form-item label="请求时间：">
+          <el-date-picker v-model="p.sTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="开始日期" />
+          -
+          <el-date-picker v-model="p.eTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="结束日期" />
+        </el-form-item>
+        <br>
+        <el-form-item label="综合排序：" class="s-radio-text">
+          <el-radio-group v-model="p.sortType">
+            <el-radio :label="0">默认</el-radio>
+            <el-radio :label="1">请求时间</el-radio>
+            <el-radio :label="2">请求耗时</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-form>
+      <!-- ------------- 快捷按钮 ------------- -->
+      <div class="fast-btn" style="margin-top: -10px;">
+        <el-button type="primary" icon="el-icon-plus" @click="copyAll()">复制全部</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" @click="deleteByIds()">删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" @click="deleteByStartEnd()">范围删除</el-button>
+        <el-button type="warning" plain icon="el-icon-download" @click="sa.exportExcel()">导出</el-button>
+        <el-button plain icon="el-icon-refresh" @click="sa.tagsView.f5CurrView()">重置</el-button>
+        <el-button type="success" plain icon="el-icon-view" @click="f5StaData()">统计数据</el-button>
+      </div>
+      <!-- ------------- 数据列表 ------------- -->
+      <el-table ref="data-table" class="data-table" :data="dataList" size="small">
+        <el-table-column type="selection" width="45px" />
+
+        <el-table-column label="请求id" width="110px">
+          <template slot-scope="s">
+            <div style="font-weight: bold;">{{ s.row.id }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求ip" width="130px">
+          <template slot-scope="s">
+            <span class="req-ip">{{ (s.row.reqIp) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求方式" width="100px">
+          <template slot-scope="s">
+            <span class="req-type-box">
+              <b v-if=" s.row.reqType == 'GET' " style="background-color: #00A65A;">GET</b>
+              <b v-else-if=" s.row.reqType == 'POST' " style="background-color: #0073B7;">POST</b>
+              <b v-else style="background-color: #FF6A00;">{{ s.row.reqType }}</b>
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求接口" width="250px">
+          <template slot-scope="s">
+            <p class="req-api"><span>{{ sa.maxLength(s.row.reqApi) }}</span>
+            </p>
+            <span class="req-p" @click="seeReqParame(s.row)">{{ sa.maxLength(s.row.reqParame, 70) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求返回" min-width="370px">
+          <template slot-scope="s">
+            <p style="padding-left: 3px;">
+              <b v-if="s.row.resCode == 200" style="color: green;">{{ s.row.resCode }} - {{ s.row.resMsg }}</b>
+              <b v-else-if="s.row.resCode == 500 || s.row.resCode == 501" style="color: red;">{{ s.row.resCode }} - {{ s.row.resMsg }}</b>
+              <b v-else style="color: blue;">{{ s.row.resCode }} - {{ s.row.resMsg }}</b>
+            </p>
+            <p class="req-string" @click="seeResString(s.row)">
+              {{ sa.maxLength(s.row.resString, 70) }}
+            </p>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求账号" width="150px">
+          <template slot-scope="s">
+            <p v-if="s.row.userId == 0">userId：&nbsp;&nbsp;&nbsp;0</p>
+            <p v-else>userId：&nbsp;&nbsp;&nbsp;<el-link @click="sa.alert(s.row.userId)">{{ s.row.userId }}</el-link>
+            </p>
+            <p v-if="s.row.adminId == 0">adminId：0</p>
+            <p v-else>adminId：<el-link @click="sa.$page.openAdminInfo(s.row.adminId)">{{ s.row.adminId }}</el-link>
+            </p>
+          </template>
+        </el-table-column>
+        <el-table-column v-if="!sa.isNull(p.reqToken) " label="请求token" width="150px">
+          <template slot-scope="s">
+            <div style="width: 130px;">{{ s.row.reqToken }}</div>
+          </template>
+        </el-table-column>
+        <el-table-column label="请求时间" width="280px">
+          <template slot-scope="s">
+            <p>
+              开始：{{ sa.forDate(s.row.startTime, 'yyyy-MM-dd HH:mm:ss.ms') }} -
+              <b>{{ sa.isNull(sa.forDate2(s.row.startTime), '无') }}</b>
+            </p>
+            <p>
+              结束：{{ sa.forDate(s.row.endTime, 'yyyy-MM-dd HH:mm:ss.ms') }} -
+              <b style="color: green;">耗时：{{ (s.row.costTime + 0.0) / 1000 }}s</b>
+            </p>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" width="120px">
+          <template slot-scope="s">
+            <el-button type="text" @click="copy(s.row)">复制</el-button>
+            <el-button v-if="way == 1" type="text" @click="del(s.row)">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页 -->
+      <div class="page-box">
+        <el-pagination
+          background
+          layout="total, prev, pager, next, sizes, jumper"
+          :current-page.sync="p.pageNo"
+          :page-size.sync="p.pageSize"
+          :total="dataCount"
+          :page-sizes="[1, 5, 10, 20, 30, 40, 50, 100, 1000]"
+          @current-change="f5()"
+          @size-change="f5()"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'apilog-list',
+  data() {
+    return {
+      p: { // 查询参数
+        pageNo: 1,
+        pageSize: 10,
+        id: '',
+        reqToken: '',
+        reqIp: '',
+        reqApi: '',
+        resCode: '',
+        userId: '',
+        adminId: '',
+        sTime: '',
+        eTime: '',
+        sortType: 0
+      },
+      way: sa.p('way', 1),
+      dataCount: 0,
+      dataList: [], // 数据集合
+      isNewestSta: false,	// 当前是否为最新统计数据
+      staData: {
+        cost_time_count: 0,		// 总计耗时
+      }
+    }
+  },
+  created: function() {
+    this.f5();
+    sa.onInputEnter();	// 监听表单动作
+  },
+  methods: {
+    // 刷新
+    f5: function() {
+      sa.ajax('/SgApilog/getList', sa.removeNull(this.p), function(res) {
+        this.dataList = res.data; // 数据
+        this.dataCount = res.dataCount; // 数据总数
+        sa.f5TableHeight();		// 刷新表格高度
+        this.isNewestSta = false;
+      }.bind(this));
+    },
+    // 统计数据
+    f5StaData: function() {
+      var fn = function() {
+        var str = '<b>总计请求：' + this.dataCount + ' 次</b><br/>' +
+          '<b>总计耗时：' + this.getDuration(this.staData.cost_time_count) + ' </b>';
+        str = '<big>' + str + '</big>'
+        sa.layer.alert(str, { title: '统计数据' });
+      }.bind(this);
+      if (this.isNewestSta) {
+        fn()
+      } else {
+        sa.ajax('/SgApilog/staBy', sa.removeNull(this.p), function(res) {
+          this.staData = res.data;
+          this.isNewestSta = true;
+          fn();
+        }.bind(this));
+      }
+    },
+    // 复制
+    copy: function(data) {
+      // sa.showIframe('数据详情', 'api-log-info.html?id=' + data.id);
+      sa.copyText(JSON.stringify(data));
+      sa.ok2('已成功复制到剪贴板');
+    },
+    // 复制全部
+    copyAll: function() {
+      // sa.showIframe('数据详情', 'api-log-info.html?id=' + data.id);
+      sa.copyText(JSON.stringify(this.dataList));
+      sa.ok2('已成功复制到剪贴板');
+    },
+    // 查看：访问参数
+    seeReqParame: function(data) {
+      var jsonStr = data.reqParame;
+      jsonStr = JSON.stringify(JSON.parse(jsonStr), null, '\t');
+      layer.prompt({
+        title: '请求参数',
+        shadeClose: true,	// 点击遮罩关闭
+        formType: 2,		// 多行输入
+        value: jsonStr,		// 要显示的字符串
+        maxlength: 9999999999,	// 最大输入字符长度
+        area: ['600px', '400px'],	// 弹窗尺寸
+        yes: function(index, layero){
+          layer.close(index); // 如果设定了yes回调，需进行手工关闭
+        }
+      })
+    },
+    // 查看：返回参数
+    seeResString: function(data) {
+      var jsonStr = data.resString;
+      jsonStr = JSON.stringify(JSON.parse(jsonStr), null, '\t');
+      layer.prompt({
+        title: '返回参数',
+        shadeClose: true,	// 点击遮罩关闭
+        formType: 2,		// 多行输入
+        value: jsonStr,		// 要显示的字符串
+        maxlength: 9999999999,	// 最大输入字符长度
+        area: ['600px', '400px'],	// 弹窗尺寸
+        yes: function(index, layero){
+          layer.close(index); // 如果设定了yes回调，需进行手工关闭
+        }
+      })
+    },
+    // 删除
+    del: function(data) {
+      sa.confirm('是否删除，此操作不可撤销', function() {
+        sa.ajax('/SgApilog/delete?id=' + data.id, function(res) {
+          sa.arrayDelete(this.dataList, data);
+          sa.ok('删除成功');
+          sa.f5TableHeight();		// 刷新表格高度
+        }.bind(this))
+      }.bind(this));
+    },
+    // 批量删除
+    deleteByIds: function() {
+      // 获取选中元素的id列表
+      let selection = this.$refs['data-table'].selection;
+      let ids = sa.getArrayField(selection, 'id');
+      if (selection.length == 0) {
+        return sa.msg('请至少选择一条数据')
+      }
+      // 提交删除
+      sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
+        sa.ajax('/SgApilog/deleteByIds', { ids: ids.join(',') }, function(res) {
+          sa.arrayDelete(this.dataList, selection);
+          sa.ok('删除成功');
+          sa.f5TableHeight();		// 刷新表格高度
+        }.bind(this))
+      }.bind(this));
+    },
+    // 批量删除
+    deleteByStartEnd: function() {
+      // sa.showIframe('批量删除', 'api-log-list-delete.html', '600px', '550px');
+      sa.showModel('批量删除', () => import('./apilog-list-delete'));
+    },
+    // 计算耗时
+    getDuration: function(my_time) {
+      var days = my_time / 1000 / 60 / 60 / 24;
+      var daysRound = Math.floor(days);
+      var hours = my_time / 1000 / 60 / 60 - (24 * daysRound);
+      var hoursRound = Math.floor(hours);
+      var minutes = my_time / 1000 / 60 - (24 * 60 * daysRound) - (60 * hoursRound);
+      var minutesRound = Math.floor(minutes);
+      var seconds = my_time / 1000 - (24 * 60 * 60 * daysRound) - (60 * 60 * hoursRound) - (60 * minutesRound);
+      seconds = parseInt(seconds);
+      if (daysRound >= 1) {
+        return daysRound + '天' + hoursRound + '小时';
+      } else if (hoursRound >= 1) {
+        return hoursRound + '小时' + hoursRound + '分';
+      } else if (minutesRound >= 1) {
+        return minutesRound + '分' + seconds + '秒';
+      } else {
+        return seconds + '秒';
+      }
+    }
+  }
+}
+</script>
+
+<style scoped>
+.req-type-box{color: #FFF;}
+.req-type-box b{padding: 3px 7px; border-radius: 3px; font-size: 12px;}
+/* .req-api span{background-color: ; color: #409EFF; border: 1px #409EFF solid; border-radius: 2px; padding: 3px 5px;} */
+.req-api span{color: #44f; font-weight: 700; margin-left: 3px;}
+.req-p{display: inline-block; line-height: 1.4; padding: 2px 4px; border-radius: 4px; cursor: pointer;background-color: #fff2f4; color: #c7254e;}
+.req-ip{background-color: ; color: #409EFF; border: 1px #409EFF solid; border-radius: 2px; padding: 3px 5px;}
+
+.req-string{line-height: 1.4; padding: 2px 4px; border-radius: 4px;cursor: pointer; background-color: #ECF5FF;}
+</style>
