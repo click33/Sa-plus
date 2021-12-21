@@ -127,6 +127,7 @@
 					},
 					// 点击回调, 处理其子节点跟随父节点的选中
 					node_click: function(node) {
+						console.log(node);
 						var is_select = this.$refs.tree.getCheckedKeys().indexOf(node.id) != -1;	// 此节点现在是否被选中 
 						if(node.children){
 							node.children.forEach(function(item) {

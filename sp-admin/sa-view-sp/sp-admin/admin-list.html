@@ -55,7 +55,7 @@
 							<span v-if="s.row.createByAid == -1">无</span>
 							<el-link v-else @click="sa.$page.openAdminInfo(s.row.createByAid, s.row.name)">{{s.row.createByAid}}</el-link>
 						</template>
-					</sa-td type="text">
+					</sa-td>
 					<sa-td type="text" name="所属角色" prop="roleName"></sa-td>
 					<sa-td type="datetime" name="所属角色" prop="createTime" width="150px"></sa-td>
 					<sa-td type="datetime" name="最后登录" prop="loginTime" width="150px"></sa-td>
@@ -116,7 +116,6 @@
 					dataCount: 0,
 					dataList: [],	// 数据集合
 					roleList: [],	// 角色集合 
-					curr_m: null // 当前操作的 m 
 				},
 				methods: {
 					// 刷新
