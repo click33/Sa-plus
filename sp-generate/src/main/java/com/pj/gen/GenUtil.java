@@ -7,6 +7,8 @@ import com.pj.gen.read.FlyRead;
 import com.pj.gen.read.FlyReadMySql;
 import com.pj.gen.read.ReadUtil;
 
+import java.io.File;
+
 /**
  *  操作工具类 
  * @author kong
@@ -41,8 +43,8 @@ public class GenUtil {
 		for (DbTable t : GenCfgManager.cfg.tableList) {
 			
 			// model
-			String modelPath = t.getServerIoPath() + t.getModelName() + ".java";			// 路径
-			String modelContent = FreeMarkerUtil.getResult("mybatis/Model.ftl", "t", t);		// 内容 
+			String modelPath = t.getServerIoPath() + t.getModelName() + ".java";
+			String modelContent = FreeMarkerUtil.getResult("mybatis/Model.ftl", "t", t);		// 内容
 			SUtil.outFile(modelPath, modelContent);
 			System.out.println(t.getModelName() + " 写入成功：\t\t\t" + modelPath);
 			
@@ -146,7 +148,7 @@ public class GenUtil {
 		}
 		
 		// menu-list.js 菜单列表 
-		String menuListPath = GenCfgManager.cfg.getAdminProjectPath() + "sa-frame\\menu-list.js";						// 路径  
+		String menuListPath = GenCfgManager.cfg.getAdminProjectPath() + "sa-frame"+ File.separator+"menu-list.js";						// 路径
 		String menuListContent = FreeMarkerUtil.getResult("admin/menu-list.ftl", "abc", 123);		// 内容 
 		SUtil.outFile(menuListPath, menuListContent);
 		System.out.println("menu-list.js 菜单列表, 写入成功：\t\t" + menuListPath);

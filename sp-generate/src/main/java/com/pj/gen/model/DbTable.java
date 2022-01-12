@@ -1,5 +1,6 @@
 package com.pj.gen.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -665,11 +666,11 @@ public class DbTable {
 	// ---------- IO输出相关 
 	// 返回服务端应该写入哪个文件夹
 	public String getServerIoPath() {
-		return GenCfgManager.cfg.getServerIoPath() + this.getPackageModules() + "\\";
+		return GenCfgManager.cfg.getServerIoPath() + this.getPackageModules() + File.separator;
 	}
 	// 返回后台管理应该写入哪个文件夹
 	public String getAdminIoPath() {
-		return GenCfgManager.cfg.getAdminIoPath() + this.getKebabName() + "\\";
+		return GenCfgManager.cfg.getAdminIoPath() + this.getKebabName() + File.separator;
 	}
 	// 返回接口文档应该写入哪个文件夹
 	public String getApidocIoPath() {

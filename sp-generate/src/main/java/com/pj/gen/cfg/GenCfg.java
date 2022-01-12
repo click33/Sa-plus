@@ -85,18 +85,18 @@ public class GenCfg {
 	// ---------------- 项目根路径 
 	// 服务端代码根路径 
 	public String getServerProjectPath() {
-		String path = projectPath + "\\" + serverProjectName + "\\";
-		return new File(path).getAbsolutePath() + "\\";
+		String path = projectPath +  File.separator + serverProjectName + File.separator;
+		return new File(path).getAbsolutePath() + File.separator;
 	}
-	// 后天管理端代码根路径 
+	// 后台管理端代码根路径
 	public String getAdminProjectPath() {
-		String path = projectPath + "\\" + adminProjectName + "\\";
-		return new File(path).getAbsolutePath() + "\\";
+		String path = projectPath + File.separator + adminProjectName + File.separator;
+		return new File(path).getAbsolutePath() + File.separator;
 	}
 	// 接口文档端代码根路径 
 	public String getApidocProjectPath() {
-		String path = projectPath + "\\" + apidocProjectName + "\\";
-		return new File(path).getAbsolutePath() + "\\";
+		String path = projectPath + File.separator + apidocProjectName + File.separator;
+		return new File(path).getAbsolutePath() + File.separator;
 	}
 	
 
@@ -106,18 +106,18 @@ public class GenCfg {
 	
 	// 返会服务端IO的主目录
 	public String getServerIoPath() {
-		String path = getServerProjectPath() + codePath + "\\" + packagePath.replace(".", "\\");
-		return new File(path).getAbsolutePath() + "\\";
+		String path = getServerProjectPath() + codePath + File.separator + packagePath.replace(".", File.separator);
+		return new File(path).getAbsolutePath() + File.separator;
 	}
 	// 返会admin后台管理的IO的主目录
 	public String getAdminIoPath() {
-		String path = getAdminProjectPath() + adminCodePath + "\\";
-		return new File(path).getAbsolutePath() + "\\";
+		String path = getAdminProjectPath() + adminCodePath + File.separator;
+		return new File(path).getAbsolutePath() + File.separator;
 	}
 	// 返会apidoc后台管理的IO的主目录
 	public String getApidocIoPath() {
-		String path = getApidocProjectPath() + apidocCodePath + "\\";
-		return new File(path).getAbsolutePath() + "\\";
+		String path = getApidocProjectPath() + apidocCodePath + File.separator;
+		return new File(path).getAbsolutePath() + File.separator;
 	}
 		
 
