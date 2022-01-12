@@ -354,7 +354,7 @@ public class SUtil {
 	
 	// 指定包的Spring工厂类
 	public static String SpringBeanFC(String projectPath, String packagePath, String fcName){
-		File wjj = new File(projectPath, packagePath.replace(".", "\\")); // 创建路径
+		File wjj = new File(projectPath, packagePath.replace(".", File.separator)); // 创建路径
 		String[] classNameArray = wjj.list();
 		
 		String _package = "package " + packagePath + ";\r\n\r\n";
