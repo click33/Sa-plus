@@ -70,14 +70,14 @@
 		<dependency>
 		    <groupId>cn.dev33</groupId>
 		    <artifactId>sa-token-spring-boot-starter</artifactId>
-		    <version>1.28.0</version>
+		    <version>1.29.0</version>
 		</dependency>
 		
 	    <!-- Sa-Token 整合 Redis (使用jackson序列化方式) -->
 	    <dependency>
 	        <groupId>cn.dev33</groupId>
 	        <artifactId>sa-token-dao-redis-jackson</artifactId>
-		    <version>1.28.0</version>
+		    <version>1.29.0</version>
 	    </dependency>
 
         <!-- 工具类大全 - 在线文档：https://hutool.cn/docs/#/ -->
