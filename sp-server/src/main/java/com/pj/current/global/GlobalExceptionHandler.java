@@ -1,11 +1,10 @@
-package com.pj.project4sp.global;
+package com.pj.current.global;
 
 import java.sql.SQLException;
 
 import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.pj.project4sp.apilog.SpApilogUtil;
 import com.pj.project4sp.spcfg.SpCfgUtil;
@@ -16,16 +15,16 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 
 /**
- * 全局异常拦截 
+ * 全局异常处理 
+ * 
  * <p> @ControllerAdvice 可指定包前缀，例如：(basePackages = "com.pj.controller.admin")
  * @author kong
  *
  */
-@ControllerAdvice
-public class GlobalException {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
 	/** 全局异常拦截  */
-	@ResponseBody
 	@ExceptionHandler
 	public AjaxJson handlerException(Exception e) {
 
@@ -77,5 +76,5 @@ public class GlobalException {
 		aj.set("reqId", SpApilogUtil.getCurrReqId());
 		return aj;
 	}
-
+	
 }

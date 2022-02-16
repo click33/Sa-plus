@@ -33,13 +33,18 @@ public class SaPlusStartup implements CommandLineRunner {
     	 String ip = InetAddress.getLocalHost().getHostAddress();
          String str = "\n------------- " + applicationName + " (" + active + ") 启动成功 --by " + getNow() + " -------------\n" + 
                  "\t- Local:   http://localhost:" + port + path + "\n" +
-                 "\t- Local2:  http://127.0.0.1:" + port + path + "\n" +
-                 "\t- Network: http://" + ip + ":" + port + path + "\n";
+                 "\t- Local2:  http://127.0.0.1:" + port + path + ""
+                 ;
          System.out.println(str);
+         // 
+         try {
+        	 System.out.println("\t- Network: http://" + ip + ":" + port + path + "\n");
+         } catch (Exception e) {
+        	 System.out.println("\t- Network: 未能成功获取\n");
+        	 System.err.println("异常：" + e.getMessage());
+         }
     }
 
-    
-	
 	/**
 	 * 返回系统当前时间的YYYY-MM-dd hh:mm:ss 字符串格式
 	 */
@@ -47,6 +52,5 @@ public class SaPlusStartup implements CommandLineRunner {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 	}
     
-
 }
 

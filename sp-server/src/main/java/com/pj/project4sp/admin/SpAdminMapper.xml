@@ -39,7 +39,7 @@
 		<result property="name" column="name" />
 		<result property="avatar" column="avatar" />
 		<result property="password" column="password" />
-		<result property="pw" column="pw" />
+		<!-- <result property="pw" column="pw" /> -->
 		<result property="phone" column="phone" />
 		<result property="roleId" column="role_id" />
 		<result property="status" column="status" />

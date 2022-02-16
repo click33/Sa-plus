@@ -30,7 +30,7 @@ public class SpAdmin implements Serializable  {
 	public String password;	
 	
 	/** 明文密码 */
-	public String pw;	
+	// public String pw;	
 	
 	/** 手机号 */
 	public String phone;	

@@ -141,10 +141,13 @@ public class RedisConsoleUtil {
 
 	/** 修改一个值的ttl  */
 	public static void updateTtl(String key, long ttl) {
-		if(ttl <= 0) {
-			String value = stringRedisTemplate.opsForValue().get(key);
-			stringRedisTemplate.opsForValue().set(key, value);
-			return;
+		if(ttl < 0) {
+			// 因为序列化格式的不同，以下代码有将数据修改为无效数据的风险，为了安全考虑，此处禁止修改 
+//			String value = stringRedisTemplate.opsForValue().get(key);
+//			stringRedisTemplate.opsForValue().set(key, value);
+//			return;
+			// 禁止修改
+			throw AjaxError.get("ttl值需要>=0");
 		}
 		stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
 	}

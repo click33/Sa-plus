@@ -10,8 +10,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pj.current.satoken.StpUserUtil;
+import com.pj.project4sp.SP;
 import com.pj.utils.LogUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.WebNbUtil;
@@ -37,6 +37,7 @@ public class SpApilogUtil {
 	
 	static final String APILOG_OBJ_SAVE_KEY = "APILOG_OBJ_SAVE_KEY";
 	static final String APILOG_OBJ_SAVE_ID_KEY = "APILOG_OBJ_SAVE_ID_KEY";
+	
 	
 	/**
 	 * 请求开始时调用，开始计时 
@@ -66,7 +67,6 @@ public class SpApilogUtil {
 		LogUtil.info("IP: " + a.getReqIp() + "\tr-> " + a.getReqApi()+ "\tp-> " + a.getReqParame());
 	}
 	
-
 	/**
 	 * 请求结束时调用，结束计时 
 	 * @param aj
@@ -80,9 +80,8 @@ public class SpApilogUtil {
 		HttpServletRequest request = SpringMVCUtil.getRequest();
 		SpApilog a = (SpApilog)request.getAttribute(APILOG_OBJ_SAVE_KEY);
 		if(a == null) {
-//	    	LogUtil.info("未找到相应ApiLog对象（可能原因：全局异常），aj=" + aj);
-	    	SpApilogUtil.startRequest();	
-	    	a = (SpApilog)request.getAttribute(APILOG_OBJ_SAVE_KEY);
+			LogUtil.info("未找到相应ApiLog对象，aj=" + aj);
+			return;
 		}
 
 		// 保存数据库
@@ -90,7 +89,7 @@ public class SpApilogUtil {
 			// 开始结束计时 
 			a.setResCode(aj.getCode()); 	
 			a.setResMsg(aj.getMsg());	
-			a.setResString(new ObjectMapper().writeValueAsString(aj));		
+			a.setResString(SP.objectMapper.writeValueAsString(aj));		
 			a.setEndTime(new Date());		
 			a.setCostTime((int)(a.getEndTime().getTime() - a.getStartTime().getTime()));
 			
@@ -101,15 +100,14 @@ public class SpApilogUtil {
 		
         	LogUtil.info("本次请求耗时：" + ((a.getCostTime() + 0.0) / 1000) + "s, 返回：" + a.getResString());
         	spApilogMapper.saveObj(a);
+        	
+        	// 清除上下文，防止重复记录日志 
+        	request.removeAttribute(APILOG_OBJ_SAVE_KEY);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
-	
-	
-	
-
 	/**
 	 * 当前是否为web环境 
 	 */
@@ -122,7 +120,6 @@ public class SpApilogUtil {
 		return false;
 	}
 
-
 	/** 获取当前请求的id */
 	public static String getCurrReqId() {
 		HttpServletRequest request = SpringMVCUtil.getRequest();
@@ -133,7 +130,6 @@ public class SpApilogUtil {
 		}
 		return id;
 	}
-
 
 	/**
 	 * 根据雪花算法，返回唯一id 

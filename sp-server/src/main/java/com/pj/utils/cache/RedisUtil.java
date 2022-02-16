@@ -59,6 +59,11 @@ public class RedisUtil {
 		stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MINUTES);
 	}
 
+	// 写入，永久有效 
+	public static void setByForever(String key, String value) {
+		stringRedisTemplate.opsForValue().set(key, value);
+	}
+
 	// 读取
 	public static String get(String key) {
 		return stringRedisTemplate.opsForValue().get(key);

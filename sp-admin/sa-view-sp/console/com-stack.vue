@@ -8,10 +8,10 @@
 					<img src="http://dev33-yxzj.oss-cn-beijing.aliyuncs.com/dyc/img/2020/01/17/157924554064970545739.png" style="width: 150px; height: 150px;" >
 				</div>
 			</el-popover>
-			<el-button type="success" size="small" @click="sa.open('https://github.com/click33/sa-admin')">GitHub 地址 (求star)</el-button>
-			<el-button type="danger" size="small" @click="sa.open('https://gitee.com/click33/sa-admin')">Gitee 地址</el-button>
+			<el-button type="success" size="small" @click="sa.open('https://github.com/click33/sa-plus')">GitHub 地址 (求star)</el-button>
+			<el-button type="danger" size="small" @click="sa.open('https://gitee.com/click33/sa-plus')">Gitee 地址</el-button>
 			<!-- <el-button type="info" size="small" @click="sa_admin.showMenuById('1-11')">意见吐槽</el-button> -->
-			<el-button type="info" size="small" @click="sa.open('http://sa-app.dev33.cn/wall.html?name=sa-admin')">需求征集</el-button>
+			<el-button type="info" size="small" @click="sa.open('http://sa-app.dev33.cn/wall.html?name=sa-plus')">需求征集</el-button>
 			<el-popover placement="top-start" trigger="hover">
 			    <el-button slot="reference" type="warning" size="small">打赏</el-button>
 				<div style="text-align: center;">
