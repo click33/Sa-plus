@@ -11,7 +11,7 @@ import com.pj.project4sp.SP;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.so.SoMap;
 
-import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 
 /**
  * Controller: api请求记录表
@@ -25,21 +25,18 @@ public class SpApilogControlle {
 	@Autowired
 	SpApilogMapper spApilogMapper;
 	
-
 	/** 删 */
 	@RequestMapping("delete")
+	@SaCheckPermission(AuthConst.APILOG_LIST)
 	AjaxJson delete(String id){
-		StpUtil.checkPermission(AuthConst.APILOG_LIST);
 		int line = spApilogMapper.delete(id);
 		return AjaxJson.getByLine(line);
 	}
 
 	/** 删 - 根据id列表 */
 	@RequestMapping("deleteByIds")
+	@SaCheckPermission(AuthConst.APILOG_LIST)
 	AjaxJson deleteByIds(){
-		// 鉴权
-		StpUtil.checkPermission(AuthConst.APILOG_LIST);	
-		// 开始删除 
 		List<Long> ids = SoMap.getRequestSoMap().getListByComma("ids", long.class); 
 		int line = SP.publicMapper.deleteByIds("sp_apilog", ids);
 		return AjaxJson.getByLine(line);
@@ -47,16 +44,16 @@ public class SpApilogControlle {
 	
 	/** 删 - 根据日期范围 */
 	@RequestMapping("deleteByStartEnd")
+	@SaCheckPermission(AuthConst.APILOG_LIST)
 	AjaxJson deleteByStartEnd(String startTime, String endTime){
-		StpUtil.checkPermission(AuthConst.APILOG_LIST);
 		int line = spApilogMapper.deleteByStartEnd(startTime, endTime);
 		return AjaxJson.getSuccessData(line);
 	}
 	
 	/** 查 - 集合（参数为null或0时默认忽略此条件）   */
 	@RequestMapping("getList")
+	@SaCheckPermission(AuthConst.APILOG_LIST)
 	AjaxJson getList() { 
-		StpUtil.checkPermission(AuthConst.APILOG_LIST);	
 		SoMap so = SoMap.getRequestSoMap();
 		List<SpApilog> list = spApilogMapper.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
@@ -64,14 +61,11 @@ public class SpApilogControlle {
 
 	/** 统计  */
 	@RequestMapping("staBy")
+	@SaCheckPermission(AuthConst.APILOG_LIST)
 	AjaxJson staBy() { 
-		StpUtil.checkPermission(AuthConst.APILOG_LIST);
 		SoMap so = SoMap.getRequestSoMap();
 		SoMap data = spApilogMapper.staBy(so);
 		return AjaxJson.getSuccessData(data);
 	}
-	
-
-	
 	
 }

@@ -71,7 +71,7 @@ public class SpCfgUtil {
 
 	/** 获取app端全部配置信息 */
 	public static String getAppCfg() {
-		return sysCfgService.getCfgValue("AppCfg");
+		return sysCfgService.getCfgValue("app_cfg");
 	}
 
 	// --- app  
@@ -89,12 +89,7 @@ public class SpCfgUtil {
 	public static String reserveInfo() {
 		return SpCfgUtil.getServerCfg("reserveInfo", "");
 	}
-	/** 是否在发生sql异常时，抛出sql，方便调试   */
-	public static boolean throwOutSql() {
-		return SpCfgUtil.getServerCfg("throwOutSql", "2").equals("1");
-	}
 
-	
 	
 	
 	

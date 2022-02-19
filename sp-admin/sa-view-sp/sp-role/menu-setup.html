@@ -109,13 +109,9 @@
 					},
 					// 开始设置 
 					ok2: function() {
-						var str = '';
 						var keys = this.$refs.tree.getCheckedKeys();
-						keys.forEach(function(ts){
-							str += 'code=' + ts + '&';
-						})
-						var url = '/SpRolePermission/updatePcodeByRid?roleId=' + roleId;
-						sa.ajax(url, str,function (res) {
+						var url = '/SpRolePermission/updatePcodeByRid';
+						sa.ajax(url, {roleId: roleId, codes: keys.join(',')}, function (res) {
 							sa.alert('设置成功', function(){
 								sa.closeCurrIframe();
 							});

@@ -93,8 +93,13 @@
 						localStorage.tokenName = res.data.tokenInfo.tokenName; 
 						localStorage.tokenValue = res.data.tokenInfo.tokenValue; 
 					}
+					// 写入账号 
+					sa.$sys.setCurrUser(res.data.admin);
 					// 写入权限码 
-					sa.setAuth(res.data.per_list);		
+					sa.setAuth(res.data.perList);		
+					// 写入全局配置 
+					sa.$sys.setAppCfg(res.data.appCfg);
+					
 					// 打个招呼，进入 index.html 
 					sa.msg('登录成功，欢迎你：' + p.key);
 					setTimeout(function () {

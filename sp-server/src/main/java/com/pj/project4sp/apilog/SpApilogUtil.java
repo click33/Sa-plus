@@ -10,6 +10,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.alibaba.fastjson.JSON;
+import com.pj.current.config.SystemObject;
 import com.pj.current.satoken.StpUserUtil;
 import com.pj.project4sp.SP;
 import com.pj.utils.LogUtil;
@@ -33,6 +34,13 @@ public class SpApilogUtil {
 	@Autowired
 	public void setSpApilogMapper(SpApilogMapper spApilogMapper) {
 		SpApilogUtil.spApilogMapper = spApilogMapper;
+	}
+
+	/** 底层 InsertTemplate 对象 */
+	static SpApilogInsertTemplate spApilogInsertTemplate;
+	@Autowired
+	public void setSpApilogInsertTemplate(SpApilogInsertTemplate spApilogInsertTemplate) {
+		SpApilogUtil.spApilogInsertTemplate = spApilogInsertTemplate;
 	}
 	
 	static final String APILOG_OBJ_SAVE_KEY = "APILOG_OBJ_SAVE_KEY";
@@ -63,8 +71,11 @@ public class SpApilogUtil {
     	request.setAttribute(APILOG_OBJ_SAVE_KEY, a);
     	
     	// 控制台日志 
-    	LogUtil.info("----------------------------------------------------------------");
-		LogUtil.info("IP: " + a.getReqIp() + "\tr-> " + a.getReqApi()+ "\tp-> " + a.getReqParame());
+    	if(SystemObject.config.getLogToFile()) {
+    		LogUtil.info("");
+        	LogUtil.info("----------------------------------------------------------------");
+    		LogUtil.info("IP: " + a.getReqIp() + "\tr-> " + a.getReqApi()+ "\tp-> " + a.getReqParame());
+    	}
 	}
 	
 	/**
@@ -98,8 +109,15 @@ public class SpApilogUtil {
 				a.setResString("{\"msg\": \"数据过长，无法写入 (length=" + a.getResString().length() + ")\"}");		
 			}
 		
-        	LogUtil.info("本次请求耗时：" + ((a.getCostTime() + 0.0) / 1000) + "s, 返回：" + a.getResString());
-        	spApilogMapper.saveObj(a);
+			// 输出到控制台 
+	    	if(SystemObject.config.getLogToFile()) {
+	        	LogUtil.info("本次请求耗时：" + ((a.getCostTime() + 0.0) / 1000) + "s, 返回：" + a.getResString());
+	    	}
+	    	// 输出到数据库 
+	    	if(SystemObject.config.getLogToDb()) {
+	    		// spApilogMapper.saveObj(a);
+	    		spApilogInsertTemplate.saveObj(a);
+	    	}
         	
         	// 清除上下文，防止重复记录日志 
         	request.removeAttribute(APILOG_OBJ_SAVE_KEY);
@@ -107,12 +125,11 @@ public class SpApilogUtil {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * 当前是否为web环境 
 	 */
 	public static boolean isWeb() {
-		// 大善人SpringMVC提供的封装 
 		ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
 		if(servletRequestAttributes != null) {
 			return true;

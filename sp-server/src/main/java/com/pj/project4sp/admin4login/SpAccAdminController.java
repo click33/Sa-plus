@@ -25,13 +25,11 @@ import cn.dev33.satoken.stp.StpUtil;
 @RequestMapping("/AccAdmin/")
 public class SpAccAdminController {
 
-	
 	@Autowired
 	SpAccAdminService spAccAdminService;
 	
 	@Autowired
 	SpRolePermissionService spRolePermissionService;
-	
 	
 	/** 账号、密码登录  */
 	@RequestMapping("doLogin")
@@ -43,7 +41,6 @@ public class SpAccAdminController {
 		return spAccAdminService.doLogin(key, password);
 	}
 	
-	
 	/** 退出登录  */
 	@RequestMapping("doExit")
 	AjaxJson doExit() {
@@ -51,23 +48,18 @@ public class SpAccAdminController {
 		return AjaxJson.getSuccess();
 	}
 	
-
 	/** 管理员登录后台时需要返回的信息 */
-	@RequestMapping("fristOpenAdmin")
+	@RequestMapping("getLoginInfo")
 	AjaxJson fristOpenAdmin(HttpServletRequest request) {
 		// 当前admin
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		
 		// 组织参数 (admin信息，权限信息，配置信息)
 		SoMap map = new SoMap();
-		map.set("admin", SpAdminUtil.getCurrAdmin());	
-		map.set("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));				
-		map.set("app_cfg", SpCfgUtil.getAppCfg());	
+		map.set("admin", admin);	
+		map.set("perList", spRolePermissionService.getPcodeByRid(admin.getRoleId()));				
+		map.set("appCfg", SpCfgUtil.getAppCfg());	
 		return AjaxJson.getSuccessData(map); 
 	}
-	
-	
-	
-	
 	
 }

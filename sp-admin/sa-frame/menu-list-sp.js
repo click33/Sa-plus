@@ -6,23 +6,10 @@ window.menuList.unshift(
 		id: 'bas',
 		name: '身份相关',
 		isShow: false,	// 隐藏显示 
-		info: '身份相关权限，不显示在菜单上', 
+		info: '控制角色的身份', 
 		childList: [
-			{id: '1', name: '身份-超管', info: '最高权限，超管身份的代表（请谨慎授权）', isShow: false},
-			{id: '11', name: '身份-普通账号', isShow: false, info: '无特殊权限'},
-			{id: '99', name: '允许进入后台管理', isShow: false, info: '只有拥有这个权限的角色才可以进入后台'},
-		]
-	},
-	{	
-		id: 'console',
-		name: '监控中心',
-		icon: 'el-icon-view',
-		info: '对本系统的各种监控',
-		childList: [
-			{id: 'sql-console', name: 'SQL监控台', url: 'sa-view-sp/sp-console/sql-console.html', info: 'sql控制台'},
-			{id: 'redis-console', name: 'Redis控制台', url: 'sa-view-sp/sp-console/redis-console.html', info: 'redis常用工具'},
-			{id: 'apilog-list', name: 'API请求日志', url: 'sa-view-sp/sp-apilog/api-log-list.html', info: '记录本系统所有的api请求'},
-			{id: 'form-generator', name: '在线表单构建', url: 'https://mrhj.gitee.io/form-generator/#/'},
+			{id: 'dev', name: '开发者权限', info: '系统最高权限（请谨慎授权）', isShow: false},
+			{id: 'in-system', name: '后台管理权限', info: '拥有此权限才可以进入后台管理系统', isShow: false},
 		]
 	},
 	{	
@@ -35,7 +22,18 @@ window.menuList.unshift(
 			{id: 'menu-list', name: '菜单列表', url: 'sa-view-sp/sp-role/menu-list.html', info: '所有菜单项预览'},
 			{id: 'admin-list', name: '管理员列表', url: 'sa-view-sp/sp-admin/admin-list.html', info: '所有管理员账号'},
 			{id: 'admin-add', name: '管理员添加', url: 'sa-view-sp/sp-admin/admin-add.html', info: '添加一个管理员'},
-			// {id: 'apilog-list', name: '请求日志监控', url: 'sa-view-sp/sp-apilog/api-log-list.html', info: '记录本系统所有的api请求'},
+		]
+	},
+	{	
+		id: 'console',
+		name: '监控中心',
+		icon: 'el-icon-view',
+		info: '对本系统的各种监控',
+		childList: [
+			{id: 'sql-console', name: 'SQL监控台', url: 'sa-view-sp/sp-console/sql-console.html', info: 'sql控制台'},
+			{id: 'redis-console', name: 'Redis控制台', url: 'sa-view-sp/sp-console/redis-console.html', info: 'redis常用工具'},
+			{id: 'apilog-list', name: 'API请求日志', url: 'sa-view-sp/sp-apilog/api-log-list.html', info: '记录本系统所有的api请求'},
+			{id: 'form-generator', name: '在线表单构建', url: 'https://mrhj.gitee.io/form-generator/#/'},
 		]
 	},
 	{

@@ -10,7 +10,7 @@ import com.pj.current.satoken.AuthConst;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.so.SoMap;
 
-import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 
 /**
  * redis相关操作 
@@ -23,64 +23,64 @@ public class RedisConsoleController {
 
 	/** 获取一些基本预览信息  */
 	@RequestMapping("getPreInfo")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson getPreInfo() {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		SoMap so = RedisConsoleUtil.getInfo();
 		return AjaxJson.getSuccessData(so);
 	}
 
 	/** 查询key集合   */
 	@RequestMapping("getKeys")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson getKeys(String k) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		List<String> keys = RedisConsoleUtil.getKeys(k);
 		return AjaxJson.getSuccessData(keys);
 	}
 	
 	/** 查询某个值的详细信息  */
 	@RequestMapping("getByKey")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson getByKey(String key) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		SoMap soMap = RedisConsoleUtil.getByKey(key);
 		return AjaxJson.getSuccessData(soMap);
 	}
 	
 	/** 添加一个键值  */
 	@RequestMapping("set")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson set(String key, String value, long ttl) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		RedisConsoleUtil.setBySeconds(key, value, ttl);
 		return AjaxJson.getSuccess();
 	}
 
 	/** 删除一个键值  */
 	@RequestMapping("del")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson del(String key) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		RedisConsoleUtil.del(key);
 		return AjaxJson.getSuccess();
 	}
 	
 	/** 修改一个值的value  */
 	@RequestMapping("updateValue")
+	@SaCheckPermission({AuthConst.REDIS_CONSOLE, AuthConst.DEV})
 	public AjaxJson updateValue(String key, String value) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		RedisConsoleUtil.updateValue(key, value);
 		return AjaxJson.getSuccess();
 	}
 	
 	/** 修改一个值的ttl  */
 	@RequestMapping("updateTtl")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson updateTtl(String key, long ttl) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);
 		RedisConsoleUtil.updateTtl(key, ttl);
 		return AjaxJson.getSuccess();
 	}
 	
 	/** 删除多个键值  */
 	@RequestMapping("deleteByKeys")
+	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
 	public AjaxJson deleteByKeys(@RequestParam(value="key[]") List<String> key) {
-		StpUtil.checkPermission(AuthConst.REDIS_CONSOLE);	
 		for (String k : key) {
 			RedisConsoleUtil.del(k);
 		}

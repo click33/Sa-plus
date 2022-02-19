@@ -31,7 +31,6 @@ public class SP {
 	@Autowired
 	public static ObjectMapper objectMapper;
 	
-	
 	// 注入 
 	@Autowired
 	public void setBean(

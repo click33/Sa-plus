@@ -6,8 +6,8 @@ import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.pj.current.config.SystemObject;
 import com.pj.project4sp.apilog.SpApilogUtil;
-import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.AjaxJson;
 
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
 			aj = AjaxJson.get(ee.getCode(), ee.getMessage());
 		}  
 		// 如果是SQLException，并且指定了hideSql，则只返回sql error 
-		else if((e instanceof SQLException || e2 instanceof SQLException) && SpCfgUtil.throwOutSql() == false) {	
+		else if((e instanceof SQLException || e2 instanceof SQLException) && SystemObject.config.getThrowSql() == false) {	
 			// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
 			aj = AjaxJson.getError(e2.getMessage());
 			SpApilogUtil.endRequest(aj);	

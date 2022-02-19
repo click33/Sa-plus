@@ -13,6 +13,7 @@ import com.pj.project4sp.SP;
 import com.pj.project4sp.admin.SpAdmin;
 import com.pj.project4sp.admin.SpAdminMapper;
 import com.pj.project4sp.role4permission.SpRolePermissionService;
+import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.sg.NbUtil;
 import com.pj.utils.sg.WebNbUtil;
@@ -29,8 +30,6 @@ import cn.dev33.satoken.stp.StpUtil;
 @Service
 public class SpAccAdminService {
 
-	
-
 	@Autowired
 	SpAccAdminMapper spAccAdminMapper;
 
@@ -39,7 +38,6 @@ public class SpAccAdminService {
 	
 	@Autowired
 	SpRolePermissionService spRolePermissionService;
-	
 	
 	/**
 	  * 登录 
@@ -95,11 +93,11 @@ public class SpAccAdminService {
         // 组织返回参数  
 		SoMap map = new SoMap();
 		map.put("admin", admin);
-		map.put("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));
+		map.put("appCfg", SpCfgUtil.getAppCfg());
+		map.put("perList", spRolePermissionService.getPcodeByRid(admin.getRoleId()));
 		map.put("tokenInfo", StpUtil.getTokenInfo());
 		return AjaxJson.getSuccessData(map);	
 	}
-	
 	
 	/**
 	 * 指定id的账号成功登录一次 （修改最后登录时间等数据 ）
@@ -129,8 +127,5 @@ public class SpAccAdminService {
 		int line = SP.publicMapper.updateColumnById("sys_admin", "phone", newPhone, adminId);
 		return AjaxJson.getByLine(line);
 	}
-	
-	
-	
 	
 }

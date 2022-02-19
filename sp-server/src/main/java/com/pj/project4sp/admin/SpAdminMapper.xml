@@ -87,10 +87,10 @@
 		<if test=' this.has("roleId")  '>and role_id = #{roleId} </if>
 		order by 
 		<choose>
-			<when test='sort_type == 0'>id desc</when> 
-			<when test='sort_type == 1'>id asc</when> 
-			<when test='sort_type == 2'>login_time desc</when> 
-			<when test='sort_type == 3'>login_count desc</when> 
+			<when test=' sortType == "id" '> id desc </when> 
+			<when test=' sortType == "id__asc" '> id asc </when> 
+			<when test=' sortType == "loginTime" '> login_time desc </when> 
+			<when test=' sortType == "loginCount" ' > login_count desc </when> 
 		 	<otherwise>id desc</otherwise>
 		 </choose>
 	</select>

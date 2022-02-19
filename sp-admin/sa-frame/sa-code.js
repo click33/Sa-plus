@@ -13,12 +13,12 @@
 
 
 // ================================= 用户信息 和 菜单 =================================
-sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
+sa.ajax('/AccAdmin/getLoginInfo', function(res) {
 
 	// 验证权限 
-	// if(!(res.data.admin && res.data.per_list.indexOf('99') > -1)) {
-	// 	return sa.alert('当前账号暂无进入后台权限');
-	// }	
+	if(!(res.data.admin && res.data.perList.indexOf('in-system') > -1)) {
+		return sa.alert('当前账号暂无进入后台权限');
+	}	
 	
 	// 配置 
 	sa_admin.title = "sa-plus 后台";
@@ -29,7 +29,7 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 	// 当前用户信息 
 	sa_admin.user = {
 		username: res.data.admin.name,
-		avatar: !!res.data.admin.avatar ? res.data.admin.avatar : 'sa-frame/admin-logo.png' // 使用logo作为头像 
+		avatar: res.data.admin.avatar || 'sa-frame/admin-logo.png' // 使用logo作为头像 
 		// avatar: res.data.admin.avatar // 此写法为账号头像 
 	};		
 	sa.$sys.setCurrUser(res.data.admin);
@@ -37,11 +37,11 @@ sa.ajax('/AccAdmin/fristOpenAdmin', function(res) {
 	
 	// 所有菜单
 	// var myMenuList = window.menuList;    // window.menuList 在 menu-list.js 中定义 
-	sa_admin.initMenu(res.data.per_list);    // 初始化菜单   
-	sa.setAuth(res.data.per_list);		// 当前用户权限码集合  
+	sa_admin.initMenu(res.data.perList);    // 初始化菜单   
+	sa.setAuth(res.data.perList);		// 当前用户权限码集合  
 	
 	// 配置信息 
-	sa.$sys.setAppCfg(res.app_cfg);
+	sa.$sys.setAppCfg(res.appCfg);
 	
 	// 初始化模板(必须调用) 
 	sa_admin.init();	

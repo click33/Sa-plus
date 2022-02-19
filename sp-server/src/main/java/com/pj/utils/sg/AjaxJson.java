@@ -96,8 +96,8 @@ public class AjaxJson extends LinkedHashMap<String, Object> implements Serializa
 		return this;
 	}
 	/** 获取dataCount(数据总数) */
-	public String getDataCount() {
-		return (String)this.get("dataCount");
+	public Long getDataCount() {
+		return (Long)this.get("dataCount");
 	}
 	
 	/** 设置pageNo 和 pageSize，并计算出startIndex于pageCount */

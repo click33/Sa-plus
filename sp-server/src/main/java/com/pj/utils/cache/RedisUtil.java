@@ -6,6 +6,8 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 
 /**
@@ -16,9 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisUtil {
 
-
 	public static long ttl = 24* 7;	//默认超时时间，单位周,此为一周
-
 
 	/**
 	 * 对象专用
@@ -27,6 +27,15 @@ public class RedisUtil {
 	@Autowired
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void setRedisTemplate(RedisTemplate redisTemplate) {
+		// 配置 key 序列化为 json序列化格式 
+		StringRedisSerializer keySerializer = new StringRedisSerializer();
+		redisTemplate.setKeySerializer(keySerializer);
+		redisTemplate.setHashKeySerializer(keySerializer);
+		// 配置 value 序列化为 json序列化格式 
+		GenericJackson2JsonRedisSerializer valueSerializer = new GenericJackson2JsonRedisSerializer();
+		redisTemplate.setValueSerializer(valueSerializer);
+		redisTemplate.setHashValueSerializer(valueSerializer);
+		// 
 		RedisUtil.redisTemplate = redisTemplate;
 	}
 
@@ -38,7 +47,6 @@ public class RedisUtil {
 	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplates) {
 		RedisUtil.stringRedisTemplate = stringRedisTemplates;
 	}
-
 
 
 	/* * * * * * * * * * * * * * * * String操作 * * * * * * * * * * * * * * * * * * * * * * * * */
@@ -76,6 +84,20 @@ public class RedisUtil {
 	}
 
 
+	/* * * * * * * * * * * * * * * * Object值操作 * * * * * * * * * * * * * * * * * * * * * * * * */
+
+	// 写入值
+	public static void forValueSet(String key, Object value){
+		redisTemplate.opsForValue().set(key, value, ttl, TimeUnit.HOURS);
+	}
+
+	// 读取值
+	@SuppressWarnings("unchecked")
+	public static <T>T forValueGet(String key, Class<T> cs){
+		return (T) redisTemplate.opsForValue().get(key);
+	}
+
+
 	/* * * * * * * * * * * * * * * * List集合操作 * * * * * * * * * * * * * * * * * * * * * * * * */
 
 	// 查询
@@ -95,27 +117,5 @@ public class RedisUtil {
 			redisTemplate.opsForList().remove(key, -1,list.get(i));
 		}
 	}
-
-
-	/* * * * * * * * * * * * * * * * Object值操作 * * * * * * * * * * * * * * * * * * * * * * * * */
-
-	// 写入值
-	public static void forValueSet(String key, Object value){
-		redisTemplate.opsForValue().set(key, value, ttl, TimeUnit.HOURS);
-	}
-
-	// 读取值
-	@SuppressWarnings("unchecked")
-	public static <T>T forValueGet(String key, Class<T> cs){
-		return (T) redisTemplate.opsForValue().get(key);
-	}
-
-
-
-
-
-
-
-
 
 }

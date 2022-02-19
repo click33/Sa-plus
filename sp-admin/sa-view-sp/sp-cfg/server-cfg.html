@@ -38,16 +38,9 @@
 				<el-tabs class="s-tab" v-model="activeTab">
 					<!-- ---------------------------------- 系统参数 ---------------------------------- -->
 					<el-tab-pane label="系统参数" name="tab1">
-						<!-- <div class="c-item br">
+						<div class="c-item br">
 							<label class="c-label">预留信息：</label>
-							<el-input v-model="m.reserve_info"></el-input>
-						</div> -->
-						<div class="c-item">
-							<label class="c-label">抛出SQL：</label>
-							<el-switch v-model="m.throwOutSql" :active-value="1" :inactive-value="2"></el-switch>
-							<span class="c-remark" v-if="m.throwOutSql==1">开启</span>
-							<span class="c-remark" v-else>关闭</span>
-							<span class="c-remark" style="color: red;">( 抛出sql只为方便调试，建议只在开发环境下打开此选项，生产环境请务必关闭 )</span>
+							<el-input v-model="m.reserveInfo"></el-input>
 						</div>
 					</el-tab-pane>
 				</el-tabs>
@@ -73,8 +66,7 @@
 			// 创建一个默认的配置对象
 			function create_m() {
 				return {
-					reserve_info: '预留信息', // 预留信息 
-					throwOutSql: 2,	// 是否隐藏sql，
+					reserveInfo: '预留信息', // 预留信息 
 				}
 			}
 		</script>

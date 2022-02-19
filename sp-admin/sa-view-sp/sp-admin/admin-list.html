@@ -35,10 +35,10 @@
 					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
 					<br>
 					<sa-item name="综合排序" class="s-radio-text">
-						<el-radio-group v-model="p.sort_type">
-							<el-radio :label="0">最近添加</el-radio>
-							<el-radio :label="2">最近登录</el-radio>
-							<el-radio :label="3">登录次数</el-radio>
+						<el-radio-group v-model="p.sortType">
+							<el-radio label="id">最近添加</el-radio>
+							<el-radio label="loginTime">最近登录</el-radio>
+							<el-radio label="loginCount">登录次数</el-radio>
 						</el-radio-group>
 					</sa-item>
 				</el-form>
@@ -109,7 +109,7 @@
 						id: '',
 						name: '',
 						roleId: '',
-						sort_type: 0,
+						sortType: 'id',
 						pageNo: 1,
 						pageSize: 10,
 					},

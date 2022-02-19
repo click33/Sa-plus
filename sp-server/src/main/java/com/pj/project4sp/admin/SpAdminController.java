@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.pj.current.satoken.AuthConst;
 import com.pj.project4sp.SP;
 import com.pj.project4sp.admin4password.SpAdminPasswordService;
+import com.pj.project4sp.role.SpRoleUtil;
+import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.so.SoMap;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
@@ -33,16 +36,16 @@ public class SpAdminController {
 
 	/** 增  */
 	@RequestMapping("add")
+	@SaCheckPermission(AuthConst.ADMIN_ADD)
 	AjaxJson add(SpAdmin admin){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);
 		long id = spAdminService.add(admin);
 		return AjaxJson.getSuccessData(id);
 	}
 
 	/** 删 */
 	@RequestMapping("delete")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson delete(long id){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		// 不能自己删除自己
 		if(StpUtil.getLoginIdAsLong() == id) {
 			return AjaxJson.getError("不能自己删除自己");
@@ -53,9 +56,8 @@ public class SpAdminController {
 
 	/** 删 - 根据id列表 */
 	@RequestMapping("deleteByIds")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson deleteByIds(){
-		// 鉴权
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		// 不能自己删除自己
 		List<Long> ids = SoMap.getRequestSoMap().getListByComma("ids", long.class); 
 		if(ids.contains(StpUtil.getLoginIdAsLong())) {
@@ -68,8 +70,8 @@ public class SpAdminController {
 	
 	/** 改  -  name */
 	@RequestMapping("update")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson update(SpAdmin obj){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		SpAdminUtil.checkName(obj.getId(), obj.getName());
 		int line = spAdminMapper.update(obj);
 		return AjaxJson.getByLine(line);
@@ -77,16 +79,16 @@ public class SpAdminController {
 
 	/** 查  */
 	@RequestMapping("getById")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson getById(long id){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);
 		Object data = spAdminMapper.getById(id);
 		return AjaxJson.getSuccessData(data);
 	}
 
 	/** 查 - 集合 */
 	@RequestMapping("getList")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson getList(){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		SoMap so = SoMap.getRequestSoMap();
 		List<SpAdmin> list = spAdminMapper.getList(so.startPage());
 		return AjaxJson.getPageData(so.getDataCount(), list);
@@ -94,33 +96,33 @@ public class SpAdminController {
 
 	/** 改密码 */
 	@RequestMapping("updatePassword")
+	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
 	AjaxJson updatePassword(long id, String password){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		int line = spAdminPasswordService.updatePassword(id, password);
 		return AjaxJson.getByLine(line);
 	}
 	
 	/** 改头像  */
 	@RequestMapping("updateAvatar")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
 	AjaxJson updateAvatar(long id, String avatar){
-		StpUtil.checkPermission(AuthConst.ADMIN_LIST);	
 		int line = SP.publicMapper.updateColumnById("sp_admin", "avatar", avatar, id);
 		return AjaxJson.getByLine(line);
 	}
 	
 	/** 改状态  */
 	@RequestMapping("updateStatus")
+	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
 	public AjaxJson updateStatus(long adminId, int status) {
-		StpUtil.checkPermission(AuthConst.R1);
 
-		// 验证对方是否为超管(保护超管不受摧残) 
-		if(StpUtil.hasPermission(adminId, AuthConst.R1)){
+		// 验证对方是否为超管 
+		if(StpUtil.hasPermission(adminId, AuthConst.DEV)){
 			return AjaxJson.getError("抱歉，对方角色为系统超级管理员，您暂无权限操作");
 		}
 		
 		// 修改状态 
 		SP.publicMapper.updateColumnById("sp_admin", "status", status, adminId);
-		// 如果是禁用，就停掉其秘钥有效果性，使其账号的登录状态立即无效 
+		// 如果是禁用，就将其强制注销 
 		if(status == 2) {
 			StpUtil.logout(adminId);
 		}
@@ -129,20 +131,27 @@ public class SpAdminController {
 	
 	/** 改角色  */
 	@RequestMapping("updateRole")
+	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
 	AjaxJson updateRole(long id, String roleId){
-		StpUtil.checkPermission(AuthConst.R1);
+		// 改角色 
 		int line = SP.publicMapper.updateColumnById("sp_admin", "role_id", roleId, id);
-		return AjaxJson.getByLine(line);
+		AjaxError.throwByLine(line);
+		
+		// 清缓存 
+		SpRoleUtil.clearRoleIdCache(id);
+		
+		// 返回 
+		return AjaxJson.getSuccess();
 	}
 	
-	/** 返回当前admin信息  */
+	/** 返回当前 Admin 信息  */
 	@RequestMapping("getByCurr")
 	AjaxJson getByCurr() {
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		return AjaxJson.getSuccessData(admin);
 	}
 	
-	/** 当前admin修改信息 */
+	/** 当前 Admin 修改自己信息 */
 	@RequestMapping("updateInfo")
 	AjaxJson updateInfo(SpAdmin obj){
 		obj.setId(StpUtil.getLoginIdAsLong());
@@ -151,13 +160,4 @@ public class SpAdminController {
 		return AjaxJson.getByLine(line);
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-
-
 }
