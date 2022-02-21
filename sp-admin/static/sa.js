@@ -117,7 +117,7 @@ var sa = {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 				// 追加token
 				if(localStorage.tokenName) {
-					xhr.setRequestHeader(localStorage.tokenName, localStorage.tokenValue);
+					xhr.setRequestHeader(localStorage.tokenName, sessionStorage.runAsToken || localStorage.tokenValue);
 				}
 			},
 			success: function(res){

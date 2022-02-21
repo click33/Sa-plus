@@ -57,16 +57,16 @@
 						</template>
 					</sa-td>
 					<sa-td type="text" name="所属角色" prop="roleName"></sa-td>
-					<sa-td type="datetime" name="所属角色" prop="createTime" width="150px"></sa-td>
+					<sa-td type="datetime" name="创建日期" prop="createTime" width="150px"></sa-td>
 					<sa-td type="datetime" name="最后登录" prop="loginTime" width="150px"></sa-td>
 					<sa-td type="text" name="登录次数" prop="loginCount" not="0" width="100px"></sa-td>
 					<sa-td type="switch" name="账号状态" prop="status" :jv="{1: '正常', 2: '禁用[#ff4949]'}" @change="s => updateStatus(s.row)" width="120px"></sa-td>
-					<el-table-column label="操作" fixed="right" width="450px">
+					<el-table-column label="操作" fixed="right" width="420px">
 						<template slot-scope="s">
 							<span @click="getInfo(s.row)">
 								<el-button type="success" class="c-btn" icon="el-icon-view">查看</el-button>
 							</span>
-							<span @click="updateName(s.row)">
+							<!-- <span @click="updateName(s.row)">
 								<el-button type="primary" class="c-btn" icon="el-icon-edit">改名称</el-button>
 							</span>
 							<span @click="updateAvatar(s.row)">
@@ -74,7 +74,23 @@
 							</span>
 							<span @click="updatePassword(s.row)">
 								<el-button type="primary" class="c-btn" icon="el-icon-edit">改密码</el-button>
-							</span>
+							</span> -->
+							<el-dropdown trigger="click" style="font-size: 0.85em;">
+								<el-button type="primary" class="c-btn">
+									修改资料 <i class="el-icon-arrow-down el-icon--right"></i>
+								</el-button>
+								<el-dropdown-menu slot="dropdown">
+									<span @click="updateName(s.row)">
+										<el-dropdown-item>改名称</el-dropdown-item>
+									</span>
+									<span @click="updateAvatar(s.row)">
+										<el-dropdown-item>改头像</el-dropdown-item>
+									</span>
+									<span @click="updatePassword(s.row)">
+										<el-dropdown-item>改密码</el-dropdown-item>
+									</span>
+								</el-dropdown-menu>
+							</el-dropdown>
 							<el-dropdown trigger="click" style="font-size: 0.85em;">
 								<el-button type="primary" class="c-btn">
 									修改角色为 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -85,6 +101,9 @@
 									</span>
 								</el-dropdown-menu>
 							</el-dropdown>
+							<span @click="runAs(s.row)">
+								<el-button type="warning" class="c-btn" icon="el-icon-coordinate">模拟登录</el-button>
+							</span>
 							<span @click="del(s.row)">
 								<el-button type="danger" class="c-btn" icon="el-icon-delete">删除</el-button>
 							</span>
@@ -209,6 +228,19 @@
 								data.status = 3 - data.status; 
 							}
 						})
+					},
+					// 模拟登陆
+					runAs: function(data) {
+						// 提交删除 
+						sa.confirm('将要以账号 [ ' + data.name + ' ] 模拟登录，是否确认？', function() {
+							sa.ajax('/admin/runAs?adminId=' + data.id, function(res) {
+								sa.ok('登录成功，即将刷新页面');
+								sessionStorage.runAsToken = res.data;
+								setTimeout(function() {
+									top.location.reload(true);
+								}, 1000)
+							}.bind(this))
+						}.bind(this));
 					},
 					// 删除 
 					del: function (data) {

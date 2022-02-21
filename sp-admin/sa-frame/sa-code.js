@@ -98,6 +98,19 @@ sa_admin.dropList = [		// 头像点击处可操作的选项
 	}
 ]
 
+// 退出模拟登陆的方法
+sa_admin.closeRunAs = function() {
+	layer.confirm('退出模拟登录？', function() {
+		sa.ajax('/AccAdmin/doExit', function(res) {
+			sa.ok('退出成功，即将刷新页面');
+			sessionStorage.removeItem('runAsToken');
+			setTimeout(function() {
+				top.location.reload(true);
+			}, 1000);
+		})
+	});
+}
+
 
 // ================================= 示例：js控制打开某个菜单 =================================
 

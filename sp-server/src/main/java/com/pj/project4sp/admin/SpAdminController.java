@@ -159,5 +159,23 @@ public class SpAdminController {
 		int line = spAdminMapper.update(obj);
 		return AjaxJson.getByLine(line);
 	}
+
+	/** 模拟指定账号登录 */
+	@RequestMapping("runAs")
+	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
+	AjaxJson runAs(long adminId) {
+		// 如果不存在这个账号 
+		if(SpAdminUtil.spAdminMapper.getById(adminId) == null) {
+			return AjaxJson.getError("未找到账号：" + adminId);
+		}
+		// 如果要模拟的账号就是当前账号 
+		if(StpUtil.getLoginIdAsLong() == adminId) {
+			return AjaxJson.getError("不能自己模拟自己");
+		}
+		
+		// 获取这个人的token 
+		String token = StpUtil.createLoginSession(adminId);
+		return AjaxJson.getSuccessData(token);
+	}
 	
 }

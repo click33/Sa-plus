@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.pj.utils.sg.NbUtil;
 
 /**
  * DB活动配置操作工具类
@@ -90,6 +91,13 @@ public class SpCfgUtil {
 		return SpCfgUtil.getServerCfg("reserveInfo", "");
 	}
 
+	/** 随机返回一个：新用户头像地址 */
+	public static String userDefaultAvatar() {
+		String[] avatarArray = SpCfgUtil.getServerCfg("userDefaultAvatar", "").split(",");
+		int index = NbUtil.getRandom(0, avatarArray.length - 1);
+		return avatarArray[index];
+	}
+	
 	
 	
 	

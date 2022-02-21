@@ -28,6 +28,10 @@
 			</span>
 		</div>
 		<div class="tools-right">
+			<span title="模拟登陆" v-if="runAsToken">
+				<span style="font-size: 0.8em; font-weight: bold; ">当前模拟登录账号：{{sa.$sys.getCurrUser().id}}，</span>
+				<span style="font-size: 0.8em; color: #44f; text-decoration: underline; cursor: pointer;" @click="$root.closeRunAs()">退出</span>
+			</span>
 			<span title="点击登录" class="tool-fox" onclick="location.href='login.html'" v-if="$root.user == null">
 				<span style="font-size: 0.8em; font-weight: bold; position: relative; top: -2px;">未登录</span>
 			</span>
@@ -89,6 +93,8 @@
 				
 				nowTime: '加载中...'	,	// 当前时间 
 				currInterval: null,		// 刷新当前时间的定时器 
+				
+				runAsToken: sessionStorage.runAsToken,	// 模拟登陆-Token
 				
 				themeList: [	// 主题数组
 					{name: '蓝色', value: '1'},

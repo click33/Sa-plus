@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
 		<link rel="stylesheet" href="../../static/sa.css">
 		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
 		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
 		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
 		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
@@ -29,11 +30,24 @@
 			}
 			.s-tab{height: 100%; }
 			.el-tabs__content{height: calc(100% - 130px); overflow: auto;}
+			
+			/* 让头像样式小一点 */
+			.c-item-mline{width: 600px;}
+			.c-item-mline .image-box-2{width: 60px; height: 100px;}
+			.c-item-mline .image-box-2 img{width: 60px; height: 60px;}
+			.c-item-mline .image-box-2.up_img{height: 60px;}
+			.c-item-mline .image-box-2.up_img img{margin: 15px; width: 30px; height: 30px;}
 		</style>
 	</head>
 	<body>
 		<div class="vue-box" style="display: none;" :style="'display: block;'">
 			<div class="c-panel" v-if="m != null">
+				<!-- 提示 -->
+				<el-alert style="margin: 10px 0;"
+					type="blue" show-icon 
+					title="Server-Config 非对外开放，用来配置一些敏感信息。"
+					>
+				</el-alert>
 				<!-- tab卡片 -->
 				<el-tabs class="s-tab" v-model="activeTab">
 					<!-- ---------------------------------- 系统参数 ---------------------------------- -->
@@ -42,6 +56,11 @@
 							<label class="c-label">预留信息：</label>
 							<el-input v-model="m.reserveInfo"></el-input>
 						</div>
+						<div style="height: 1px;"></div>
+						<sa-item type="img-list" name="新用户默认头像" v-model="m.userDefaultAvatar" br></sa-item>
+						<sa-item name="" style="margin-top: -20px;" br>
+							<span style="color: #999;">系统将从以上图片中随机选择一张作为新用户头像</span>
+						</sa-item>
 					</el-tab-pane>
 				</el-tabs>
 				
@@ -67,11 +86,16 @@
 			function create_m() {
 				return {
 					reserveInfo: '预留信息', // 预留信息 
+					
+					userDefaultAvatar: '',	// 新用户默认头像 
 				}
 			}
 		</script>
 		<script>
 			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),
+				},
 				el: '.vue-box',
 				data: {
 					sa: sa, // 超级对象

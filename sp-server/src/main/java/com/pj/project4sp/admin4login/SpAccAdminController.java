@@ -50,7 +50,7 @@ public class SpAccAdminController {
 	
 	/** 管理员登录后台时需要返回的信息 */
 	@RequestMapping("getLoginInfo")
-	AjaxJson fristOpenAdmin(HttpServletRequest request) {
+	AjaxJson getLoginInfo(HttpServletRequest request) {
 		// 当前admin
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		
@@ -61,5 +61,7 @@ public class SpAccAdminController {
 		map.set("appCfg", SpCfgUtil.getAppCfg());	
 		return AjaxJson.getSuccessData(map); 
 	}
+	
+	
 	
 }

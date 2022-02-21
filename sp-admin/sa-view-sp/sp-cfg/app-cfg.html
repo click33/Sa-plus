@@ -34,6 +34,12 @@
 	<body>
 		<div class="vue-box" style="display: none;" :style="'display: block;'">
 			<div class="c-panel" v-if="m != null">
+				<!-- 提示 -->
+				<el-alert style="margin: 10px 0;"
+					type="blue" show-icon 
+					title="App-Config 对外开放，用来配置一些非敏感信息。"
+					>
+				</el-alert>
 				<!-- tab卡片 -->
 				<el-tabs class="s-tab" v-model="activeTab">
 					<!-- ---------------------------------- 系统参数 ---------------------------------- -->
