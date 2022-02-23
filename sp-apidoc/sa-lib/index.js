@@ -112,6 +112,20 @@ var sa_plugins = function(hook) {
 	// 渲染完全完成之后
 	hook.doneEach(function() {
 		f5_test_btn();
+		
+		// 给代码盒子，添加行数样式 
+		$('pre code').each(function(){
+			var lines = $(this).text().split('\n').length;
+			var $numbering = $('<ul/>').addClass('code-line-box');
+			$(this)
+				.addClass('has-numbering')
+				.parent()
+				.append($numbering);
+			for(i=1;i<=lines;i++){
+				$numbering.append($('<li/>').text(i));
+			}
+		});
+		
 	});
 	
 };

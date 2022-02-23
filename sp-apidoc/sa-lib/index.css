@@ -11,17 +11,6 @@
 
 /* ============== 样式优化 ================ */
 
-/* 背景变黑 */
-.main-box [data-lang]{padding: 0px !important; border-radius: 10px; overflow: hidden;}
-.main-box [class^="lang-"]{/* color: red !important; */ border: 0px red solid; padding: 1.2em; background-color: #000; color: #FFF;}
-.main-box [class^="lang-api"]{color: #FFF;}
-
-
-.token.string{color: #65B042;}
-.token.number{color: #2487CC;}
-.token.punctuation{color: #FFF;}
-.token.comment{color: #FFF;}
-
 /* .main-box [class="lang-api"]{color: red;} */
 
 #main table{margin-left: 25px;}
@@ -44,3 +33,57 @@
 .layui-layer-iframe{box-shadow: 0 0 100px #000 !important;}
 
 #main [data-lang=js]{margin-bottom: 80px;}
+
+
+
+
+
+/* ============== code代码样式优化 ================ */
+
+/* 背景变黑 */
+.main-box [data-lang]{padding: 0px !important; border-radius: 2px;overflow-x: auto; overflow-y: hidden;}
+.main-box [v-pre] code{border: 0px red solid; border-radius: 1px; /* background-color: #282828; */ background-color: #111; color: #FFF;}
+.main-box [v-pre] code{padding: 1.5em 1.3em; margin-left: 40px !important;}
+/* .main-box h2{margin-top: 70px;} */
+
+/* 代码行号盒子样式 */
+.code-line-box {list-style-type: none; border-right: 1px solid #000; position: absolute; top: 0; left: 0; width: 40px;  user-select: none;}
+.code-line-box {padding: calc(1.5em + 1px)  0px !important; padding-bottom: calc(1.5em + 20px) !important; margin: 0px !important;}
+.code-line-box {line-height: inherit !important; background-color: #111; color: #aaa;font-weight: 400;font-size: 0.85em;text-align: center;}
+
+/* xml语言样式优化 */
+.lang-xml .token.comment{color: #CDAB53;}
+.lang-xml .token.tag *{color: #db2d20;}
+.lang-xml .token.attr-value{color: #A6E22E;}
+
+/* html语言样式优化 */
+.lang-html .token.comment{color: #CDAB53;}
+.lang-html .token.tag *{color: #db2d20;}
+.lang-html .token.tag .attr-name,
+.lang-html .token.tag .attr-name *{color: #A6E22E; opacity: 0.9;}
+.lang-html .token.tag .attr-value,
+.lang-html .token.tag .attr-value *{color: #E6DB74; opacity: 0.9;}
+
+/* java语言样式优化 */
+.main-box .lang-java{color: #01a252 !important;; opacity: 1;}
+.lang-java .token.keyword{color: #db2d20;}
+.lang-java .token.namespace,.lang-java .token.namespace *{color: #01A252; opacity: 1;}
+.lang-java .token.class-name,.lang-java .cm-variable{color: #55b5db; opacity: 1;}
+.lang-java .token.comment{color: #CDAB53;}
+.lang-java .token.annotation.punctuation{color: #ddd;}
+.lang-java .token.punctuation{color: #ddd;}
+
+/* yml语言样式优化 */
+.main-box .lang-yml{color: #01A252 !important; opacity: 1;}
+
+/* url语言样式优化 */
+.main-box .lang-api{color: #E96917 !important; opacity: 1;}
+
+/* js语言样式优化 */
+.main-box .lang-js{color: #01a252 !important;}
+.lang-js .token.comment{color: #ddd;}
+/* .lang-js .token.string{color: #fded02;} */
+.lang-js .token.string{color: #75C052;}
+.lang-js .token.punctuation{color: #eee;}
+
+/* .gt-container{padding: 1.5em; padding-bottom: 100px;} */

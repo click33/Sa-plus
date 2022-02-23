@@ -118,6 +118,7 @@
 							// 如果设置的角色与当前登录者的角色一致，则立即显示出来							
 							if(roleId == sa.$sys.getCurrUser().roleId) {
 								top.sa_admin.initMenu(keys);
+								sa.setAuth(keys);
 							}
 						}.bind(this))
 					},

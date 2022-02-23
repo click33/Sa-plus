@@ -42,7 +42,6 @@ public class SpRolePermissionController {
 		return AjaxJson.getSuccessData(spRolePermissionService.getPcodeByRid(roleId));
 	}
 	
-	
 	/** 拉取菜单id列表  根据当前用户roleId  */
 	@RequestMapping("getPcodeByCurrRid")
 	public AjaxJson getPcodeByCurrRid(){

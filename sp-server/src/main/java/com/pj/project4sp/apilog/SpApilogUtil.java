@@ -15,6 +15,7 @@ import com.pj.current.satoken.StpUserUtil;
 import com.pj.project4sp.SP;
 import com.pj.utils.LogUtil;
 import com.pj.utils.sg.AjaxJson;
+import com.pj.utils.sg.IpUtil;
 import com.pj.utils.sg.WebNbUtil;
 
 import cn.dev33.satoken.spring.SpringMVCUtil;
@@ -59,7 +60,7 @@ public class SpApilogUtil {
     	HttpServletRequest request = SpringMVCUtil.getRequest();
     	SpApilog a = new SpApilog();
     	a.setId(getSnowflakeId());		
-    	a.setReqIp(WebNbUtil.getIP(request));	
+    	a.setReqIp(IpUtil.getIP(request));	
     	a.setReqApi(request.getRequestURI());;		
     	a.setReqParame(JSON.toJSONString(WebNbUtil.getParamsMap2(request)));	
     	a.setReqToken(StpUtil.getTokenValue());			

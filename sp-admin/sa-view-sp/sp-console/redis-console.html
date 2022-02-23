@@ -289,7 +289,7 @@
 						}
 						// 删除 
 						sa.confirm('是否删除选中记录，此操作不可撤销', function() {
-							sa.ajax('/RedisConsole/deleteByKeys', {key: keys}, function(res) {
+							sa.ajax('/RedisConsole/deleteByKeys', {keys: keys.join(',')}, function(res) {
 								sa.arrayDelete(this.dataListShow, selection);
 								sa.ok2('删除成功');
 								sa.f5TableHeight();		// 刷新表格高度 

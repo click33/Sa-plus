@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pj.project4sp.admin4login.SpAdminLoginMapper">
+
+	<!-- 增 -->
+	<insert id="add">
+		insert into 
+		sp_admin_login (id, acc_id, acc_token, login_ip, address, device, system, create_time) 
+		values (0, #{accId}, #{accToken}, #{loginIp}, #{address}, #{device}, #{system}, now()) 
+	</insert>
+
+	<!-- 删 -->
+	<delete id="delete">
+		delete from sp_admin_login 
+		where id = #{id} 
+	</delete>
+
+	<!-- ================================== 查询相关 ================================== -->
+	
+	<!-- 通用映射：手动模式 -->
+	<resultMap id="model" type="com.pj.project4sp.admin4login.SpAdminLogin">
+		<result property="id" column="id" />
+		<result property="accId" column="acc_id" />
+		<result property="accToken" column="acc_token" />
+		<result property="loginIp" column="login_ip" />
+		<result property="address" column="address" />
+		<result property="device" column="device" />
+		<result property="system" column="system" />
+		<result property="createTime" column="create_time" />
+		<result property="spAdminName" column="sp_admin_name" />
+		<result property="spAdminAvatar" column="sp_admin_avatar" />
+	</resultMap>
+	
+	<!-- 公共查询sql片段 -->
+	<sql id="select_sql">
+		select 
+			*, 
+			(select name from sp_admin where id = sp_admin_login.acc_id) as sp_admin_name, 
+			(select avatar from sp_admin where id = sp_admin_login.acc_id) as sp_admin_avatar
+		from sp_admin_login 
+	</sql>
+	
+	<!-- 查 - 根据id -->
+	<select id="getById" resultMap="model">
+		<include refid="select_sql"></include>
+		where id = #{id}
+	</select>
+	
+	<!-- 查集合 - 根据条件（参数为空时代表忽略指定条件） [G] -->
+	<select id="getList" resultMap="model">
+		<include refid="select_sql"></include>
+		<where>
+			<if test=' this.has("id") '> and id = #{id} </if>
+			<if test=' this.has("accId") '> and acc_id = #{accId} </if>
+			<if test=' this.has("accToken") '> and acc_token = #{accToken} </if>
+			<if test=' this.has("loginIp") '> and login_ip = #{loginIp} </if>
+		</where>
+		order by id desc 
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+</mapper>

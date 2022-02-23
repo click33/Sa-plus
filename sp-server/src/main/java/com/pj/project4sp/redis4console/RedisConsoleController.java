@@ -3,7 +3,6 @@ package com.pj.project4sp.redis4console;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.pj.current.satoken.AuthConst;
@@ -47,7 +46,7 @@ public class RedisConsoleController {
 	
 	/** 添加一个键值  */
 	@RequestMapping("set")
-	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
+	@SaCheckPermission({AuthConst.REDIS_CONSOLE, AuthConst.DEV})
 	public AjaxJson set(String key, String value, long ttl) {
 		RedisConsoleUtil.setBySeconds(key, value, ttl);
 		return AjaxJson.getSuccess();
@@ -55,7 +54,7 @@ public class RedisConsoleController {
 
 	/** 删除一个键值  */
 	@RequestMapping("del")
-	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
+	@SaCheckPermission({AuthConst.REDIS_CONSOLE, AuthConst.DEV})
 	public AjaxJson del(String key) {
 		RedisConsoleUtil.del(key);
 		return AjaxJson.getSuccess();
@@ -71,7 +70,7 @@ public class RedisConsoleController {
 	
 	/** 修改一个值的ttl  */
 	@RequestMapping("updateTtl")
-	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
+	@SaCheckPermission({AuthConst.REDIS_CONSOLE, AuthConst.DEV})
 	public AjaxJson updateTtl(String key, long ttl) {
 		RedisConsoleUtil.updateTtl(key, ttl);
 		return AjaxJson.getSuccess();
@@ -79,9 +78,10 @@ public class RedisConsoleController {
 	
 	/** 删除多个键值  */
 	@RequestMapping("deleteByKeys")
-	@SaCheckPermission(AuthConst.REDIS_CONSOLE)
-	public AjaxJson deleteByKeys(@RequestParam(value="key[]") List<String> key) {
-		for (String k : key) {
+	@SaCheckPermission({AuthConst.REDIS_CONSOLE, AuthConst.DEV})
+	public AjaxJson deleteByKeys() {
+		List<String> keys = SoMap.getRequestSoMap().getListByComma("keys", String.class);
+		for (String k : keys) {
 			RedisConsoleUtil.del(k);
 		}
 		return AjaxJson.getSuccess();

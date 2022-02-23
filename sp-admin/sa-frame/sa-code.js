@@ -17,6 +17,7 @@ sa.ajax('/AccAdmin/getLoginInfo', function(res) {
 
 	// 验证权限 
 	if(!(res.data.admin && res.data.perList.indexOf('in-system') > -1)) {
+		sa.$sys.setCurrUser(res.data.admin);
 		return sa.alert('当前账号暂无进入后台权限');
 	}	
 	

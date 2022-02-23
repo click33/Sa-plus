@@ -77,23 +77,6 @@ public class SpAdminController {
 		return AjaxJson.getByLine(line);
 	}
 
-	/** 查  */
-	@RequestMapping("getById")
-	@SaCheckPermission(AuthConst.ADMIN_LIST)
-	AjaxJson getById(long id){
-		Object data = spAdminMapper.getById(id);
-		return AjaxJson.getSuccessData(data);
-	}
-
-	/** 查 - 集合 */
-	@RequestMapping("getList")
-	@SaCheckPermission(AuthConst.ADMIN_LIST)
-	AjaxJson getList(){
-		SoMap so = SoMap.getRequestSoMap();
-		List<SpAdmin> list = spAdminMapper.getList(so.startPage());
-		return AjaxJson.getPageData(so.getDataCount(), list);
-	}
-
 	/** 改密码 */
 	@RequestMapping("updatePassword")
 	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
@@ -113,18 +96,18 @@ public class SpAdminController {
 	/** 改状态  */
 	@RequestMapping("updateStatus")
 	@SaCheckPermission({AuthConst.ADMIN_LIST, AuthConst.DEV})
-	public AjaxJson updateStatus(long adminId, int status) {
+	public AjaxJson updateStatus(long id, int status) {
 
 		// 验证对方是否为超管 
-		if(StpUtil.hasPermission(adminId, AuthConst.DEV)){
-			return AjaxJson.getError("抱歉，对方角色为系统超级管理员，您暂无权限操作");
+		if(StpUtil.hasPermission(id, AuthConst.DEV)){
+			return AjaxJson.getError("抱歉，对方角色为最高权限，您暂时无法完成此操作");
 		}
 		
 		// 修改状态 
-		SP.publicMapper.updateColumnById("sp_admin", "status", status, adminId);
+		SP.publicMapper.updateColumnById("sp_admin", "status", status, id);
 		// 如果是禁用，就将其强制注销 
 		if(status == 2) {
-			StpUtil.logout(adminId);
+			StpUtil.logout(id);
 		}
 		return AjaxJson.getSuccess();
 	}
@@ -144,6 +127,14 @@ public class SpAdminController {
 		return AjaxJson.getSuccess();
 	}
 	
+	/** 查  */
+	@RequestMapping("getById")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
+	AjaxJson getById(long id){
+		Object data = spAdminMapper.getById(id);
+		return AjaxJson.getSuccessData(data);
+	}
+
 	/** 返回当前 Admin 信息  */
 	@RequestMapping("getByCurr")
 	AjaxJson getByCurr() {
@@ -151,6 +142,15 @@ public class SpAdminController {
 		return AjaxJson.getSuccessData(admin);
 	}
 	
+	/** 查 - 集合 */
+	@RequestMapping("getList")
+	@SaCheckPermission(AuthConst.ADMIN_LIST)
+	AjaxJson getList(){
+		SoMap so = SoMap.getRequestSoMap();
+		List<SpAdmin> list = spAdminMapper.getList(so.startPage());
+		return AjaxJson.getPageData(so.getDataCount(), list);
+	}
+
 	/** 当前 Admin 修改自己信息 */
 	@RequestMapping("updateInfo")
 	AjaxJson updateInfo(SpAdmin obj){

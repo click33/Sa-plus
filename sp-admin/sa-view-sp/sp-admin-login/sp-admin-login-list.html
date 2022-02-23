@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>管理员登录日志</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css">
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/http-vue-loader@1.4.2/src/httpVueLoader.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			.vue-box{padding: 0; height: 100%; background-color: #FFF;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- ------------- 检索参数 ------------- -->
+				<div class="c-title">检索参数</div>
+				<el-form ref="form" :model='p' @submit.native.prevent>
+					<sa-item type="num" name="记录id" v-model="p.id"></sa-item>
+					<sa-item type="num" name="管理员id" v-model="p.accId"></sa-item>
+					<sa-item type="text" name="登录Token" v-model="p.accToken"></sa-item>
+					<sa-item type="text" name="登陆IP" v-model="p.loginIp"></sa-item>
+					<el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
+				</el-form>
+				<!-- ------------- 快捷按钮 ------------- -->
+				<!-- <sa-item type="fast-btn" show="delete,export,reset"></sa-item> -->
+				<div style="height: 10px;"></div>
+				<!-- ------------- 数据列表 ------------- -->
+				<el-table class="data-table" ref="data-table" :data="dataList">
+					<sa-td type="selection"></sa-td>
+					<sa-td name="记录id" prop="id" width="100px"></sa-td>
+					<sa-td name="登录账号" width="180px">
+						<template slot-scope="s">
+							<img :src="s.row.spAdminAvatar" @click="sa.showImage(s.row.spAdminAvatar, '400px', '400px')"  
+								class="td-img" style="vertical-align: middle; margin-right: 5px;" />
+							<el-link type="primary" @click="sa.showIframe('id = ' + s.row.accId + ' 详细信息', '../sp-admin/admin-info.html?id=' + s.row.accId)">
+								<b style="font-weight: 400;">{{s.row.spAdminName}}</b>
+							</el-link>
+						</template>
+					</sa-td>
+					<sa-td name="本次登录Token" prop="accToken" width="180px"></sa-td>
+					<sa-td name="登陆IP" prop="loginIp" width="130px"></sa-td>
+					<sa-td name="客户端标识" prop="device"></sa-td>
+					<sa-td name="所属系统" prop="system"></sa-td>
+					<sa-td name="登录地" prop="address"></sa-td>
+					<sa-td name="登录时间" width="220px">
+						<template slot-scope="s">
+							<span>{{sa.forDate(s.row.createTime, 2)}}</span> - 
+							<b style="color: green;">{{sa.isNull(sa.forDate2(s.row.createTime), '无')}}</b>
+						</template>
+					</sa-td>
+					<el-table-column label="操作" fixed="right"  width="120px">
+						<template slot-scope="s">
+							<el-button class="c-btn" type="danger" icon="el-icon-delete" @click="del(s.row)">删除</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
+				<!-- ------------- 分页 ------------- -->
+				<sa-item type="page" :curr.sync="p.pageNo" :size.sync="p.pageSize" :total="dataCount" @change="f5()"></sa-item>
+			</div>
+		</div>
+		<script>
+			var app = new Vue({
+				components: {
+					"sa-item": httpVueLoader('../../sa-frame/com/sa-item.vue'),
+					"sa-td": httpVueLoader('../../sa-frame/com/sa-td.vue')
+				},
+				el: '.vue-box',
+				data: {
+					p: { // 查询参数  
+						id: '',		// id号 
+						accId: sa.p('accId', ''),		// 用户id 
+						accToken: '',		// 本次登录Token 
+						loginIp: '',		// 登陆IP 
+						pageNo: 1,		// 当前页 
+						pageSize: 10,	// 页大小 
+						sortType: 0		// 排序方式 
+					},
+					dataCount: 0,
+					dataList: [], // 数据集合 
+				},
+				methods: {
+					// 刷新
+					f5: function() {
+						sa.ajax('/SpAdminLogin/getList', sa.removeNull(this.p), function(res) {
+							this.dataList = res.data; // 数据
+							this.dataCount = res.dataCount; // 数据总数 
+							sa.f5TableHeight();		// 刷新表格高度 
+						}.bind(this));
+					},
+					// 删除
+					del: function(data) {
+						sa.confirm('是否删除，此操作不可撤销', function() {
+							sa.ajax('/SpAdminLogin/delete?id=' + data.id, function(res) {
+								sa.arrayDelete(this.dataList, data);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							}.bind(this))
+						}.bind(this));
+					},
+					// 批量删除
+					deleteByIds: function() {
+						// 获取选中元素的id列表 
+						let selection = this.$refs['data-table'].selection;
+						let ids = sa.getArrayField(selection, 'id');
+						if(selection.length == 0) {
+							return sa.msg('请至少选择一条数据')
+						}
+						// 提交删除 
+						sa.confirm('是否批量删除选中数据？此操作不可撤销', function() {
+							sa.ajax('/SpAdminLogin/deleteByIds', {ids: ids.join(',')}, function(res) {
+								sa.arrayDelete(this.dataList, selection);
+								sa.ok('删除成功');
+								sa.f5TableHeight();		// 刷新表格高度 
+							}.bind(this))
+						}.bind(this));
+					},
+				},
+				created: function() {
+					this.f5();
+					sa.onInputEnter();
+				}
+			})
+		</script>
+	</body>
+</html>

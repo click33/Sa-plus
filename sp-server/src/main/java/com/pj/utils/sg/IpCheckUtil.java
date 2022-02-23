@@ -1,7 +1,6 @@
-package com.pj.utils.cache;
+package com.pj.utils.sg;
 
-import com.pj.utils.sg.AjaxError;
-import com.pj.utils.sg.WebNbUtil;
+import com.pj.utils.cache.RedisUtil;
 
 import cn.dev33.satoken.spring.SpringMVCUtil;
 
@@ -63,7 +62,7 @@ public class IpCheckUtil {
 	
 	// 返回我的ip
 	private static String getMyIp() {
-		String ip = WebNbUtil.getIP(SpringMVCUtil.getRequest());
+		String ip = IpUtil.getIP(SpringMVCUtil.getRequest());
 		return ip;
 	}
 	

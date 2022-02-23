@@ -22,6 +22,7 @@ window.menuList.unshift(
 			{id: 'menu-list', name: '菜单列表', url: 'sa-view-sp/sp-role/menu-list.html', info: '所有菜单项预览'},
 			{id: 'admin-list', name: '管理员列表', url: 'sa-view-sp/sp-admin/admin-list.html', info: '所有管理员账号'},
 			{id: 'admin-add', name: '管理员添加', url: 'sa-view-sp/sp-admin/admin-add.html', info: '添加一个管理员'},
+			{id: 'sp-admin-login', name: '管理员登录日志', url: 'sa-view-sp/sp-admin-login/sp-admin-login-list.html', info: '查看管理员历史登录信息'},
 		]
 	},
 	{	

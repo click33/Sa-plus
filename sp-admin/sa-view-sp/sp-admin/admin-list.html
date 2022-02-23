@@ -61,20 +61,14 @@
 					<sa-td type="datetime" name="最后登录" prop="loginTime" width="150px"></sa-td>
 					<sa-td type="text" name="登录次数" prop="loginCount" not="0" width="100px"></sa-td>
 					<sa-td type="switch" name="账号状态" prop="status" :jv="{1: '正常', 2: '禁用[#ff4949]'}" @change="s => updateStatus(s.row)" width="120px"></sa-td>
-					<el-table-column label="操作" fixed="right" width="420px">
+					<el-table-column label="操作" fixed="right" width="500px">
 						<template slot-scope="s">
 							<span @click="getInfo(s.row)">
 								<el-button type="success" class="c-btn" icon="el-icon-view">查看</el-button>
 							</span>
-							<!-- <span @click="updateName(s.row)">
-								<el-button type="primary" class="c-btn" icon="el-icon-edit">改名称</el-button>
+							<span @click="getAdminLogin(s.row)" v-if="sa.isAuth('sp-admin-login')">
+								<el-button type="success" class="c-btn">登录日志</el-button>
 							</span>
-							<span @click="updateAvatar(s.row)">
-								<el-button type="primary" class="c-btn" icon="el-icon-edit">改头像</el-button>
-							</span>
-							<span @click="updatePassword(s.row)">
-								<el-button type="primary" class="c-btn" icon="el-icon-edit">改密码</el-button>
-							</span> -->
 							<el-dropdown trigger="click" style="font-size: 0.85em;">
 								<el-button type="primary" class="c-btn">
 									修改资料 <i class="el-icon-arrow-down el-icon--right"></i>
@@ -154,6 +148,10 @@
 						//sa.showIframe('账号详情', 'admin-info.html?id=' + data.id, '700px', '80%');
 						sa.$page.openAdminInfo(data.id, data.name);
 					},
+					// 查看登录日志 
+					getAdminLogin: function(data) {
+						sa.showIframe('登录日志', '../sp-admin-login/sp-admin-login-list.html?accId=' + data.id, '90%', '90%');
+					},
 					// 查看 - 根据选中的
 					getBySelect: function(data) {
 						var selection = this.$refs['data-table'].selection;
@@ -218,7 +216,7 @@
 							return sa.alert('不能自己封禁自己');  
 						}
 						var is_ok = false;	// 记录是否成功 
-						var ajax = sa.ajax('/admin/updateStatus', {adminId: data.id, status: data.status}, function(res) {
+						var ajax = sa.ajax('/admin/updateStatus', {id: data.id, status: data.status}, function(res) {
 							sa.msg('修改成功');
 							is_ok = true;
 						}.bind(this));

@@ -2,8 +2,6 @@ package com.pj.project4sp.role;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +31,7 @@ public class SpRoleController {
 	@RequestMapping("add")
 	@SaCheckPermission(AuthConst.ROLE_LIST)
 	@Transactional(rollbackFor = Exception.class)
-	public AjaxJson add(SpRole s, HttpServletRequest request){
+	public AjaxJson add(SpRole s){
 		// 检验
 		if(spRoleMapper.getById(s.getId()) != null) {
 			return AjaxJson.getError("此id已存在，请更换");
@@ -52,7 +50,7 @@ public class SpRoleController {
 	/** 删 */
 	@RequestMapping("delete")
 	@SaCheckPermission({AuthConst.ROLE_LIST, AuthConst.DEV})
-	AjaxJson delete(long id, HttpServletRequest request){
+	AjaxJson delete(long id){
 		int line = spRoleMapper.delete(id);
 		return AjaxJson.getByLine(line);
 	}

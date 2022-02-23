@@ -86,9 +86,9 @@ public class NbUtil {
 		return (str == null || str.equals(""));
 	}
 	/**
-	 * 该字符串是否为null或者空串
+	 * 指定字符串是否含有null或者空串
 	 */
-	public static boolean isOneNull(String ...str) {
+	public static boolean hasNull(String ...str) {
 		for (String string : str) {
 			 if ((string == null || string.equals(""))) {
 				return true;

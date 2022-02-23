@@ -95,6 +95,15 @@
 		 </choose>
 	</select>
 	
+	<!-- 修改指定账号的 最后登录记录 -->
+	<update id="updateLoginLog">
+		update sp_admin set 
+		login_ip = #{loginIp},
+		login_time = NOW(),
+		login_count = login_count + 1
+		where id = #{id}
+	</update>
+	
 
 
 </mapper>

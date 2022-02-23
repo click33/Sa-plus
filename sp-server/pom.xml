@@ -86,6 +86,13 @@
             <artifactId>hutool-all</artifactId>
             <version>5.7.15</version>
         </dependency>
+        
+        <!-- UserAgent 解析 -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
                 
         <!-- OkHttps网络请求库： http://okhttps.ejlchina.com/ -->
         <dependency>

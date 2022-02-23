@@ -1,4 +1,4 @@
-package com.pj.project4sp.admin4login;
+package com.pj.project4sp.admin4acc;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -17,7 +17,8 @@ import com.pj.utils.so.SoMap;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
- * admin账号相关的接口 
+ * Admin账号相关的接口 
+ * 
  * @author kong
  *
  */
@@ -35,7 +36,7 @@ public class SpAccAdminController {
 	@RequestMapping("doLogin")
 	AjaxJson doLogin(String key, String password) {
 		// 1、验证参数 
-		if(NbUtil.isOneNull(key, password)) {
+		if(NbUtil.hasNull(key, password)) {
 			return AjaxJson.getError("请提供key与password参数");
 		}
 		return spAccAdminService.doLogin(key, password);
@@ -48,7 +49,7 @@ public class SpAccAdminController {
 		return AjaxJson.getSuccess();
 	}
 	
-	/** 管理员登录后台时需要返回的信息 */
+	/** 获取会话信息 */
 	@RequestMapping("getLoginInfo")
 	AjaxJson getLoginInfo(HttpServletRequest request) {
 		// 当前admin
@@ -61,7 +62,5 @@ public class SpAccAdminController {
 		map.set("appCfg", SpCfgUtil.getAppCfg());	
 		return AjaxJson.getSuccessData(map); 
 	}
-	
-	
 	
 }
