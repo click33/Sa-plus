@@ -69,7 +69,7 @@ export default {
     create_m: function() {
       return {
         logoUrl: '',	// 系统logo地址
-        appName: 'sa-plus快速开发框架', // 系统名称
+        appName: this.$root.title || '', // 系统名称
         appVersionNo: 'v1.0.0',	// 系统版本
         appVersionLog: '更新于2099-10-1',	// 更新日志
       }

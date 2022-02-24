@@ -463,7 +463,7 @@ var sa_admin = new Vue({
 		// 	console.log('如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
 		// },
 		printVesion: function() {
-			var str = ('欢迎使用sa-plus，当前版本：' + this.plusVersion + "，更新于：" + this.plusUpdateTime + "，GitHub地址：" + this.plusGithubUrl);
+			var str = ('Sa-Plus ' + this.plusVersion + " (" + this.plusUpdateTime + ")  GitHub：" + this.plusGithubUrl);
 			// console.log('%c%s', 'color: green; font-size: 12px; font-weight: 400; margin-top: 4px; margin-bottom: 4px;', str);
 			var str2 = ('如在使用中发现任何bug或者疑问，请加入QQ群交流：782974737，点击加入：' + 'https://jq.qq.com/?_wv=1027&k=5DHN5Ib');
 			var s = str;// + ' \n' + str2;

@@ -126,7 +126,7 @@ var sa = {
     let headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       'X-Requested-With': 'XMLHttpRequest',
-      'satoken': sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken,
+      'satoken': sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken  || '',
     };
 
     // 开始请求ajax

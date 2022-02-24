@@ -7,7 +7,7 @@
           <div>
             <img src="@/assets/logo.png" class="admin-logo">
           </div>
-          <h1 style="margin-top: 30px; font-size: 30px;">Sa-Plus 后台管理系统</h1>
+          <h1 style="margin-top: 30px; font-size: 30px;">{{$root.title}}系统</h1>
           <div>
             <el-link type="primary" href="https://gitee.com/click33/sa-plus" target="_blank">
               https://gitee.com/click33/sa-plus

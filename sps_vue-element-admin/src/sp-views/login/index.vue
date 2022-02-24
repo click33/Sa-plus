@@ -19,7 +19,7 @@
           <div class="from-box" :class="{'from-box-show': show}">
             <h3 class="from-title">
               <img src="@/assets/logo.png" class="logo">
-              <span>Sa-Plus 后台管理</span>
+              <span>{{$root.title}}</span>
             </h3>
             <el-form size="small" label-position="left" label-width="0px">
               <el-form-item>
@@ -42,7 +42,7 @@
 
       <!-- 底部 版权 -->
       <div style="position: absolute; bottom: 40px; width: 100%; text-align: center; color: #666;">
-        Copyright ©2022 Sa-Plus 后台管理 | xx省xxx网络科技有限公司 - 提供技术支持
+        Copyright ©2022 {{$root.title}} | xx 市 xx 网络科技有限公司 - 提供技术支持
       </div>
 
     </div>

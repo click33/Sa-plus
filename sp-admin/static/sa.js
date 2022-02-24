@@ -1,8 +1,7 @@
 // =========================== sa对象封装一系列工具方法 ===========================  
 var sa = {
-	version: '2.4.3',
-	update_time: '2020-10-2',
-	info: '新增双击layer标题处全屏'
+  updateTime: '2022-2-25',
+  info: '升级部分API'
 };
 
 // ===========================  当前环境配置  ======================================= 
@@ -14,7 +13,7 @@ var sa = {
 	}
 	// 服务器测试环境
 	var cfg_test = {
-		api_url: 'http://www.baidu.com',
+		api_url: 'http://demo-jj.dev33.cn/spdj-server',
 		web_url: 'http://www.baidu.com'
 	}
 	// 正式生产环境
@@ -116,7 +115,7 @@ var sa = {
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 				// 追加token
-				xhr.setRequestHeader('satoken', sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken);
+				xhr.setRequestHeader('satoken', sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken || '');
 			},
 			success: function(res){
 				console.log('返回数据：', res);

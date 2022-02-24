@@ -14,6 +14,8 @@ import router from './router'
 import './icons' // icon
 import './permission' // permission control
 
+import {title} from './settings.js'
+
 // element-ui 全局组件样式
 Vue.use(Element, {
   size: 'mini'
@@ -45,6 +47,9 @@ import '@/sa-frame/kj/upload-util.js';
 
 new Vue({
   el: '#app',
+  data: {
+    title: title
+  },
   router,
   store,
   render: h => h(App)
