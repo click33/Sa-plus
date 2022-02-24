@@ -43,11 +43,11 @@ import { asyncRoutes } from '@/router/index';
 
 export default {
   name: 'menu-setup',
-  props: { p: Object },
+  props: { param: Object },
   data() {
     return {
       // p: [],
-      roleId: this.p.roleId,
+      roleId: this.param.roleId,
       dataList: [],	// 数据集合
       selectList: [],	// 默认选中
       ywList: [],		// 一维数组
@@ -106,13 +106,9 @@ export default {
     },
     // 真正的保存
     ok2: function() {
-      let str = ''
       let keys = this.$refs.tree.getCheckedKeys()
-      keys.forEach(function(ts){
-        str += 'code=' + ts + '&';
-      })
-      let url = '/SpRolePermission/updatePcodeByRid?roleId=' + this.roleId
-      sa.ajax(url, str, function(res) {
+      let url = '/SpRolePermission/updatePcodeByRid'
+      sa.ajax(url, {roleId: this.roleId, codes: keys.join(',')}, function(res) {
         sa.alert('设置成功', function(){
           sa.closeModel();
         });

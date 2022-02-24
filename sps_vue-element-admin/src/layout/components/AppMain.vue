@@ -5,7 +5,7 @@
   <section class="app-main">
     <transition name="fade" mode="out-in">
       <keep-alive :include="cachedViews">
-        <router-view :key="key" ref="curr-view" />
+        <router-view :key="key" ref="curr-view" :param="{isModel: false}" />
       </keep-alive>
     </transition>
   </section>

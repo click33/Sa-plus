@@ -15,10 +15,10 @@
         <el-button type="primary" icon="el-icon-search" @click="p.pageNo = 1; f5()">查询</el-button>
         <br>
         <sa-item name="综合排序" class="s-radio-text">
-          <el-radio-group v-model="p.sort_type">
-            <el-radio :label="0">最近添加</el-radio>
-            <el-radio :label="2">最近登录</el-radio>
-            <el-radio :label="3">登录次数</el-radio>
+          <el-radio-group v-model="p.sortType">
+            <el-radio label="id">最近添加</el-radio>
+            <el-radio label="loginTime">最近登录</el-radio>
+            <el-radio label="loginCount">登录次数</el-radio>
           </el-radio-group>
         </sa-item>
       </el-form>
@@ -41,20 +41,30 @@
         <sa-td type="datetime" name="最后登录" prop="loginTime" width="150px" />
         <sa-td type="text" name="登录次数" prop="loginCount" not="0" width="100px" />
         <sa-td type="switch" name="账号状态" prop="status" :jv="{1: '正常', 2: '禁用[#ff4949]'}" width="120px" @change="s => updateStatus(s.row)" />
-        <el-table-column label="操作" fixed="right" width="450px">
+        <el-table-column label="操作" fixed="right" width="470px">
           <template slot-scope="s">
             <span @click="getInfo(s.row)">
               <el-button type="success" class="c-btn" icon="el-icon-view">查看</el-button>
             </span>
-            <span @click="updateName(s.row)">
-              <el-button type="primary" class="c-btn" icon="el-icon-edit">改名称</el-button>
+            <span @click="getAdminLogin(s.row)" v-if="sa.isAuth('sp-admin-login')">
+              <el-button type="success" class="c-btn">登录日志</el-button>
             </span>
-            <span @click="updateAvatar(s.row)">
-              <el-button type="primary" class="c-btn" icon="el-icon-edit">改头像</el-button>
-            </span>
-            <span @click="updatePassword(s.row)">
-              <el-button type="primary" class="c-btn" icon="el-icon-edit">改密码</el-button>
-            </span>
+            <el-dropdown trigger="click" style="font-size: 0.85em;">
+              <el-button type="primary" class="c-btn">
+                修改资料 <i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <el-dropdown-menu slot="dropdown">
+									<span @click="updateName(s.row)">
+										<el-dropdown-item>改名称</el-dropdown-item>
+									</span>
+                <span @click="updateAvatar(s.row)">
+										<el-dropdown-item>改头像</el-dropdown-item>
+									</span>
+                <span @click="updatePassword(s.row)">
+										<el-dropdown-item>改密码</el-dropdown-item>
+									</span>
+              </el-dropdown-menu>
+            </el-dropdown>
             <el-dropdown trigger="click" style="font-size: 0.85em;">
               <el-button type="primary" class="c-btn">
                 修改角色为 <i class="el-icon-arrow-down el-icon--right" />
@@ -65,6 +75,9 @@
                 </span>
               </el-dropdown-menu>
             </el-dropdown>
+            <span @click="runAs(s.row)">
+              <el-button type="warning" class="c-btn">模拟登录</el-button>
+            </span>
             <span @click="del(s.row)">
               <el-button type="danger" class="c-btn" icon="el-icon-delete">删除</el-button>
             </span>
@@ -87,7 +100,7 @@ export default {
         id: '',
         name: '',
         roleId: '',
-        sort_type: 0,
+        sortType: 'id',
         pageNo: 1,
         pageSize: 10,
       },
@@ -123,10 +136,14 @@ export default {
     getInfo: function(data) {
       sa.showModel('管理员详情', () => import('./admin-info'), { id: data.id });
     },
+    // 查看登录日志
+    getAdminLogin: function(data) {
+      sa.showModel('登录日志', () => import('../sp-admin-login/sp-admin-login-list'), {accId: data.id});
+    },
     // 查看 - 根据选中的
     getBySelect: function(data) {
       var selection = this.$refs['data-table'].selection;
-      if (selection.length == 0) {
+      if (selection.length === 0) {
         return sa.msg('请至少选择一条数据')
       }
       this.getInfo(selection[0]);
@@ -202,6 +219,19 @@ export default {
       //     data.status = 3 - data.status;
       //   }
       // })
+    },
+    // 模拟登陆
+    runAs: function(data) {
+      // 提交删除
+      sa.confirm('将要以账号 [ ' + data.name + ' ] 模拟登录，是否确认？', function() {
+        sa.ajax('/admin/runAs?adminId=' + data.id, function(res) {
+          sa.ok('登录成功，即将刷新页面');
+          sessionStorage.runAsToken = res.data;
+          setTimeout(function() {
+            top.location.reload(true);
+          }, 1000)
+        }.bind(this))
+      }.bind(this));
     },
     // 删除
     del: function(data) {

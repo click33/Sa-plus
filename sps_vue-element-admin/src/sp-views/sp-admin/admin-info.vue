@@ -22,10 +22,10 @@
 <script>
 export default {
   name: 'admin-info',
-  props: { p: Object },
+  props: { param: Object },
   data() {
     return {
-      id: this.p.id || 0,
+      id: this.param.id || 0,
       sa: sa,
       m: {}
     }

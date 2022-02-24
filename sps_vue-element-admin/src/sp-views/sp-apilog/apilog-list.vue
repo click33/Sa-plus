@@ -38,9 +38,9 @@
         <br>
         <el-form-item label="综合排序：" class="s-radio-text">
           <el-radio-group v-model="p.sortType">
-            <el-radio :label="0">默认</el-radio>
-            <el-radio :label="1">请求时间</el-radio>
-            <el-radio :label="2">请求耗时</el-radio>
+            <el-radio label="id">默认</el-radio>
+            <el-radio label="start_time">请求时间</el-radio>
+            <el-radio label="cost_time">请求耗时</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-form>
@@ -163,7 +163,7 @@ export default {
         adminId: '',
         sTime: '',
         eTime: '',
-        sortType: 0
+        sortType: 'id'
       },
       way: sa.p('way', 1),
       dataCount: 0,

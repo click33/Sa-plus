@@ -1,21 +1,25 @@
 <template>
   <div class="vue-box" style="display: none;" :style="'display: block;'">
     <div v-if="m != null" class="c-panel">
+      <!-- 提示 -->
+      <el-alert style="margin: 10px 0;"
+                type="blue" show-icon
+                title="Server-Config 非对外开放，用来配置一些敏感信息。"
+      >
+      </el-alert>
       <!-- tab卡片 -->
       <el-tabs v-model="activeTab" class="s-tab">
         <!-- ---------------------------------- 系统参数 ---------------------------------- -->
         <el-tab-pane label="系统参数" name="tab1">
-          <!-- <div class="c-item br">
+          <div class="c-item br">
             <label class="c-label">预留信息：</label>
-            <el-input v-model="m.reserve_info"></el-input>
-          </div> -->
-          <div class="c-item">
-            <label class="c-label">抛出SQL：</label>
-            <el-switch v-model="m.throwOutSql" :active-value="1" :inactive-value="2" />
-            <span v-if="m.throwOutSql==1" class="c-remark">开启</span>
-            <span v-else class="c-remark">关闭</span>
-            <span class="c-remark" style="color: red;">( 抛出sql只为方便调试，建议只在开发环境下打开此选项，生产环境请务必关闭 )</span>
+            <el-input v-model="m.reserveInfo"></el-input>
           </div>
+          <div style="height: 1px;"></div>
+          <sa-item type="img-list" name="新用户默认头像" v-model="m.userDefaultAvatar" br></sa-item>
+          <sa-item name="" style="margin-top: -20px;" br>
+            <span style="color: #999;">系统将从以上图片中随机选择一张作为新用户头像</span>
+          </sa-item>
         </el-tab-pane>
       </el-tabs>
 
@@ -54,8 +58,8 @@ export default {
     // 创建一个默认的配置对象
     create_m: function() {
       return {
-        reserve_info: '预留信息', // 预留信息
-        throwOutSql: 2,	// 是否隐藏sql，
+        reserveInfo: '预留信息', // 预留信息
+        userDefaultAvatar: '',	// 新用户默认头像
       }
     },
     // 初始化配置
@@ -110,4 +114,11 @@ export default {
 }
 .s-tab{height: 100%; }
 .vue-box >>> .el-tabs__content{height: calc(100% - 130px); overflow: auto;}
+
+/* 让头像样式小一点 */
+.vue-box >>> .c-item-mline{width: 600px;}
+.vue-box >>> .c-item-mline .image-box-2{width: 60px; height: 100px;}
+.vue-box >>> .c-item-mline .image-box-2 img{width: 60px; height: 60px;}
+.vue-box >>> .c-item-mline .image-box-2.up_img{height: 60px;}
+.vue-box >>> .c-item-mline .image-box-2.up_img img{margin: 15px; width: 30px; height: 30px;}
 </style>

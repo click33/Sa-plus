@@ -31,10 +31,10 @@
 
 export default {
   name: 'admin-add',
-  props: { p: Object },
+  props: { param: Object },
   data() {
     return {
-      id: (this.p && this.p.id) || 0, 	// 超级对象
+      id: (this.param && this.param.id) || 0, 	// 超级对象
       m: this.crateModel(),
       roleList: []
     }

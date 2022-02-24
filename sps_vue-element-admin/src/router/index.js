@@ -97,51 +97,8 @@ export const asyncRoutes = [
       title: '身份相关',
     },
     children: [
-      { name: '1', hidden: true, meta: { title: '身份-超管（最高权限）' }},
-      { name: '11', hidden: true, meta: { title: '身份-普通账号' }},
-      { name: '99', hidden: true, meta: { title: '允许进入后台管理' }},
-    ]
-  },
-
-  {
-    name: 'console',
-    path: '/sp-console',
-    component: Layout,
-    meta: {
-      title: '监控中心',
-      icon: 'el-icon-view'
-    },
-    children: [
-      {
-        name: 'sql-console',
-        path: 'sql-console',
-        component: () => import('@/sp-views/sp-console/sql-console.vue'),
-        meta: { title: 'SQL监控台' }
-      },
-      {
-        name: 'redis-console',
-        path: 'redis-console',
-        component: () => import('@/sp-views/sp-console/redis-console.vue'),
-        meta: { title: 'Redis监控台' }
-      },
-      {
-        name: 'apilog-list',
-        path: 'apilog-list',
-        component: () => import('@/sp-views/sp-apilog/apilog-list.vue'),
-        meta: { title: 'API请求日志' }
-      },
-      {
-        name: 'form-generator',
-        path: 'form-generator',
-        component: () => import('@/sp-views/sp-console/form-generator.vue'),
-        meta: { title: '在线表单构建' }
-      },
-      // {
-      //   name: 'sa-test',
-      //   path: 'sa-test',
-      //   component: () => import('@/views/test/sa-test'),
-      //   meta: { title: 'Test组件' }
-      // },
+      { name: 'dev', hidden: true, meta: { title: '开发者权限（最高权限）' }},
+      { name: 'in-system', hidden: true, meta: { title: '允许进入后台管理' }},
     ]
   },
 
@@ -177,7 +134,55 @@ export const asyncRoutes = [
         path: 'admin-add',
         component: () => import('@/sp-views/sp-admin/admin-add.vue'),
         meta: { title: '管理员添加' }
+      },
+      {
+        name: 'sp-admin-login',
+        path: 'sp-admin-login',
+        component: () => import('@/sp-views/sp-admin-login/sp-admin-login-list.vue'),
+        meta: { title: '管理员登录日志' }
       }
+    ]
+  },
+
+  {
+    name: 'console',
+    path: '/sp-console',
+    component: Layout,
+    meta: {
+      title: '监控中心',
+      icon: 'el-icon-view'
+    },
+    children: [
+      {
+        name: 'redis-console',
+        path: 'redis-console',
+        component: () => import('@/sp-views/sp-console/redis-console.vue'),
+        meta: { title: 'Redis监控台' }
+      },
+      {
+        name: 'apilog-list',
+        path: 'apilog-list',
+        component: () => import('@/sp-views/sp-apilog/apilog-list.vue'),
+        meta: { title: 'API请求日志' }
+      },
+      {
+        name: 'sql-console',
+        path: 'sql-console',
+        component: () => import('@/sp-views/sp-console/sql-console.vue'),
+        meta: { title: 'SQL 监控台' }
+      },
+      {
+        name: 'form-generator',
+        path: 'form-generator',
+        component: () => import('@/sp-views/sp-console/form-generator.vue'),
+        meta: { title: '在线表单构建' }
+      },
+      // {
+      //   name: 'sa-test',
+      //   path: 'sa-test',
+      //   component: () => import('@/views/test/sa-test'),
+      //   meta: { title: 'Test组件' }
+      // },
     ]
   },
 

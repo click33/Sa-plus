@@ -66,7 +66,7 @@ input::-webkit-inner-spin-button {
 .vue-box .el-textarea__inner,
 .vue-box .el-button,
 .s-foot .el-button{border-radius: 2px !important;}
-.vue-box .el-alert{padding: 1em 0.5em; border-radius: 0px !important;}
+.vue-box .el-alert{/*padding: 1em 0.5em; */border-radius: 0px !important;}
 
 .vue-box .el-form .el-button.el-button--mini{height: 28px;}
 
@@ -139,6 +139,11 @@ input::-webkit-inner-spin-button {
 .sbot-fluid .el-form .el-input,.sbot-fluid .el-form .el-select{width: calc(100% - 100px);}
 .sbot-fluid .el-form .el-select .el-input{width: 100%;}
 .sbot-fluid .c-item{padding-right: 0px}
+
+/* alert */
+.vue-box .el-alert--success.is-light{border: 1px #13ce66 solid;}
+.vue-box .el-alert--blue.is-light{border: 1px #28a0ff solid; color: #28a0ff; background-color: #e8f4ff;}
+.vue-box .el-alert.is-light .el-alert__closebtn{color: 666;}
 
   /* ===================== 表单相关 ===================== */
 

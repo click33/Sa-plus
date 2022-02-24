@@ -8,9 +8,8 @@ import XLSX from 'xlsx';
 
 // =========================== sa对象封装一系列工具方法 ===========================
 var sa = {
-  version: '2.4.3',
-  update_time: '2020-10-2',
-  info: '新增双击layer标题处全屏'
+  updateTime: '2022-2-25',
+  info: '调整 f5TableHeight 函数，使其可以在一个页面多个表格的情况下正常完成刷新'
 };
 
 // ===========================  当前环境配置  =======================================
@@ -126,11 +125,9 @@ var sa = {
     // 请求头，追加Token
     let headers = {
       "Content-Type": "application/x-www-form-urlencoded",
-      'X-Requested-With': 'XMLHttpRequest'
+      'X-Requested-With': 'XMLHttpRequest',
+      'satoken': sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken,
     };
-    if(localStorage.tokenName) {
-      headers[localStorage.tokenName] = localStorage.tokenValue;
-    }
 
     // 开始请求ajax
     return axios({
@@ -441,7 +438,7 @@ var sa = {
   // 监听回车事件，达到回车关闭弹窗的效果
   if(window.$) {
     $(document).on('keydown', function(event) {
-      if(event.keyCode === 13 && $(".layui-layer-btn0").length == 1 && !window.is_not_watch_enter && $(this).find('.layui-layer-input').length == 0){
+      if(event.keyCode === 13 && $(".layui-layer-btn0").length === 1 && !window.is_not_watch_enter && $(this).find('.layui-layer-input').length === 0){
         $(".layui-layer-btn0").click();
         return false;
       }
@@ -449,8 +446,8 @@ var sa = {
   }
 
   // 显示全局dialog
-  me.showModel = function(title, view, p) {
-    me.osModel.showModel(title, view, p);
+  me.showModel = function(title, view, param) {
+    me.osModel.showModel(title, view, param);
   };
 
   // 关闭全局dialog
@@ -1080,23 +1077,27 @@ var sa = {
     // 刷新表格高度, 请务必在所有表格高度发生变化的地方调用此方法
     me.f5TableHeight = function() {
       Vue.nextTick(function() {
-        if($('.el-table.data-table .el-table__body-wrapper table').length == 0) {
+        if($('.el-table.data-table .el-table__body-wrapper table').length === 0) {
           return;
         }
         var _f5Height = function() {
-          var height = $('.el-table .el-table__body-wrapper table').height();
-          height = height == 0 ? 60 : height;
-          // 判断是否有滚动条
-          var tw = $('.el-table .el-table__body-wrapper').get(0);
-          if(tw.scrollWidth > tw.clientWidth) {
-            height = height + 16;
-          }
-          if($('.el-table .el-table__body-wrapper table td').width() == 0) {
-            return;
-          }
-          // 设置高度
-          $('.el-table .el-table__body-wrapper').css('min-height', height);
-          $('.el-table .el-table__body-wrapper').css('max-height', height);
+          // 循环这个页面上的所有表格，重新调整高度
+          $('.el-table.data-table').each(function () {
+            var table = this;
+            var height = $(table).find('.el-table__body-wrapper table').height();
+            height = height === 0 ? 60 : height;
+            // 判断是否有滚动条
+            var tw = $(table).find('.el-table__body-wrapper').get(0);
+            if(tw.scrollWidth > tw.clientWidth) {
+              height = height + 16;
+            }
+            if($(table).find('.el-table__body-wrapper table td').width() === 0) {
+              return;
+            }
+            // 设置高度
+            $(table).find('.el-table__body-wrapper').css('min-height', height);
+            $(table).find('.el-table__body-wrapper').css('max-height', height);
+          })
         };
 
         setTimeout(_f5Height, 0)

@@ -13,6 +13,17 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
 
+        <template v-if="runAsToken">
+          <div class="right-menu-item hover-effect" style="font-size: 14px;">
+            <span style="font-size: 0.8em; font-weight: bold; ">当前模拟登录账号：{{sa.$sys.getCurrUser().id}}，</span>
+            <span style="font-size: 0.8em; color: #44f; text-decoration: underline; cursor: pointer;" @click="closeRunAs()">退出</span>
+          </div>
+        </template>
+<!--			<span title="模拟登陆" v-if="runAsToken">
+				<span style="font-size: 0.8em; font-weight: bold; ">当前模拟登录账号：{{sa.$sys.getCurrUser().id}}，</span>
+				<span style="font-size: 0.8em; color: #44f; text-decoration: underline; cursor: pointer;" @click="$root.closeRunAs()">退出</span>
+			</span>-->
+
         <el-dropdown v-if="$store.getters.name" class="avatar-container right-menu-item hover-effect" trigger="click" size="medium">
           <div class="avatar-wrapper" style="line-height: 50px; margin-top: 0px;">
             <img :src="$store.getters.avatar" class="user-avatar" style=" vertical-align: middle;">
@@ -69,6 +80,11 @@ export default {
     Hamburger,
     Screenfull,
     Search
+  },
+  data() {
+    return {
+      runAsToken: sessionStorage.runAsToken,	// 模拟登陆-Token
+    }
   },
   computed: {
     ...mapGetters([
@@ -139,6 +155,18 @@ export default {
           sa.alert('注销成功', function() {
             _this.$router.push(`/login?redirect=${_this.$route.fullPath}`);
           })
+        })
+      });
+    },
+    // 退出模拟登录
+    closeRunAs: function() {
+      sa.layer.confirm('退出模拟登录？', function() {
+        sa.ajax('/AccAdmin/doExit', function(res) {
+          sa.ok('退出成功，即将刷新页面');
+          sessionStorage.removeItem('runAsToken');
+          setTimeout(function() {
+            top.location.reload(true);
+          }, 1000);
         })
       });
     }

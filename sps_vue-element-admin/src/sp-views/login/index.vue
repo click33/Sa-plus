@@ -53,6 +53,7 @@
 <script>
 import store from '@/store'
 import router from '@/router'
+import sa from "@/sa-frame/sa";
 
 export default {
   name: 'sa-login',
@@ -94,8 +95,13 @@ export default {
       this.sa.ajax('/AccAdmin/doLogin', this.m, function(res){
         // 写入token
         if (res.data.tokenInfo) {
-          localStorage.tokenName = res.data.tokenInfo.tokenName;
-          localStorage.tokenValue = res.data.tokenInfo.tokenValue;
+          if(this.m.remember) {
+            sessionStorage.removeItem('satoken');
+            localStorage.setItem('satoken', res.data.tokenInfo.tokenValue);
+          } else {
+            localStorage.removeItem('satoken');
+            sessionStorage.setItem('satoken', res.data.tokenInfo.tokenValue);
+          }
         }
 
         // 写入当前账号信息
@@ -106,8 +112,11 @@ export default {
         })
 
         // 写入权限码
-        sa.setAuth(res.data.per_list);
-        this.$store.commit('permission/setPerCodes', res.data.per_list);
+        sa.setAuth(res.data.perList);
+        this.$store.commit('permission/setPerCodes', res.data.perList);
+
+        // 配置信息
+        sa.$sys.setAppCfg(res.data.appCfg);
 
         // 打个招呼，进入 index
         this.sa.msg('欢迎你：' + this.m.key);

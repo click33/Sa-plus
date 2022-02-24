@@ -25,7 +25,8 @@
         </el-table-column>
         <el-table-column label="是否锁定" title="锁定的角色为系统维持正常运行的重要角色，不可删除">
           <template slot-scope="s">
-            {{ s.row.isLock == 1 ? '是' : '否' }}
+            <el-tag v-if="s.row.isLock == 1">已锁定</el-tag>
+            <el-tag v-else type="success">未锁定</el-tag>
           </template>
         </el-table-column>
         <el-table-column label="创建日期">
@@ -134,5 +135,5 @@ export default {
 </script>
 
 <style scoped>
-
+  .el-tag{border-radius: 0px;}
 </style>

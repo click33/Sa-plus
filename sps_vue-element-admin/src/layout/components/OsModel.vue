@@ -16,10 +16,10 @@
       <div>
         <!-- ------- 内容部分 ------- -->
         <div class="s-body">
-          <component :is="dg.view" ref="os-model-view" :p="dg.p" />
+          <component :is="dg.view" ref="os-model-view" :param="dg.param" />
         </div>
         <!-- ------- 底部按钮 ------- -->
-        <div v-if="dg.p.btn" class="s-foot">
+        <div v-if="dg.param.btn" class="s-foot">
           <el-button :type="getBtnType()" @click="ok">确定</el-button>
           <el-button @click="closeModel()">取消</el-button>
         </div>
@@ -38,7 +38,7 @@ export default {
         show: false, // 是否显示
         title: '提示', // 标题
         view: null, // view视图
-        p: { // view视图的参数
+        param: { // view视图的参数
           btn: true
         },
       }
@@ -49,14 +49,15 @@ export default {
   },
   methods: {
     // 显示全局dialog
-    showModel: function(title, view, p) {
+    showModel: function(title, view, param) {
       // console.log('显示窗口')
-      p = p || {};
-      p.btn = (p.btn === undefined ? true : p.btn);
+      param = param || {};
+      param.btn = (param.btn === undefined ? true : param.btn);
+      param.isModel = true;
 
       this.dg.title = title || '信息';
       this.dg.view = view;
-      this.dg.p = p;
+      this.dg.param = param;
       this.dg.show = true;
     },
 
