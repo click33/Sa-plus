@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
+import com.pj.utils.sg.NbUtil;
 
 /**
  * DB活动配置操作工具类
@@ -71,7 +72,7 @@ public class SpCfgUtil {
 
 	/** 获取app端全部配置信息 */
 	public static String getAppCfg() {
-		return sysCfgService.getCfgValue("AppCfg");
+		return sysCfgService.getCfgValue("app_cfg");
 	}
 
 	// --- app  
@@ -89,11 +90,13 @@ public class SpCfgUtil {
 	public static String reserveInfo() {
 		return SpCfgUtil.getServerCfg("reserveInfo", "");
 	}
-	/** 是否在发生sql异常时，抛出sql，方便调试   */
-	public static boolean throwOutSql() {
-		return SpCfgUtil.getServerCfg("throwOutSql", "2").equals("1");
-	}
 
+	/** 随机返回一个：新用户头像地址 */
+	public static String userDefaultAvatar() {
+		String[] avatarArray = SpCfgUtil.getServerCfg("userDefaultAvatar", "").split(",");
+		int index = NbUtil.getRandom(0, avatarArray.length - 1);
+		return avatarArray[index];
+	}
 	
 	
 	

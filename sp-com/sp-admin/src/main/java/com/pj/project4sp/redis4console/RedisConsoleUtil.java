@@ -102,7 +102,13 @@ public class RedisConsoleUtil {
 	/** 获取单个的详情 */
 	public static SoMap getByKey(String key) {
 		// 键值 
-		String value = stringRedisTemplate.opsForValue().get(key);
+		String value = null;
+		try {
+			value = stringRedisTemplate.opsForValue().get(key);
+		} catch (Exception e) {
+			value = "未能成功获取：" + e.getMessage();
+		}
+		
 		// 过期时间 
 		long expire = stringRedisTemplate.getExpire(key);	
 		
@@ -141,10 +147,13 @@ public class RedisConsoleUtil {
 
 	/** 修改一个值的ttl  */
 	public static void updateTtl(String key, long ttl) {
-		if(ttl <= 0) {
+		if(ttl < 0) {
+			// 注意此处可能因为序列化格式的不同，导致数据修改为无效数据 
 			String value = stringRedisTemplate.opsForValue().get(key);
 			stringRedisTemplate.opsForValue().set(key, value);
 			return;
+			// 禁止修改
+//			throw AjaxError.get("ttl值需要>=0");
 		}
 		stringRedisTemplate.expire(key, ttl, TimeUnit.SECONDS);
 	}

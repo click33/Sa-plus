@@ -145,22 +145,6 @@ public class WebNbUtil {
 	
 	
 	/**
-	 * 返回请求端的IP地址
-	 */
-	public static String getIP(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		ip = checkIp(ip) ? ip : (
-                checkIp(ip = request.getHeader("Proxy-Client-IP")) ? ip : (
-                        checkIp(ip = request.getHeader("WL-Proxy-Client-IP")) ? ip :
-                                request.getRemoteAddr()));
-		return ip.equals("0:0:0:0:0:0:0:1") ? "127.0.0.1" : ip;
-	}
-	
-	private static boolean checkIp(String ip) {
-        return !NbUtil.isNull(ip) && !"unknown".equalsIgnoreCase(ip);
-    }
-
-	/**
 	 * 返回指定地址在服务器上的绝对路径
 	 */
 	public static String getRealPath(HttpSession session, String path) {

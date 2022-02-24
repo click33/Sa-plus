@@ -17,7 +17,7 @@ import cn.dev33.satoken.stp.StpUtil;
 public class SpAdminUtil {
 
 	
-	static SpAdminMapper spAdminMapper;
+	public static SpAdminMapper spAdminMapper;
 	@Autowired
 	public void setSpAdminMapper(SpAdminMapper spAdminMapper) {
 		SpAdminUtil.spAdminMapper = spAdminMapper;

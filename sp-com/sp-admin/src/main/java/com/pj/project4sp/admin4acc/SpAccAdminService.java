@@ -1,25 +1,29 @@
-package com.pj.project4sp.admin4login;
+package com.pj.project4sp.admin4acc;
 
 
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.pj.current.config.SystemObject;
-import com.pj.project4sp.SP;
 import com.pj.project4sp.admin.SpAdmin;
 import com.pj.project4sp.admin.SpAdminMapper;
+import com.pj.project4sp.admin4login.SpAdminLogin;
+import com.pj.project4sp.admin4login.SpAdminLoginMapper;
 import com.pj.project4sp.role4permission.SpRolePermissionService;
+import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxJson;
+import com.pj.utils.sg.IpUtil;
 import com.pj.utils.sg.NbUtil;
-import com.pj.utils.sg.WebNbUtil;
 import com.pj.utils.so.SoMap;
 
 import cn.dev33.satoken.spring.SpringMVCUtil;
 import cn.dev33.satoken.stp.StpUtil;
+import eu.bitwalker.useragentutils.UserAgent;
 
 /**
  * service：admin账号相关
@@ -29,25 +33,23 @@ import cn.dev33.satoken.stp.StpUtil;
 @Service
 public class SpAccAdminService {
 
-	
-
-	@Autowired
-	SpAccAdminMapper spAccAdminMapper;
-
 	@Autowired
 	SpAdminMapper spAdminMapper;
 	
 	@Autowired
 	SpRolePermissionService spRolePermissionService;
-	
+
+	@Autowired
+	SpAdminLoginMapper sysLoginLogMapper;
 	
 	/**
 	  * 登录 
-	 * @param name 店铺名称
-	 * @param password 店铺密码 
+	 * @param key 账号 (ID / 名称 / 手机号)
+	 * @param password 密码 
 	 * @return
 	 */
-	AjaxJson doLogin(String key, String password) {
+	@Transactional(rollbackFor = Exception.class)
+	public AjaxJson doLogin(String key, String password) {
 		
 		// 0、判断 way (1=ID, 2=昵称，3=手机号  )
     	int way = 2;	
@@ -89,48 +91,46 @@ public class SpAccAdminService {
         }
 
         // =========== 至此, 已登录成功 ============ 
-        successLogin(admin);
         StpUtil.login(admin.getId()); 		
+        String tokenValue = StpUtil.getTokenValue();
+        successLogin(admin, tokenValue);
         
         // 组织返回参数  
 		SoMap map = new SoMap();
 		map.put("admin", admin);
-		map.put("per_list", spRolePermissionService.getPcodeByRid2(admin.getRoleId()));
+		map.put("appCfg", SpCfgUtil.getAppCfg());
+		map.put("perList", spRolePermissionService.getPcodeByRid(admin.getRoleId()));
 		map.put("tokenInfo", StpUtil.getTokenInfo());
 		return AjaxJson.getSuccessData(map);	
 	}
-	
 	
 	/**
 	 * 指定id的账号成功登录一次 （修改最后登录时间等数据 ）
 	 * @param s
 	 * @return
 	 */
-	public int successLogin(SpAdmin s){
-		String loginIp = WebNbUtil.getIP(SpringMVCUtil.getRequest());
-		int line = spAccAdminMapper.successLogin(s.getId(), loginIp);
+	void successLogin(SpAdmin s, String tokenValue){
+		HttpServletRequest request = SpringMVCUtil.getRequest();
+		UserAgent ua = UserAgent.parseUserAgentString(request.getHeader("user-agent"));
+		String loginIp = IpUtil.getIP(request);
+		
+		// 1、修改 admin表 最后登录日志 
+		int line = spAdminMapper.updateLoginLog(s.getId(), loginIp);
 		if(line > 0) {
 	        s.setLoginIp(loginIp);
 	        s.setLoginTime(new Date());
 	        s.setLoginCount(s.getLoginCount() + 1);
 		}
-        return line;
+		
+		// 2、在管理员登录日志表增加记录 
+		SpAdminLogin al = new SpAdminLogin();	// 声明对象 
+		al.setAccId(s.getId());		// 管理员id 
+		al.setAccToken(tokenValue);	// 本次登录Token 
+		al.setLoginIp(loginIp);		// 登陆IP 
+		al.setAddress(IpUtil.getAddres(loginIp));		// 客户端所在地址 
+		al.setDevice(ua.getBrowser().getName());	// 客户端标识 
+		al.setSystem(ua.getOperatingSystem().getName()); 	// 客户端系统 
+		sysLoginLogMapper.add(al);
 	}
-	
-	/**
-	 * 修改手机号  
-	 * @param adminId
-	 * @param newPhone
-	 * @return
-	 */
-	@Transactional(rollbackFor = Exception.class, propagation=Propagation.REQUIRED)
-	public AjaxJson updatePhone(long adminId, String newPhone) {
-		// 修改admin手机号
-		int line = SP.publicMapper.updateColumnById("sys_admin", "phone", newPhone, adminId);
-		return AjaxJson.getByLine(line);
-	}
-	
-	
-	
 	
 }

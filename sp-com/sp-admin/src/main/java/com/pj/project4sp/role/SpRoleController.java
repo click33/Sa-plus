@@ -2,8 +2,6 @@ package com.pj.project4sp.role;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +13,7 @@ import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.AjaxJson;
 import com.pj.utils.so.SoMap;
 
-import cn.dev33.satoken.stp.StpUtil;
+import cn.dev33.satoken.annotation.SaCheckPermission;
 
 /**
  * Controller: 系统角色表
@@ -31,9 +29,9 @@ public class SpRoleController {
 
 	/** 增 */
 	@RequestMapping("add")
+	@SaCheckPermission(AuthConst.ROLE_LIST)
 	@Transactional(rollbackFor = Exception.class)
-	AjaxJson add(SpRole s, HttpServletRequest request){
-		StpUtil.checkPermission(AuthConst.ROLE_LIST);
+	public AjaxJson add(SpRole s){
 		// 检验
 		if(spRoleMapper.getById(s.getId()) != null) {
 			return AjaxJson.getError("此id已存在，请更换");
@@ -51,18 +49,16 @@ public class SpRoleController {
 
 	/** 删 */
 	@RequestMapping("delete")
-	AjaxJson delete(long id, HttpServletRequest request){
-		StpUtil.checkPermission(AuthConst.R1);	
-		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
+	@SaCheckPermission({AuthConst.ROLE_LIST, AuthConst.DEV})
+	AjaxJson delete(long id){
 		int line = spRoleMapper.delete(id);
 		return AjaxJson.getByLine(line);
 	}
 
 	/** 改 */ 
 	@RequestMapping("update")
+	@SaCheckPermission({AuthConst.ROLE_LIST, AuthConst.DEV})
 	AjaxJson update(SpRole s){
-		StpUtil.checkPermission(AuthConst.R1);	
-		StpUtil.checkPermission(AuthConst.ROLE_LIST);	
 		SpRoleUtil.checkRoleThrow(s);
 		int line = spRoleMapper.update(s);
 		return AjaxJson.getByLine(line);
@@ -70,23 +66,19 @@ public class SpRoleController {
 
 	/** 查 */ 
 	@RequestMapping("getById")
+	@SaCheckPermission(AuthConst.IN_SYSTEM)
 	AjaxJson getById(long id){
-		StpUtil.checkPermission(AuthConst.R99);	
 		SpRole s = spRoleMapper.getById(id);
 		return AjaxJson.getSuccessData(s);
 	}
 
 	/** 查 - 集合  */
 	@RequestMapping("getList")
+	@SaCheckPermission(AuthConst.IN_SYSTEM)
 	AjaxJson getList(){
-		StpUtil.checkPermission(AuthConst.R99);	
 		SoMap so = SoMap.getRequestSoMap();
 		List<SpRole> list = spRoleMapper.getList(so);
 		return AjaxJson.getSuccessData(list);
 	}
-
-
-	
-	
 
 }

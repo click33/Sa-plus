@@ -19,7 +19,6 @@ import com.pj.utils.sg.NbUtil;
 @RequestMapping("/AdminPassword/")
 public class SpAdminPasswordController {
 
-	
 	@Autowired
 	SpAdminPasswordService spAdminPasswordService;
 
@@ -43,8 +42,5 @@ public class SpAdminPasswordController {
 		int line = spAdminPasswordService.updatePassword(a.getId(), newPwd);
 		return AjaxJson.getByLine(line);
 	}
-	
-	
-	
 	
 }

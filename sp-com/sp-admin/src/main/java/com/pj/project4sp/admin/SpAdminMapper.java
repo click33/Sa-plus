@@ -3,6 +3,7 @@ package com.pj.project4sp.admin;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.pj.utils.so.SoMap;
 
@@ -64,5 +65,13 @@ public interface SpAdminMapper {
 	SpAdmin getByPhone(String phone);
 
 
+	/**
+	 * 修改指定账号的 最后登录记录  
+	 * @param id
+	 * @param loginIp
+	 * @return
+	 */
+	public int updateLoginLog(@Param("id")long id, @Param("loginIp")String loginIp);
+	
 
 }

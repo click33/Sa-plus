@@ -30,7 +30,6 @@ public class SystemObject {
 	}
 	
 	
-	
 	// ===================================== yml自定义配置信息 ===================================================
 	
 	public static MyConfig config;
@@ -38,6 +37,5 @@ public class SystemObject {
 	void setMyConfig(MyConfig config) {
 		SystemObject.config = config;
 	}
-		
 	
 }

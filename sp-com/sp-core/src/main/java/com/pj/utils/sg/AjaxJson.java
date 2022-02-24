@@ -68,7 +68,7 @@ public class AjaxJson extends LinkedHashMap<String, Object> implements Serializa
 		return this;
 	}
 	/** 获取data */
-	public String getData() {
+	public Object getData() {
 		return (String)this.get("data");
 	}
 	/** 将data还原为指定类型并返回 */
@@ -96,8 +96,8 @@ public class AjaxJson extends LinkedHashMap<String, Object> implements Serializa
 		return this;
 	}
 	/** 获取dataCount(数据总数) */
-	public String getDataCount() {
-		return (String)this.get("dataCount");
+	public Long getDataCount() {
+		return (Long)this.get("dataCount");
 	}
 	
 	/** 设置pageNo 和 pageSize，并计算出startIndex于pageCount */
@@ -140,7 +140,9 @@ public class AjaxJson extends LinkedHashMap<String, Object> implements Serializa
 		this.setCode(code);
 		this.setMsg(msg);
 		this.setData(data);
-		this.setDataCount(dataCount == null ? -1 : dataCount);
+		if(dataCount != null) {
+			this.setDataCount(dataCount);
+		}
 	}
 	
 	/** 返回成功 */

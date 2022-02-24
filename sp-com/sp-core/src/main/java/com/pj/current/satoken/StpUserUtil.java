@@ -2,8 +2,6 @@ package com.pj.current.satoken;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.fun.SaFunction;
 import cn.dev33.satoken.session.SaSession;
@@ -13,16 +11,15 @@ import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
 
 /**
- * Sa-Token 权限认证工具类 (User版本) 
+ * Sa-Token 权限认证工具类 (User版本)
  * @author kong 
  */
-@Component
 public class StpUserUtil {
 	
 	/**
 	 * 账号类型标识 
 	 */
-	public static final String TYPE = "user";
+	public static final String TYPE = "login";
 	
 	/**
 	 * 底层的 StpLogic 对象  

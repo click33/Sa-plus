@@ -1,14 +1,13 @@
-package com.pj.project4sp.global;
+package com.pj.current.global;
 
 import java.sql.SQLException;
 
 import org.springframework.data.redis.RedisConnectionFailureException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.pj.current.config.SystemObject;
 import com.pj.project4sp.apilog.SpApilogUtil;
-import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxError;
 import com.pj.utils.sg.AjaxJson;
 
@@ -16,16 +15,16 @@ import cn.dev33.satoken.exception.NotLoginException;
 import cn.dev33.satoken.exception.NotPermissionException;
 
 /**
- * 全局异常拦截 
+ * 全局异常处理 
+ * 
  * <p> @ControllerAdvice 可指定包前缀，例如：(basePackages = "com.pj.controller.admin")
  * @author kong
  *
  */
-@ControllerAdvice
-public class GlobalException {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
 	/** 全局异常拦截  */
-	@ResponseBody
 	@ExceptionHandler
 	public AjaxJson handlerException(Exception e) {
 
@@ -53,7 +52,7 @@ public class GlobalException {
 			aj = AjaxJson.get(ee.getCode(), ee.getMessage());
 		}  
 		// 如果是SQLException，并且指定了hideSql，则只返回sql error 
-		else if((e instanceof SQLException || e2 instanceof SQLException) && SpCfgUtil.throwOutSql() == false) {	
+		else if((e instanceof SQLException || e2 instanceof SQLException) && SystemObject.config.getThrowSql() == false) {	
 			// 无论是否打开隐藏sql，日志表记录的都是真实异常信息 
 			aj = AjaxJson.getError(e2.getMessage());
 			SpApilogUtil.endRequest(aj);	
@@ -77,5 +76,5 @@ public class GlobalException {
 		aj.set("reqId", SpApilogUtil.getCurrReqId());
 		return aj;
 	}
-
+	
 }

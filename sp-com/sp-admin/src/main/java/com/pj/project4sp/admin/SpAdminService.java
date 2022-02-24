@@ -25,7 +25,6 @@ public class SpAdminService {
 	@Autowired
 	SpAdminPasswordService spAdminPasswordService;
 	
-	
 	/**
 	 * 管理员添加一个管理员 
 	 * @param admin
@@ -48,8 +47,5 @@ public class SpAdminService {
 		// 返回主键 
 		return id;
 	}
-	
-	
-	
 	
 }

@@ -16,9 +16,9 @@ public final class AuthConst {
 	
 	// --------------- 代表身份的权限 --------------- 
 	
-	public static final String R1 = "1"; 			 // 角色_id_超级管理员 最高权限，超管身份的代表
-	public static final String R11 = "11"; 		 // 
-	public static final String R99 = "99";		  // 进入后台权限，没有此权限无法进入后台管理
+	public static final String BAS = "bas"; 			 // 身份相关 
+	public static final String DEV = "dev"; 			 // 开发者权限 	--- 系统最高权限
+	public static final String IN_SYSTEM = "in-system";		  // 进入后台权限，没有此权限无法进入后台管理
 	
 	
 	// --------------- 所有权限码 --------------- 
@@ -37,6 +37,11 @@ public final class AuthConst {
 	public static final String SP_CFG = "sp-cfg";		  	 // 系统配置
 	public static final String SP_CFG_APP = "sp-cfg-app";		  	 // 系统配置 - 系统对公配置
 	public static final String SP_CFG_SERVER = "sp-cfg-server";		   // 系统配置 - 服务器私有配置
+
 	
+	// --------------- 其它常量 --------------- 
+	
+	/** 在 SaSession 上存储 角色id 使用的key */
+	public static final String ROLE_ID_KEY = "ROLE_ID";		   
 	
 }

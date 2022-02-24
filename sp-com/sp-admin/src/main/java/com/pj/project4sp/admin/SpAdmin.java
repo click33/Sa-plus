@@ -30,13 +30,13 @@ public class SpAdmin implements Serializable  {
 	public String password;	
 	
 	/** 明文密码 */
-	public String pw;	
+	// public String pw;	
 	
 	/** 手机号 */
 	public String phone;	
 	
 	/** 所属角色id */
-	public Integer roleId;	
+	public Long roleId;	
 	
 	/** 账号状态(1=正常, 2=禁用) */
 	public Integer status;	

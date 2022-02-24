@@ -86,9 +86,9 @@
 		<if test=' this.has("eTime") '>and start_time &lt;= #{eTime} </if>
 		order by 
 		<choose>
-			<when test='sortType == 0'>id desc</when> 
-			<when test='sortType == 1'>start_time desc, id desc</when> 
-			<when test='sortType == 2'>cost_time desc, id desc</when> 
+			<when test='sortType == "id" '>id desc</when> 
+			<when test='sortType == "start_time" '>start_time desc, id desc</when> 
+			<when test='sortType == "cost_time" '>cost_time desc, id desc</when> 
 		 	<otherwise>id desc</otherwise>
 		 </choose>
 	</select>
