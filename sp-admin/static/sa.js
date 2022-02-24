@@ -116,9 +116,7 @@ var sa = {
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-Requested-With','XMLHttpRequest');
 				// 追加token
-				if(localStorage.tokenName) {
-					xhr.setRequestHeader(localStorage.tokenName, sessionStorage.runAsToken || localStorage.tokenValue);
-				}
+				xhr.setRequestHeader('satoken', sessionStorage.runAsToken || sessionStorage.satoken || localStorage.satoken);
 			},
 			success: function(res){
 				console.log('返回数据：', res);

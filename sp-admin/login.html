@@ -20,14 +20,19 @@
 			.login-top{margin-top: 0px; margin-bottom: 30px;}
 			.logo-img{width: 50px; height: 50px; vertical-align: middle; position: relative; top: -3px; border-radius: 50%; margin-left: -10px; margin-right: 10px;}
 			.logo-img{display: none;}
-			.login-button{width: 270px; border-radius: 0px; transition: all 0.2s;}
+			.login-button{width: 300px; border-radius: 0px; transition: all 0.2s; margin-top: 30px;}
 			.login-button:hover{background-color: #0E80eF;}
 			/* .page-title{line-height: 50px;} */
 			.sk-rotating-plane{}
 			/* 动画相关 */
 			/* .login{background-color: rgba(0,0,0,0); } */
-			.login{opacity: 0;}
+			.login{opacity: 0; width: 380px;}
+			.login-center-input{width: 260px;}
 			
+			.login-box .remember-box{color: #888; margin-bottom: 10px;}
+			.remember-box label{cursor: pointer; }
+			.remember-box [type=checkbox]{position: relative; top: 2px; margin-right: 2px;}
+			.remember-box .remark-text{float: right; position: relative; top: 1px; margin-right: 5px;}
 		</style>
 	</head>
 	<body>
@@ -53,6 +58,10 @@
 							<div class="login-center-input-text">密码</div>
 						</div>
 					</div>
+					<div class="login-center clearfix remember-box">
+						<label><input type="checkbox" id="remember"> 记住我</label>
+						<span class="remark-text">测试：sa/123456</span>
+					</div>
 					<div class="login-button">登录</div>
 				</div>
 			</div>
@@ -70,7 +79,7 @@
 			// 你所有要改的代码全在这里   ↓↓↓↓↓ 
 			
 			// 所有参考属性  
-			var page_title = 'sa-plus 后台登录';		// 页面标题 
+			var page_title = 'Sa-Plus 后台 - 登录';		// 页面标题 
 			var key = 'sa';							// 默认的账号
 			var password = '123456';				// 默认的password  
 			var logo = 'sa-frame/admin-logo.png';	// logo地址，为空字符串则不显示 
@@ -80,7 +89,8 @@
 				// 1、取值 
 				var p = {
 					key: $('[name=key]').val(),
-					password: $('[name=password]').val()
+					password: $('[name=password]').val(),
+					remember: $('#remember').is(':checked')
 				}
 				// 2、判断
 				if(p.key == '' || p.password == ''){
@@ -90,8 +100,13 @@
 				sa.ajax('/AccAdmin/doLogin', p, function(res){
 					// 写入token
 					if(res.data.tokenInfo) {
-						localStorage.tokenName = res.data.tokenInfo.tokenName; 
-						localStorage.tokenValue = res.data.tokenInfo.tokenValue; 
+						if(p.remember) {
+							sessionStorage.removeItem('satoken');
+							localStorage.setItem('satoken', res.data.tokenInfo.tokenValue);
+						} else {
+							localStorage.removeItem('satoken');
+							sessionStorage.setItem('satoken', res.data.tokenInfo.tokenValue);
+						}
 					}
 					// 写入账号 
 					sa.$sys.setCurrUser(res.data.admin);

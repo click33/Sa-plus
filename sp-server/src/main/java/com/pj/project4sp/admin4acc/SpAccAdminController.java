@@ -51,7 +51,7 @@ public class SpAccAdminController {
 	
 	/** 获取会话信息 */
 	@RequestMapping("getLoginInfo")
-	AjaxJson getLoginInfo(HttpServletRequest request) {
+	AjaxJson getLoginInfo() {
 		// 当前admin
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		

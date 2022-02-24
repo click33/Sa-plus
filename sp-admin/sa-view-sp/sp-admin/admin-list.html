@@ -61,7 +61,7 @@
 					<sa-td type="datetime" name="最后登录" prop="loginTime" width="150px"></sa-td>
 					<sa-td type="text" name="登录次数" prop="loginCount" not="0" width="100px"></sa-td>
 					<sa-td type="switch" name="账号状态" prop="status" :jv="{1: '正常', 2: '禁用[#ff4949]'}" @change="s => updateStatus(s.row)" width="120px"></sa-td>
-					<el-table-column label="操作" fixed="right" width="500px">
+					<el-table-column label="操作" fixed="right" width="460px">
 						<template slot-scope="s">
 							<span @click="getInfo(s.row)">
 								<el-button type="success" class="c-btn" icon="el-icon-view">查看</el-button>
@@ -96,7 +96,7 @@
 								</el-dropdown-menu>
 							</el-dropdown>
 							<span @click="runAs(s.row)">
-								<el-button type="warning" class="c-btn" icon="el-icon-coordinate">模拟登录</el-button>
+								<el-button type="warning" class="c-btn">模拟登录</el-button>
 							</span>
 							<span @click="del(s.row)">
 								<el-button type="danger" class="c-btn" icon="el-icon-delete">删除</el-button>
