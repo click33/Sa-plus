@@ -6,7 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import ${cfg.package_utils};
+import com.pj.utils.sg.*;
+import com.pj.utils.so.*;
 import com.pj.project4sp.SP;
 
 import com.pj.current.satoken.StpUserUtil;

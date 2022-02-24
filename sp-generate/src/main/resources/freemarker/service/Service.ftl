@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import ${cfg.package_utils};
+import com.pj.utils.so.*;
 
 /**
  * Service: ${t.tableName} -- ${t.tableComment}

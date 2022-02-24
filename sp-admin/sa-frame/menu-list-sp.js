@@ -31,9 +31,9 @@ window.menuList.unshift(
 		icon: 'el-icon-view',
 		info: '对本系统的各种监控',
 		childList: [
-			{id: 'sql-console', name: 'SQL监控台', url: 'sa-view-sp/sp-console/sql-console.html', info: 'sql控制台'},
 			{id: 'redis-console', name: 'Redis控制台', url: 'sa-view-sp/sp-console/redis-console.html', info: 'redis常用工具'},
 			{id: 'apilog-list', name: 'API请求日志', url: 'sa-view-sp/sp-apilog/api-log-list.html', info: '记录本系统所有的api请求'},
+			{id: 'sql-console', name: 'SQL 监控台', url: 'sa-view-sp/sp-console/sql-console.html', info: 'sql控制台'},
 			{id: 'form-generator', name: '在线表单构建', url: 'https://mrhj.gitee.io/form-generator/#/'},
 		]
 	},

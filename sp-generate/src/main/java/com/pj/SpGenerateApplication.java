@@ -66,7 +66,7 @@ public class SpGenerateApplication {
 			.setWebLibImportWay(1) 			// 前端js库导入方式(1=cdn导入, 2=本地导入[需将sa-admin附带js包复制到kj文件夹])
 			// .addTableName("sys_user")	// 添加要生成的表 (单个添加)
 			.addTableAll()		// 添加要生成的表 (一次性添加所有表)
-            .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
+            .removeTableName("sp_role", "sp_role_permission", "sp_admin", "sp_admin_login", "sp_apilog", "sp_cfg")	// 移除这些内置的表，不必生成代码
             ; 
 		
 		System.out.println("\n\n\n--------------------------------------------\n\n\n");
