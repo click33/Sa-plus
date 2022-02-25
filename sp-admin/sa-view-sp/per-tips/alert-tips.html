@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>演示提示</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<!-- 所有的 css & js 资源 -->
+		<link rel="stylesheet" href="https://unpkg.com/element-ui@2.13.0/lib/theme-chalk/index.css">
+		<link rel="stylesheet" href="../../static/sa.css"> 
+		<script src="https://unpkg.com/vue@2.6.10/dist/vue.min.js"></script>
+		<script src="https://unpkg.com/element-ui@2.13.0/lib/index.js"></script>
+		<script src="https://unpkg.com/jquery@3.4.1/dist/jquery.min.js"></script>
+		<script src="https://www.layuicdn.com/layer-v3.1.1/layer.js"></script>
+		<script src="../../static/sa.js"></script>
+		<style type="text/css">
+			.vue-box{background-color: #FFF;}
+			.c-panel{line-height: 26px; padding: 1em 0.5em;}
+			.q-a-box{margin-bottom: 20px;}
+			.q-a-box h2{margin-bottom: 10px; font-size: 18px;}
+			.q-a-box p{color: #333;}
+			.s-bottom{position: fixed; width: 100%; bottom: 0px; background-color: #FFF; border-top: 1px #ccc solid; line-height: 60px; margin-bottom: 0px;}
+		</style>
+	</head>
+	<body>
+		<div class="vue-box" style="display: none;" :style="'display: block;'">
+			<div class="c-panel">
+				<!-- <h1>演示说明</h1>
+				<br> -->
+				<!-- ----------- 一个问题 ------------ -->
+				<div class="q-a-box">
+					<h2>1、为什么在演示环境里很多功能无法使用? SQL监控台为何无法打开？</h2>
+					<p>为确保系统正常运行，部分可能影响到系统正常运行的接口已被禁用，将代码下载到本地部署后即可体验这些功能</p>
+				</div>
+				<!-- ----------- 一个问题 ------------ -->
+				<div class="q-a-box">
+					<h2>2、这个演示环境看到的功能有点少？</h2>
+					<p>
+						当前演示环境只负责展示基础功能，被称为 [简洁版] <br>
+						与之对应的还有一个版本，包含一些常见业务，即 [深度定制版] <br>
+						两者有何不同？比如说你从百度上下载一个项目模板，要用到自己的项目之前，一定会先把大部分用不到的功能统统删掉，只留下最基础的功能，然后再开始Lu代码， <br>
+						这个删减之前就是 [深度定制版]，删减之后就是 [简洁版] <br>
+						大多数框架都是只给提供 [深度定制版]，想要获得 [简洁版]，只能通过自己手动删减出来 <br>
+						而当前搭建的演示环境是 [简洁版]，没有加入一些深度定制的功能模块 <br>
+						[深度定制版] 目前正在搭建中，敬请期待...  
+					</p>
+				</div>
+				<!-- ----------- 一个问题 ------------ -->
+				<div class="q-a-box">
+					<h2>3、看不到代码生成器？</h2>
+					<p>
+						前端表单构建，在 系统配置 -> 在线表单构建  <br>
+						后端的代码生成器，是和项目框架分开的，是分成的两个项目，将项目下载到本地就能运行代码生成器
+					</p>
+				</div>
+				<!-- ----------- 一个问题 ------------ -->
+				<div class="q-a-box">
+					<h2>4、商品模块为何没有规格管理？</h2>
+					<p>
+						参考问题2，下面的四个菜单，是代码生成器生成的代码直接放上去的，没有进行二次改动，这里展示的不是模板的能力，而是代码生成器的能力  <br>
+						可以看到，对于大多数简单模块，框架生成的代码已包含完善的增删改差，不用修改一行代码即可集成 <br>
+						如需使用商品规格添加页，可查看前端模板示例：<el-link type="primary" href="http://sa-admin.dev33.cn/#3-3-1" target="_blank">http://sa-admin.dev33.cn/#3-3-1</el-link>
+					</p>
+				</div>
+				<!-- ----------- 一个问题 ------------ -->
+				<div class="q-a-box">
+					<h2>5、演示环境代表最终效果吗？</h2>
+					<p>
+						不代表最终效果。 <br>
+						为了方便演示，演示环境对代码进行了一定程度的改动，并不与原始代码完全一致，且基础版本可能会有一定程度的滞后，最终效果请以GitHub仓库最新代码为准
+					</p>
+				</div>
+				<div style="height: 100px;"></div>
+				<!-- ----------- 一个s问题 ------------ -->
+				<div class="q-a-box s-bottom">
+					<el-checkbox v-model="is_not_alert">我已知晓，一小时内不再弹出</el-checkbox>
+					<el-button type="primary" size="small" icon="el-icon-close" @click="close()">关闭</el-button>
+				</div>
+				
+				
+			</div>
+		</div>
+        <script>
+			var app = new Vue({
+				el: '.vue-box',
+				data: {
+					sa: sa, 	// 超级对象
+					is_not_alert: false,
+					p: {	// 查询参数 
+						role_name: '',
+						pageNo: 1,
+						pageSize: 10000,
+					},
+					dataList: [],	// 数据集合
+				},
+				methods: {
+					// 关闭
+					close: function() {
+						if(this.is_not_alert) {
+							sessionStorage.setItem('not_alert_time', new Date().getTime() + '');
+							parent.location.href = parent.location.href;
+							sa.closeCurrIframe();
+							return;
+						}
+						sa.closeCurrIframe();
+					}
+				},
+				created: function(){
+					
+				}
+			})
+			
+			
+		
+		</script>
+	</body>
+</html>

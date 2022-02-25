@@ -1,6 +1,6 @@
 
 
--- ======================================== sa-plus 系统库 ====================================  
+-- ======================================== Sa-Plus 系统库 ====================================  
 
 
 -- 系统角色表 
@@ -15,9 +15,9 @@ CREATE TABLE `sp_role` (
   UNIQUE KEY `name` (`name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统角色表';
 
-INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (1, '超级管理员', '最高权限', 1);
-INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (2, '二级管理员', '二级管理员', 2);
-INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (11, '普通账号', '普通账号', 1);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (1, '开发者', '系统开发人员，最高权限', 1);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (2, '系统管理员', '系统管理员', 2);
+INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (11, '普通账号', '普通账号', 2);
 INSERT INTO `sp_role`(`id`, `name`, `info`, `is_lock`) VALUES (12, '测试角色', '测试角色', 2);
 
 
@@ -32,9 +32,8 @@ CREATE TABLE `sp_role_permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='角色权限中间表';
 
 insert into sp_role_permission() values (0, '1', 'bas', now());
-insert into sp_role_permission() values (0, '1', '1', now());
-insert into sp_role_permission() values (0, '1', '11', now());
-insert into sp_role_permission() values (0, '1', '99', now());
+insert into sp_role_permission() values (0, '1', 'dev', now());
+insert into sp_role_permission() values (0, '1', 'in-system', now());
 
 insert into sp_role_permission() values (0, '1', 'console', now());
 insert into sp_role_permission() values (0, '1', 'sql-console', now());
@@ -47,6 +46,7 @@ insert into sp_role_permission() values (0, '1', 'role-list', now());
 insert into sp_role_permission() values (0, '1', 'menu-list', now());
 insert into sp_role_permission() values (0, '1', 'admin-list', now());
 insert into sp_role_permission() values (0, '1', 'admin-add', now());
+insert into sp_role_permission() values (0, '1', 'sp-admin-login', now());
 
 insert into sp_role_permission() values (0, '1', 'sp-cfg', now());
 insert into sp_role_permission() values (0, '1', 'sp-cfg-app', now());
@@ -74,10 +74,27 @@ CREATE TABLE `sp_admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10001 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='系统管理员表';
 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10001, 'sa', 'http://sa-admin.dev33.cn/sa-frame/admin-logo.png', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
+VALUES (10001, 'sa', 'https://oss.dev33.cn/sa-plus/in-file/avatar1.jpg', 'E4EF2A290589A23EFE1565BB698437F5', '123456', 1, now()); 
 INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
-VALUES (10002, 'admin', 'http://sa-admin.dev33.cn/sa-frame/admin-logo.png', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 1, now()); 
+VALUES (10002, 'admin', 'https://oss.dev33.cn/sa-plus/in-file/avatar2.png', '1DE197572C0B23B82BB2F54202E8E00B', 'admin', 2, now()); 
+INSERT INTO `sp_admin`(`id`, `name`, `avatar`, `password`, `pw`, `role_id`, create_time) 
+VALUES (10003, 'admin2', 'https://oss.dev33.cn/sa-plus/in-file/avatar2.png', 'EA8A45AED41DE53509921911CBB55A1F', 'admin2', 11, now()); 
 
+
+-- 管理员登录日志表 
+drop table if exists sp_admin_login;
+CREATE TABLE `sp_admin_login` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'id号',
+  `acc_id` bigint(20) NOT NULL COMMENT '管理员账号id',
+  `acc_token` varchar(300) DEFAULT NULL COMMENT '本次登录Token',
+  `login_ip` varchar(50) DEFAULT NULL COMMENT '登陆IP',
+  `address` varchar(127) DEFAULT NULL COMMENT '登录地点',
+  `device` varchar(127) DEFAULT NULL COMMENT '客户端设备标识',
+  `system` varchar(127) DEFAULT NULL COMMENT '客户端系统标识',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1001 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT 
+COMMENT='管理员登录日志表';
 
 
 -- 配置信息表   
@@ -91,8 +108,8 @@ CREATE TABLE `sp_cfg` (
   UNIQUE KEY `cfg_name` (`cfg_name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='配置信息表';
 
-INSERT INTO `sp_cfg`(`id`, `cfg_name`, `cfg_value`, `remarks`) VALUES (1, 'app_cfg', '{}', '应用配置信息，对外公开');
-INSERT INTO `sp_cfg`(`id`, `cfg_name`, `cfg_value`, `remarks`) VALUES (2, 'server_cfg', '{}', '服务器私有配置');
+INSERT INTO `sp_cfg`(`id`, `cfg_name`, `cfg_value`, `remarks`) VALUES (1, 'app_cfg', '{"logoUrl":"http://sa-admin.dev33.cn/sa-frame/admin-logo.png","appName":"Sa-Plus 后台管理","appVersionNo":"v1.27.0","appVersionLog":"更新于2022-2-21"}', '应用配置信息，对外公开');
+INSERT INTO `sp_cfg`(`id`, `cfg_name`, `cfg_value`, `remarks`) VALUES (2, 'server_cfg', '{"reserveInfo":"预留信息","userDefaultAvatar":"https://oss.dev33.cn/sa-plus/in-file/avatar1.jpg,https://oss.dev33.cn/sa-plus/in-file/avatar2.png"}', '服务器私有配置');
 
 
 

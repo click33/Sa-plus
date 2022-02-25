@@ -1,5 +1,5 @@
 <template>
-  <div :class="classObj" class="app-wrapper">
+  <div :class="classObj" class="app-wrapper" v-if="inInit">
     <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
     <sidebar class="sidebar-container" />
     <div :class="{hasTagsView:needTagsView}" class="main-container">
@@ -41,7 +41,8 @@ export default {
   mixins: [ResizeMixin],
   data() {
     return {
-      sa: sa
+      sa: sa,
+      inInit: !!this.$store.getters.name // 是否已经初始化完毕
     }
   },
   computed: {
@@ -63,8 +64,11 @@ export default {
   },
   created() {
     // 如果尚未初始化，则开始初始化
-    if (!this.$store.getters.name) {
-      adminInit();
+    if (!this.inInit) {
+      let call = function (){
+        this.inInit = true;
+      }.bind(this);
+      adminInit(call);
     }
   },
   methods: {

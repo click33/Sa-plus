@@ -119,7 +119,7 @@ export default {
         sa.$sys.setAppCfg(res.data.appCfg);
 
         // 打个招呼，进入 index
-        this.sa.msg('欢迎你：' + this.m.key);
+        this.sa.msg('欢迎你：' + res.data.admin.name);
         setTimeout(function() {
           // this.$router.push('/');
           this.$router.push({ path: this.redirect || '/', query: this.otherQuery })

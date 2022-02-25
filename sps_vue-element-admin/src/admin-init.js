@@ -2,7 +2,7 @@ import sa from '@/sa-frame/sa';
 import store from '@/store';
 
 // admin模板初始化函数
-export default function() {
+export default function(init) {
   // console.log('初始化。。。。');
 
   sa.ajax('/AccAdmin/getLoginInfo', function(res) {
@@ -10,7 +10,7 @@ export default function() {
     // 验证权限
     if(!(res.data.admin && res.data.perList.indexOf('in-system') > -1)) {
       sa.$sys.setCurrUser(res.data.admin);
-      return alert('当前账号暂无进入后台权限');
+      return sa.alert('当前账号暂无进入后台权限');
     }
 
     // 当前用户信息，保存到本地中
@@ -27,6 +27,7 @@ export default function() {
     // 配置信息
     sa.$sys.setAppCfg(res.appCfg);
 
-    //
-  }, { msg: null });
+    // 初始化模板
+    init();
+  });
 }

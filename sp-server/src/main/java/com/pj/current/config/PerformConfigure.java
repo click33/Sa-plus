@@ -51,7 +51,16 @@ public class PerformConfigure implements WebMvcConfigurer {
 					"/SpCfg/updateCfg", 
 					
 					// sql控制台
-					"/druid/**", "/druid/sql.html"
+					"/druid/**", "/druid/sql.html",
+					
+					// 业务代码 
+					"/SerArticle/delete", "/SerArticle/deleteByIds",
+					"/SerGoods/delete", "/SerGoods/deleteByIds",
+					"/SysDept/delete", "/SysDept/deleteByIds",
+					"/SysNotice/delete", "/SysNotice/deleteByIds",
+					"/SysRedeem/delete", "/SysRedeem/deleteByIds",
+					"/SysType/delete", "/SysType/deleteByIds"
+					
 					)
 				.check(r -> {
 					throw new AjaxError("演示模式，不可操作，将项目部署到本地预览即可测试此功能");

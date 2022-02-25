@@ -1,7 +1,5 @@
 package com.pj.project4sp.admin4acc;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,9 +47,11 @@ public class SpAccAdminController {
 		return AjaxJson.getSuccess();
 	}
 	
-	/** 获取会话信息 */
+	/** 获取会话信息 
+	 * @throws InterruptedException */
 	@RequestMapping("getLoginInfo")
 	AjaxJson getLoginInfo() {
+		
 		// 当前admin
 		SpAdmin admin = SpAdminUtil.getCurrAdmin();
 		
