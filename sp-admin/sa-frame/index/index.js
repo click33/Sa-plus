@@ -33,8 +33,8 @@ var sa_admin = new Vue({
 		menuList: [],		// 全部菜单集合 
 		showList: [],		// 显示的菜单集合（id集合） 
 		
-		plusVersion: 'v1.26.0',				//sa-plus版本
-		plusUpdateTime: '2021-10-24',		//sa-plus版本
+		plusVersion: 'v1.27.0',				//sa-plus版本
+		plusUpdateTime: '2022-02-26',		//sa-plus更新日期 
 		plusGithubUrl: 'https://github.com/click33/sa-plus',	// github地址 
 		
 		// ------------------------------- 状态 -------------------------------

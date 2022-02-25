@@ -1,5 +1,6 @@
 import sa from '@/sa-frame/sa';
 import store from '@/store';
+import router from "@/router";
 
 // admin模板初始化函数
 export default function(init) {
@@ -10,7 +11,9 @@ export default function(init) {
     // 验证权限
     if(!(res.data.admin && res.data.perList.indexOf('in-system') > -1)) {
       sa.$sys.setCurrUser(res.data.admin);
-      return sa.alert('当前账号暂无进入后台权限');
+      return sa.alert('当前账号暂无进入后台权限', function (){
+        router.push('/login');
+      });
     }
 
     // 当前用户信息，保存到本地中

@@ -1,7 +1,7 @@
 ## 介绍
 此为Vue单页版UI：vue2、element-ui、js、vue-cli、vuex、vue-router、axios、xlsx
 
-跟随 Sa-Plus 主版本：v1.26.0 
+跟随 Sa-Plus 主版本：v1.27.0 
 
 ## 运行 
 

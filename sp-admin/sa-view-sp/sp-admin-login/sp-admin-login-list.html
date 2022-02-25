@@ -45,11 +45,11 @@
 							</el-link>
 						</template>
 					</sa-td>
-					<sa-td name="本次登录Token" prop="accToken" width="180px"></sa-td>
-					<sa-td name="登陆IP" prop="loginIp" width="130px"></sa-td>
+					<sa-td name="登陆IP" prop="loginIp"></sa-td>
 					<sa-td name="客户端标识" prop="device"></sa-td>
 					<sa-td name="所属系统" prop="system"></sa-td>
 					<sa-td name="登录地" prop="address"></sa-td>
+					<sa-td name="本次登录Token" prop="accToken"></sa-td>
 					<sa-td name="登录时间" width="220px">
 						<template slot-scope="s">
 							<span>{{sa.forDate(s.row.createTime, 2)}}</span> - 
