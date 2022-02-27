@@ -117,7 +117,7 @@
             <artifactId>fastjson</artifactId>
             <version>1.2.73</version>
         </dependency>
-
+        
 		<!-- ConfigurationProperties -->
         <dependency>
         	<groupId>org.springframework.boot</groupId>
