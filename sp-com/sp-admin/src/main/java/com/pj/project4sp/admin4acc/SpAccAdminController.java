@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.pj.project4sp.admin.SpAdmin;
 import com.pj.project4sp.admin.SpAdminUtil;
 import com.pj.project4sp.role4permission.SpRolePermissionService;
@@ -34,12 +36,17 @@ public class SpAccAdminController {
 	
 	/** 账号、密码登录  */
 	@RequestMapping("doLogin")
+	@SentinelResource(value = "qps-max-1", blockHandler = "doLoginBlock")
 	AjaxJson doLogin(String key, String password) {
 		// 1、验证参数 
 		if(NbUtil.hasNull(key, password)) {
 			return AjaxJson.getError("请提供key与password参数");
 		}
 		return spAccAdminService.doLogin(key, password);
+	}
+	// 限流之后触发的函数 
+	AjaxJson doLoginBlock(String key, String password, BlockException e) {
+		return AjaxJson.getError("访问过于频繁，请稍后再试");
 	}
 	
 	/** 退出登录  */

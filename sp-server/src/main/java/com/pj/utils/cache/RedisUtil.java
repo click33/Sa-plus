@@ -67,6 +67,11 @@ public class RedisUtil {
 		stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.MINUTES);
 	}
 
+	// 写入，并设置时长，单位 秒 SECONDS
+	public static void setBySECONDS(String key, String value, long timeout) {
+		stringRedisTemplate.opsForValue().set(key, value, timeout, TimeUnit.SECONDS);
+	}
+
 	// 写入，永久有效 
 	public static void setByForever(String key, String value) {
 		stringRedisTemplate.opsForValue().set(key, value);

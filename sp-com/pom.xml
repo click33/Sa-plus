@@ -128,6 +128,18 @@
             <version>1.2.73</version>
         </dependency>
 
+        <!-- Sentinel 限流 -->
+        <dependency>
+		    <groupId>com.alibaba.csp</groupId>
+		    <artifactId>sentinel-core</artifactId>
+		    <version>1.8.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.csp</groupId>
+			<artifactId>sentinel-annotation-aspectj</artifactId>
+		    <version>1.8.3</version>
+		</dependency>
+
 		<!-- ConfigurationProperties -->
         <dependency>
         	<groupId>org.springframework.boot</groupId>

@@ -9,6 +9,7 @@ import com.pj.project4sp.admin.SpAdminUtil;
 import com.pj.project4sp.role4permission.SpRolePermissionService;
 import com.pj.project4sp.spcfg.SpCfgUtil;
 import com.pj.utils.sg.AjaxJson;
+import com.pj.utils.sg.IpCheckUtil;
 import com.pj.utils.sg.NbUtil;
 import com.pj.utils.so.SoMap;
 
@@ -33,6 +34,7 @@ public class SpAccAdminController {
 	/** 账号、密码登录  */
 	@RequestMapping("doLogin")
 	AjaxJson doLogin(String key, String password) {
+		IpCheckUtil.checkResToNow("admin-login", 1);
 		// 1、验证参数 
 		if(NbUtil.hasNull(key, password)) {
 			return AjaxJson.getError("请提供key与password参数");

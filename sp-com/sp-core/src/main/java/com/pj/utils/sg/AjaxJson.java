@@ -7,6 +7,7 @@ import java.util.Map;
 import com.pj.utils.so.SoMap;
 
 
+
 /**
  * ajax请求返回Json格式数据的封装 <br>
  * 所有预留字段：<br>
@@ -69,7 +70,7 @@ public class AjaxJson extends LinkedHashMap<String, Object> implements Serializa
 	}
 	/** 获取data */
 	public Object getData() {
-		return (String)this.get("data");
+		return this.get("data");
 	}
 	/** 将data还原为指定类型并返回 */
 	@SuppressWarnings("unchecked")
