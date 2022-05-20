@@ -5,7 +5,7 @@
 	<!-- 增 -->
 	<insert id="add">
 		insert into 
-		sp_admin_login (id, acc_id, acc_token, login_ip, address, device, system, create_time) 
+		sp_admin_login (id, acc_id, acc_token, login_ip, address, device, `system`, create_time)
 		values (0, #{accId}, #{accToken}, #{loginIp}, #{address}, #{device}, #{system}, now()) 
 	</insert>
 
