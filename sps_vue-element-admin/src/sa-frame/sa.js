@@ -100,7 +100,7 @@ var sa = {
         });
       },
       errorfn: function(xhr){		// ajax发生异常时的默认处理函数
-        if(xhr.status == 0){
+        if(!xhr || !xhr.status){
           return sa.alert('无法连接到服务器，请检查网络');
         }
         return sa.alert("异常：" + JSON.stringify(xhr));

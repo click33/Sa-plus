@@ -1,6 +1,6 @@
 <template>
 	<!-- 自定义slot -->
-	<div class="c-item" :class="{br: br}" v-if="$slots.default && type != 'fast-btn'">
+	<div class="c-item" :class="{br: br}" v-if="$slots.default && type !== 'fast-btn'">
 		<label class="c-label" v-if="name && name.length > 0">{{name}}：</label>
 		<span v-else-if="name === undefined"></span>
 		<label class="c-label" v-else></label>
@@ -8,205 +8,184 @@
 		<slot></slot>
 	</div>
 	<!-- 普通input -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'text' || type == 'link'">
-		<label class="c-label">{{name}}：</label>
-		<el-input type="text" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
-	</div>
-	<!-- 数字input -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'num'">
-		<label class="c-label">{{name}}：</label>
-		<el-input type="number" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="['text','link'].includes(type)">
+    <el-input type="text" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
+  </sa-label>
+  <!-- 数字input -->
+  <sa-label :br="br" :name="name" v-else-if="type === 'num'">
+    <el-input type="number" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
+  </sa-label>
 	<!-- 密码input -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'password'">
-		<label class="c-label">{{name}}：</label>
-		<el-input type="password" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'password'">
+    <el-input type="password" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
+  </sa-label>
+  <!-- 钱 money (单位 元) -->
+  <sa-label :br="br" :name="name" v-else-if="type === 'money'">
+    <el-input type="text" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
+    <span>元</span>
+  </sa-label>
+  <!-- 钱 price-f (单位 分) -->
+  <sa-label :br="br" :name="name"  v-else-if="type === 'money-f'">
+    <el-input type="text" :value="value ? value / 100 : null" @input="$emit('input', $event * 100)" :placeholder="placeholder" :disabled="disabled"></el-input>
+    <span>元</span>
+  </sa-label>
 	<!-- 多行文本域 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'textarea'">
-		<label class="c-label">{{name}}：</label>
-		<div style="display: inline-block;">
-			<el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
-		</div>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'textarea'">
+    <div style="display: inline-block;">
+      <el-input type="textarea" :autosize="{ minRows: 3, maxRows: 10}" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
+    </div>
+  </sa-label>
+
 	<!-- 普通input - 列表 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'text-list'">
-		<label class="c-label">{{name}}：</label>
-		<div class="c-item-mline">
-			<div v-for="item in value_arr">
-				<el-input v-model="item.value" @input="value_arr_change"></el-input>
-				<el-link type="danger" class="del-rr" @click="value_arr_delete(item)">
-					<i class="el-icon-close"></i>
-					<small style="vertical-align: top;">删除</small>
-				</el-link>
-			</div>
-			<el-link type="primary" @click="value_arr_push({value: ''})">[ + 添加 ]</el-link>
-			<span class="c-remark" style="vertical-align: -5%;" v-if="remark">{{remark}}</span>
-		</div>
-	</div>
-	<!-- 钱 money (单位 元) -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'money'">
-		<label class="c-label">{{name}}：</label>
-		<el-input type="text" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-input>
-		<span>元</span>
-	</div>
-	<!-- 钱 price-f (单位 分) -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'money-f'">
-		<label class="c-label">{{name}}：</label>
-		<el-input type="text" v-model="valueReal" @input="$emit('input', $event * 100)" :placeholder="placeholder" :disabled="disabled"></el-input>
-		<span>元</span>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'text-list'">
+    <div class="c-item-mline">
+      <div v-for="item in value_arr">
+        <el-input v-model="item.value" @input="value_arr_change"></el-input>
+        <el-link type="danger" class="del-rr" @click="value_arr_delete(item)">
+          <i class="el-icon-close"></i>
+          <small style="vertical-align: top;">删除</small>
+        </el-link>
+      </div>
+      <el-link type="primary" @click="value_arr_push({value: ''})">[ + 添加 ]</el-link>
+      <span class="c-remark" style="vertical-align: -5%;" v-if="remark">{{remark}}</span>
+    </div>
+  </sa-label>
+
 	<!-- img -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'img'">
-		<label class="c-label">{{name}}：</label>
-		<img :src="value" class="info-img" @click="sa.showImage(value, '400px', '400px')" v-if="!sa.isNull(value)">
-		<el-link type="primary" @click="sa.uploadImage(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'img'">
+    <img :src="value" class="info-img" @click="sa.showImage(value, '400px', '400px')" v-if="!sa.isNull(value)">
+    <el-link type="primary" @click="sa.uploadImage(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
+  </sa-label>
 	<!-- audio -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'audio'">
-		<label class="c-label">{{name}}：</label>
-		<el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
-		<el-link type="primary" @click="sa.uploadAudio(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'audio'">
+    <el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
+    <el-link type="primary" @click="sa.uploadAudio(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
+  </sa-label>
 	<!-- video -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'video'">
-		<label class="c-label">{{name}}：</label>
-		<el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
-		<el-link type="primary" @click="sa.uploadVideo(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'video'">
+    <el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
+    <el-link type="primary" @click="sa.uploadVideo(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
+  </sa-label>
 	<!-- file -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'file'">
-		<label class="c-label">{{name}}：</label>
-		<el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
-		<el-link type="primary" @click="sa.uploadFile(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'file'">
+    <el-link type="info" :href="value" target="_blank" v-if="!sa.isNull(value)">{{value}}</el-link>
+    <el-link type="primary" @click="sa.uploadFile(src => {$emit('input', src); sa.ok2('上传成功');})">上传</el-link>
+  </sa-label>
 	<!-- img-list -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'img-list'">
-		<label class="c-label">{{name}}：</label>
-		<div class="c-item-mline image-box">
-			<div class="image-box-2" v-for="item in value_arr">
-				<img :src="item.value" @click="sa.showImage(item.value, '500px', '400px')" />
-				<p>
-					<el-link @click="value_arr_delete(item)" style="color: #999;">
-						<i class="el-icon-close" style="position: relative; top: 2px;"></i>
-						移除
-					</el-link>
-				</p>
-			</div>
-			<!-- 上传图集 -->
-			<div class="image-box-2 up_img" @click="sa.uploadImageList(src => value_arr_push({value: src}))">
+  <sa-label :br="br" :name="name" v-else-if="type === 'img-list'">
+    <div class="c-item-mline image-box">
+      <div class="image-box-2" v-for="item in value_arr">
+        <img :src="item.value" @click="sa.showImage(item.value, '500px', '400px')" />
+        <p>
+          <el-link @click="value_arr_delete(item)" style="color: #999;">
+            <i class="el-icon-close" style="position: relative; top: 2px;"></i>
+            移除
+          </el-link>
+        </p>
+      </div>
+      <!-- 上传图集 -->
+      <div class="image-box-2 up_img" @click="sa.uploadImageList(src => value_arr_push({value: src}))">
         <img src="../img/up-icon.png">
-			</div>
-		</div>
-	</div>
+      </div>
+    </div>
+  </sa-label>
 	<!-- audio-list、video-list、file-list、img-video-list -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'audio-list' || type == 'video-list' || type == 'file-list' || type == 'img-video-list'">
-		<label class="c-label">{{name}}：</label>
-		<div class="c-item-mline">
-			<div v-for="item in value_arr">
-				<el-link type="info" :href="item.value" target="_blank">{{item.value}}</el-link>
-				<el-link type="danger" class="del-rr" @click="value_arr_delete(item)">
-					<i class="el-icon-close"></i>
-					<small style="vertical-align: top;">删除</small>
-				</el-link>
-			</div>
-			<el-link type="primary" @click="sa.uploadAudioList(src => value_arr_push({value: src}))" v-if="type == 'audio-list'">上传</el-link>
-			<el-link type="primary" @click="sa.uploadVideoList(src => value_arr_push({value: src}))" v-if="type == 'video-list'">上传</el-link>
-			<el-link type="primary" @click="sa.uploadFileList(src => value_arr_push({value: src}))" v-if="type == 'file-list'">上传</el-link>
-			<el-link type="primary" @click="sa.uploadImageList(src => value_arr_push({value: src}))" v-if="type == 'img-video-list'">上传图片</el-link>
-			<el-link type="primary" @click="sa.uploadVideoList(src => value_arr_push({value: src}))" v-if="type == 'img-video-list'" style="margin-left: 7px;">上传视频</el-link>
-		</div>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="['audio-list','video-list' ,'file-list' , 'img-video-list'].includes(this.type)">
+    <div class="c-item-mline">
+      <div v-for="item in value_arr">
+        <el-link type="info" :href="item.value" target="_blank">{{item.value}}</el-link>
+        <el-link type="danger" class="del-rr" @click="value_arr_delete(item)">
+          <i class="el-icon-close"></i>
+          <small style="vertical-align: top;">删除</small>
+        </el-link>
+      </div>
+      <el-link type="primary" @click="sa.uploadAudioList(src => value_arr_push({value: src}))" v-if="type === 'audio-list'">上传</el-link>
+      <el-link type="primary" @click="sa.uploadVideoList(src => value_arr_push({value: src}))" v-if="type === 'video-list'">上传</el-link>
+      <el-link type="primary" @click="sa.uploadFileList(src => value_arr_push({value: src}))" v-if="type === 'file-list'">上传</el-link>
+      <el-link type="primary" @click="sa.uploadImageList(src => value_arr_push({value: src}))" v-if="type === 'img-video-list'">上传图片</el-link>
+      <el-link type="primary" @click="sa.uploadVideoList(src => value_arr_push({value: src}))" v-if="type === 'img-video-list'" style="margin-left: 7px;">上传视频</el-link>
+    </div>
+  </sa-label>
   <!-- 富文本 richtext f -->
-  <div class="c-item" style="margin-top: 10px;" :class="{br: br}" v-else-if="type == 'richtext' || type == 'f'">
-    <label class="c-label">{{name}}：</label>
+  <sa-label class="c-item" style="margin-top: 10px;" :br="br" :name="name" v-else-if="type === 'richtext' || type === 'f'">
     <div class="editor-box c-item-mline">
       <div :id="'editor-' + editor_id"></div>
     </div>
     <div style="clear: both;"></div>
-  </div>
+  </sa-label>
 	<!-- enum 枚举 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'enum' || type == 'j' || type == 'switch'">
-		<label class="c-label">{{name}}：</label>
-		<el-radio-group v-if="jtype == 1 || jtype == 2" :class="{'s-radio-text': jtype == 2}" :value="value" @input="onInput">
-			<el-radio label="" v-if="def">{{def}}</el-radio>
-			<el-radio v-for="j in jvList" :key="j.key" :label="j.key">{{j.value}}</el-radio>
-		</el-radio-group>
-		<el-radio-group v-if="jtype == 3" :value="value" @input="onInput">
-			<el-radio-button label="" v-if="def">{{def}}</el-radio-button>
-			<el-radio-button v-for="j in jvList" :key="j.key" :label="j.key">{{j.value}}</el-radio-button>
-		</el-radio-group>
-		<el-select v-if="jtype == 4" :value="value" @input="onInput">
-			<el-option label="" v-if="def" :value="def"></el-option>
-			<el-option v-for="j in jvList" :key="j.key" :label="j.value" :value="j.key"></el-option>
-		</el-select>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'enum' || type === 'j' || type === 'switch'">
+    <el-radio-group v-if="jtype == 1 || jtype == 2" :class="{'s-radio-text': jtype == 2}" :value="value" @input="onInput">
+      <el-radio label="" v-if="def">{{def}}</el-radio>
+      <el-radio v-for="j in jvList" :key="j.key" :label="j.key">{{j.value}}</el-radio>
+    </el-radio-group>
+    <el-radio-group v-if="jtype == 3" :value="value" @input="onInput">
+      <el-radio-button label="" v-if="def">{{def}}</el-radio-button>
+      <el-radio-button v-for="j in jvList" :key="j.key" :label="j.key">{{j.value}}</el-radio-button>
+    </el-radio-group>
+    <el-select v-if="jtype == 4" :value="value" @input="onInput">
+      <el-option label="" v-if="def" :value="def"></el-option>
+      <el-option v-for="j in jvList" :key="j.key" :label="j.value" :value="j.key"></el-option>
+    </el-select>
+  </sa-label>
 	<!-- 日期选择器 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'date'">
-		<label class="c-label">{{name}}：</label>
-		<el-date-picker type="date" value-format="yyyy-MM-dd" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-date-picker>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'date'">
+    <el-date-picker type="date" value-format="yyyy-MM-dd" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-date-picker>
+  </sa-label>
 	<!-- 日期时间选择器 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'datetime'">
-		<label class="c-label">{{name}}：</label>
-		<el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-date-picker>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'datetime'">
+    <el-date-picker type="datetime" value-format="yyyy-MM-dd HH:mm:ss" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-date-picker>
+  </sa-label>
 	<!-- 时间选择器 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'time'">
-		<label class="c-label">{{name}}：</label>
-		<el-time-picker value-format="HH:mm:ss" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-time-picker>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'time'">
+    <el-time-picker value-format="HH:mm:ss" :value="value" @input="onInput" :placeholder="placeholder" :disabled="disabled"></el-time-picker>
+  </sa-label>
 	<!-- 日期范围选择 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'date-range'">
-		<label class="c-label">{{name}}：</label>
-		<el-date-picker
-			type="daterange"
-			range-separator="至"
-			start-placeholder="开始日期"
-			end-placeholder="结束日期"
-			value-format="yyyy-MM-dd"
-			:value="dateRangeValue"
-			@input="dateRangeOnChange"
-			:disabled="disabled"
-			>
-		</el-date-picker>
-	</div>
+  <sa-label :br="br" :name="name"  v-else-if="type === 'date-range'">
+    <el-date-picker
+      type="daterange"
+      range-separator="至"
+      start-placeholder="开始日期"
+      end-placeholder="结束日期"
+      value-format="yyyy-MM-dd"
+      :value="dateRangeValue"
+      @input="dateRangeOnChange"
+      :disabled="disabled"
+    >
+    </el-date-picker>
+  </sa-label>
 	<!-- 滑块 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'slider'">
-		<label class="c-label">{{name}}：</label>
-		<div style="display: inline-block; height: 0px; vertical-align: top; width: 250px;">
-			<el-slider :value="value" @input="onInput" style="position: relative; top: -5px;" :disabled="disabled"></el-slider>
-		</div>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'slider'">
+    <div style="display: inline-block; height: 0px; vertical-align: top; width: 250px;">
+      <el-slider :value="value" @input="onInput" style="position: relative; top: -5px;" :disabled="disabled"></el-slider>
+    </div>
+  </sa-label>
 	<!-- 级联输入 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'cascader'">
-		<label class="c-label">{{name}}：</label>
-		<el-cascader :value="value" @input="onInput" :options="options" :props="{expandTrigger: 'hover'}" :placeholder="placeholder" :disabled="disabled"></el-cascader>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'cascader'">
+    <el-cascader :value="value" @input="onInput" :options="options" :props="{expandTrigger: 'hover'}" :placeholder="placeholder" :disabled="disabled"></el-cascader>
+  </sa-label>
 	<!-- 颜色输入 -->
-	<div class="c-item" :class="{br: br}" style="height: 0px;" v-else-if="type == 'color'">
-		<label class="c-label">{{name}}：</label>
-		<el-color-picker :value="value" @input="onInput" :disabled="disabled"></el-color-picker>
-		<span class="c-remark" style="vertical-align: top;">{{value}}</span>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'color'">
+    <el-color-picker :value="value" @input="onInput" :disabled="disabled"></el-color-picker>
+    <span class="c-remark" style="vertical-align: top;">{{value}}</span>
+  </sa-label>
 	<!-- 评分组件 -->
-	<div class="c-item" :class="{br: br}" v-else-if="type == 'rate'">
-		<label class="c-label">{{name}}：</label>
-		<div style="display: inline-block;">
-			<el-rate :value="value" @input="onInput" show-text :disabled="disabled"></el-rate>
-		</div>
-	</div>
+  <sa-label :br="br" :name="name" v-else-if="type === 'rate'">
+    <div style="display: inline-block;">
+      <el-rate :value="value" @input="onInput" show-text :disabled="disabled"></el-rate>
+    </div>
+  </sa-label>
 	<!-- 快捷增删改查按钮 -->
-	<div class="fast-btn" v-else-if="type == 'fast-btn'">
-		<el-button type="primary" icon="el-icon-plus" @click="$parent.add()" v-if="showBtns.indexOf('add') != -1">新增</el-button>
-		<el-button type="success" icon="el-icon-view" @click="$parent.getBySelect()" v-if="showBtns.indexOf('get') != -1">查看</el-button>
-		<el-button type="danger" icon="el-icon-delete" @click="$parent.deleteByIds()" v-if="showBtns.indexOf('delete') != -1">删除</el-button>
-		<el-button type="warning" icon="el-icon-download" @click="sa.exportExcel()" v-if="showBtns.indexOf('export') != -1">导出</el-button>
-		<el-button type="info"  icon="el-icon-refresh"  @click="sa.f5()" v-if="showBtns.indexOf('reset') != -1">重置</el-button>
+	<div class="fast-btn" v-else-if="type === 'fast-btn'">
+		<el-button type="primary" icon="el-icon-plus" @click="$parent.add()" v-if="showBtns.includes('add')">新增</el-button>
+		<el-button type="success" icon="el-icon-view" @click="$parent.getBySelect()" v-if="showBtns.includes('get')">查看</el-button>
+		<el-button type="danger" icon="el-icon-delete" @click="$parent.deleteByIds()" v-if="showBtns.includes('delete')">删除</el-button>
+		<el-button type="warning" icon="el-icon-download" @click="sa.exportExcel()" v-if="showBtns.includes('export')">导出</el-button>
+		<el-button type="info"  icon="el-icon-refresh"  @click="sa.f5()" v-if="showBtns.includes('reset')">重置</el-button>
 		<slot></slot>
 	</div>
 	<!-- 分页组件 -->
-	<div class="page-box" v-else-if="type == 'page'">
+	<div class="page-box" v-else-if="type === 'page'">
 		<el-pagination background
 			layout="total, prev, pager, next, sizes, jumper"
 			:current-page.sync="curr"
@@ -221,9 +200,11 @@
 
 <script>
 import E from 'wangeditor';
+import SaLabel from "@/sa-frame/com/sa-label";
 
 export default {
-		// props: ['name', 'value'],
+    components: {SaLabel},
+    // props: ['name', 'value'],
 		props: {
 			// text、num、
 			type: {
@@ -275,20 +256,17 @@ export default {
 				// 富文本编辑器id
 				editor_id: '',
 				// 富文本编辑器对象
-				editor: null,
-				// money-f 的底层字段
-				valueReal: ''
+				editor: null
 			}
 		},
 		watch: {
 			// 监听一些类型的 value 变动
-			value: function(oldValue, newValue) {
-				// img-list、audio-list、video-list、file-list、img-video-list
-				if(this.type == 'img-list' || this.type == 'audio-list' || this.type == 'video-list' || this.type == 'file-list'
-					|| this.type == 'img-video-list') {
+			value() {
+				//
+				if(['img-list','audio-list','video-list','file-list','img-video-list'].includes(this.type)) {
 					this.value_to_arr(this.value);
 				}
-				if(this.type == 'text-list' && this.value_arr.length == 0) {
+				if(this.type === 'text-list' && !this.value_arr.length) {
 					this.value_to_arr(this.value);
 				}
 				// 如果是富文本
@@ -302,11 +280,11 @@ export default {
 		},
 		methods: {
 			// input值发生变化时触发
-			onInput: function($event) {
+			onInput($event) {
 				this.$emit('input', $event);
 			},
 			// 日期范围选择时触发
-			dateRangeOnChange: function(value) {
+			dateRangeOnChange(value) {
 				console.log(value);
 				this.dateRangeValue = value;
 				this.start = value[0];
@@ -315,25 +293,25 @@ export default {
 				this.$emit('update:end',  value[1]);
 			},
 			// 刷新分页
-			changePage: function() {
+			changePage() {
 				this.$emit('update:curr', this.curr);
 				this.$emit('update:size', this.size);
 				this.$emit('change');
 			},
 			// 解析枚举
-			parseJv: function() {
+			parseJv() {
 				for(let key in this.jv) {
 					let value = this.jv[key];
 					let color = '';
 					//
-					if(value.indexOf('[') != -1 && value.endsWith(']')) {
+					if(value.includes('[') && value.endsWith(']')) {
 						let index = value.indexOf('[');
 						color = value.substring(index + 1, value.length - 1);
 						value = value.substring(0, index);
 						// console.log(color + ' --- ' + value);
 					}
 					//
-					if(isNaN(key) == false) {
+					if(!isNaN(key)) {
 						key = parseInt(key);
 					}
 					//
@@ -345,34 +323,34 @@ export default {
 				}
 			},
 			// 解析 value 为 value_arr
-			value_to_arr: function(value) {
+			value_to_arr(value) {
 				let arr = sa.isNull(value) ? [] : value.split(',');
 				let value_arr = [];
-				for (var i = 0; i < arr.length; i++) {
-					if(arr[i] != '' && arr[i].trim() != '') {
+				for (let i = 0; i < arr.length; i++) {
+					if(arr[i] && arr[i].trim()) {
 						value_arr.push({value: arr[i]});
 					}
 				}
 				this.value_arr = value_arr;
 			},
 			// value_arr 数组增加值
-			value_arr_push: function(item) {
+			value_arr_push(item) {
 				this.value_arr.push(item);
 				// this.value = this.value_arr.join(',');
 				this.$emit('input', sa.getArrayField(this.value_arr, 'value').join(','));
 			},
 			// value_arr 数组删除值
-			value_arr_delete: function(item) {
+			value_arr_delete(item) {
 				sa.arrayDelete(this.value_arr, item);
 				// this.value = this.value_arr.join(',');
-				this.$emit('input', sa.getArrayField(this.value_arr, 'value').join(','));
+				this.value_arr_change()
 			},
 			// value_arr 更改值时触发
-			value_arr_change: function() {
+			value_arr_change() {
 				this.$emit('input', sa.getArrayField(this.value_arr, 'value').join(','));
 			},
 			// 创建富文本编辑器
-			create_editor: function(content) {
+			create_editor(content) {
         // var E = window.wangEditor;
         var editor = new E('#editor-' + this.editor_id);
 
@@ -392,8 +370,7 @@ export default {
         }.bind(this);
         // 重写上传图片的函数到OSS
         editor.config.customUploadImg = function(files, insert) {
-          var file = files[0]; // 文件对象
-          sa.startUploadImage(file, function(src) {
+          sa.startUploadImage(files[0], function(src) {
             insert(src);
             sa.msg('上传成功');
           });
@@ -406,48 +383,33 @@ export default {
         // })
 			},
 			// 为编辑器赋值
-			editorSet: function(value) {
+			editorSet(value) {
 				this.editor.txt.html(value);
 			},
-			valueSet(valueReal) {
-				this.valueReal = valueReal;
-			}
 		},
 		created() {
 			// console.log(this.br);
-			if(this.type == 'fast-btn') {
+			if(this.type === 'fast-btn') {
 				this.showBtns = this.show.split(',');
-				for (var i = 0; i < this.showBtns.length; i++) {
+				for (let i = 0; i < this.showBtns.length; i++) {
 					this.showBtns[i] = this.showBtns[i].trim();
 				}
 			}
 			// 如果是枚举
-			if(this.type == 'enum' || this.type == 'j' || this.type == 'switch') {
+			if(['enum','j','switch'].includes(this.type)) {
 				this.parseJv();
 			}
 			// 如果是 img-list 等
-			if(this.type == 'img-list' || this.type == 'audio-list' || this.type == 'video-list' || this.type == 'file-list'
-				|| this.type == 'img-video-list' || this.type == 'text-list') {
+			if(['img-list','audio-list','video-list','file-list','img-video-list','text-list'].includes(this.type)) {
 				this.value_to_arr(this.value);
 			}
 			// 如果是富文本
-			if(this.type == 'richtext' || this.type == 'f') {
+			if(['richtext','f'].includes(this.type)) {
 				this.editor_id = sa.randomString(32);
 				this.$nextTick(function() {
 					this.create_editor(this.value);
 				})
 			}
-			// 如果是 money-f
-			if(this.type == 'money-f') {
-				if(this.value) {
-					this.valueReal = this.value / 100;
-				}
-			}
-
-
 		}
 	}
 </script>
-
-<style scoped>
-</style>
