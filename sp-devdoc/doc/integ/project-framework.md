@@ -60,9 +60,9 @@
 ## 3、前端代码介绍 
 
 ``` java 
-├─sa-html			项目模块代码存放路径
-├─sa-html-sp		sa-plus内置模块存放路径 
-├─sa-resources		sa-admin 资源文件存放路径 
+├─sa-view			项目模块代码存放路径
+├─sa-view-sp		sa-plus内置模块存放路径 
+├─sa-frame		sa-admin 资源文件存放路径 
 │  │  menu-list-sp.js		sa-plus 内置菜单文件 
 │  │  menu-list.js			自定义菜单文件 
 │  │  sa-code.js			sa-admin初始化代码文件 
